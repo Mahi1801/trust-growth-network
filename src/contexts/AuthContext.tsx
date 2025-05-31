@@ -65,19 +65,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    const newUser = {
+    // Ensure userType is properly typed
+    const validUserType = userData.userType as 'vendor' | 'ngo' | 'corporate' | 'admin';
+    
+    const newUser: User = {
       id: Date.now().toString(),
-      ...userData,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      phone: userData.phone,
+      organization: userData.organization,
+      location: userData.location,
+      userType: validUserType,
     };
     
     // Store in localStorage (temporary solution)
     const users = JSON.parse(localStorage.getItem('empowerlink_users') || '[]');
-    users.push(newUser);
+    const userWithPassword = { ...newUser, password: userData.password };
+    users.push(userWithPassword);
     localStorage.setItem('empowerlink_users', JSON.stringify(users));
     
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('empowerlink_current_user', JSON.stringify(userWithoutPassword));
+    setUser(newUser);
+    localStorage.setItem('empowerlink_current_user', JSON.stringify(newUser));
     
     setIsLoading(false);
     return true;
