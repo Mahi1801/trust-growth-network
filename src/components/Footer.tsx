@@ -1,7 +1,14 @@
 
-import { Globe, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github } from "lucide-react";
+import { Globe, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Heart, Users, Building, Store } from "lucide-react";
 
 const Footer = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -10,11 +17,11 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Globe className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold">ImpactConnect</span>
+              <span className="text-xl font-bold">EmpowerLink</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              Empowering communities through transparent funding, verified improvements, 
-              and sustainable partnerships.
+              Empowering communities through transparent funding, AI-verified improvements, 
+              and sustainable partnerships that create lasting social impact.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
@@ -28,21 +35,67 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Platform</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">For Vendors</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">For NGOs</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">For Corporations</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">API Documentation</a></li>
+              <li>
+                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                  <Store className="h-4 w-4" />
+                  <span>For Vendors</span>
+                </button>
+              </li>
+              <li>
+                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                  <Heart className="h-4 w-4" />
+                  <span>For NGOs</span>
+                </button>
+              </li>
+              <li>
+                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                  <Building className="h-4 w-4" />
+                  <span>For Corporations</span>
+                </button>
+              </li>
+              <li>
+                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                  <Users className="h-4 w-4" />
+                  <span>For Admins</span>
+                </button>
+              </li>
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Resources</h3>
+            <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Community Guidelines</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+              <li>
+                <button 
+                  onClick={() => scrollToSection('features')}
+                  className="hover:text-white transition-colors"
+                >
+                  Features
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => scrollToSection('about')}
+                  className="hover:text-white transition-colors"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => scrollToSection('how-it-works')}
+                  className="hover:text-white transition-colors"
+                >
+                  How It Works
+                </button>
+              </li>
+              <li>
+                <button className="hover:text-white transition-colors">Privacy Policy</button>
+              </li>
+              <li>
+                <button className="hover:text-white transition-colors">Terms of Service</button>
+              </li>
             </ul>
           </div>
 
@@ -52,7 +105,7 @@ const Footer = () => {
             <div className="space-y-3 text-gray-400">
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5" />
-                <span>hello@impactconnect.com</span>
+                <span>hello@empowerlink.org</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5" />
@@ -66,8 +119,19 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 ImpactConnect. All rights reserved.</p>
+        <div className="border-t border-gray-800 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <p className="text-gray-400 text-center md:text-left">
+              &copy; 2024 EmpowerLink. All rights reserved. Built with ❤️ for social impact.
+            </p>
+            <div className="flex items-center space-x-4 text-sm text-gray-400">
+              <span>Powered by AI</span>
+              <span>•</span>
+              <span>Verified Impact</span>
+              <span>•</span>
+              <span>Global Community</span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

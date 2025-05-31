@@ -11,26 +11,49 @@ interface NavbarProps {
 const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsOpen(false);
+  };
+
   return (
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <Globe className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900">ImpactConnect</span>
+            <span className="text-xl font-bold text-gray-900">EmpowerLink</span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors">
+            <button 
+              onClick={() => scrollToSection('features')}
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
               Features
-            </a>
-            <a href="#about" className="text-gray-700 hover:text-blue-600 transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('about')}
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
               About
-            </a>
-            <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
+            </button>
+            <button 
+              onClick={() => scrollToSection('how-it-works')}
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              How It Works
+            </button>
+            <button 
+              onClick={() => scrollToSection('contact')}
+              className="text-gray-700 hover:text-blue-600 transition-colors"
+            >
               Contact
-            </a>
+            </button>
             <div className="flex items-center space-x-3">
               <Button
                 variant="ghost"
@@ -45,7 +68,7 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
                 className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <User className="h-4 w-4 mr-2" />
-                Sign Up
+                Join Platform
               </Button>
             </div>
           </div>
@@ -66,15 +89,30 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
         {isOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="flex flex-col space-y-4">
-              <a href="#features" className="text-gray-700 hover:text-blue-600 transition-colors">
+              <button 
+                onClick={() => scrollToSection('features')}
+                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+              >
                 Features
-              </a>
-              <a href="#about" className="text-gray-700 hover:text-blue-600 transition-colors">
+              </button>
+              <button 
+                onClick={() => scrollToSection('about')}
+                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+              >
                 About
-              </a>
-              <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
+              </button>
+              <button 
+                onClick={() => scrollToSection('how-it-works')}
+                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+              >
+                How It Works
+              </button>
+              <button 
+                onClick={() => scrollToSection('contact')}
+                className="text-gray-700 hover:text-blue-600 transition-colors text-left"
+              >
                 Contact
-              </a>
+              </button>
               <div className="flex flex-col space-y-2 pt-4 border-t border-gray-200">
                 <Button
                   variant="outline"
@@ -89,7 +127,7 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
                   className="bg-blue-600 hover:bg-blue-700 text-white justify-start"
                 >
                   <User className="h-4 w-4 mr-2" />
-                  Sign Up
+                  Join Platform
                 </Button>
               </div>
             </div>

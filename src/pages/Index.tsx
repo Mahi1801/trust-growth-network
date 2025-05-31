@@ -3,6 +3,9 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FeatureSection from "@/components/FeatureSection";
+import AboutSection from "@/components/AboutSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import ContactSection from "@/components/ContactSection";
 import UserTypeSelector from "@/components/UserTypeSelector";
 import AuthModal from "@/components/AuthModal";
 import Footer from "@/components/Footer";
@@ -42,8 +45,11 @@ const Index = () => {
       <Navbar onLoginClick={handleLoginClick} onSignupClick={handleSignupClick} />
       
       <div className="pt-16">
-        <Hero />
+        <Hero onGetStarted={handleGetStarted} />
         <FeatureSection />
+        <AboutSection />
+        <HowItWorksSection />
+        <ContactSection />
       </div>
       
       <Footer />
