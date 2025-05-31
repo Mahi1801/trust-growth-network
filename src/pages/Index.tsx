@@ -9,12 +9,20 @@ import ContactSection from "@/components/ContactSection";
 import UserTypeSelector from "@/components/UserTypeSelector";
 import AuthModal from "@/components/AuthModal";
 import Footer from "@/components/Footer";
+import Dashboard from "@/components/Dashboard";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("login");
   const [selectedUserType, setSelectedUserType] = useState<string>("");
+  const { user } = useAuth();
+
+  // If user is logged in, show their dashboard
+  if (user) {
+    return <Dashboard />;
+  }
 
   const handleGetStarted = () => {
     setShowUserTypeSelector(true);

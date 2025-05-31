@@ -1,7 +1,9 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Menu, X, Globe, User, LogIn } from "lucide-react";
+import { Menu, X, User, LogIn, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import Logo from "./Logo";
 
 interface NavbarProps {
   onLoginClick: () => void;
@@ -10,6 +12,7 @@ interface NavbarProps {
 
 const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -24,7 +27,7 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
-            <Globe className="h-8 w-8 text-blue-600" />
+            <Logo />
             <span className="text-xl font-bold text-gray-900">EmpowerLink</span>
           </div>
 
@@ -54,22 +57,39 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
             >
               Contact
             </button>
+            
             <div className="flex items-center space-x-3">
-              <Button
-                variant="ghost"
-                onClick={onLoginClick}
-                className="text-gray-700 hover:text-blue-600"
-              >
-                <LogIn className="h-4 w-4 mr-2" />
-                Login
-              </Button>
-              <Button
-                onClick={onSignupClick}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                <User className="h-4 w-4 mr-2" />
-                Join Platform
-              </Button>
+              {user ? (
+                <>
+                  <span className="text-gray-700">Welcome, {user.firstName}!</span>
+                  <Button
+                    variant="ghost"
+                    onClick={logout}
+                    className="text-gray-700 hover:text-blue-600"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    onClick={onLoginClick}
+                    className="text-gray-700 hover:text-blue-600"
+                  >
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Login
+                  </Button>
+                  <Button
+                    onClick={onSignupClick}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Join Platform
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -113,22 +133,39 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
               >
                 Contact
               </button>
+              
               <div className="flex flex-col space-y-2 pt-4 border-t border-gray-200">
-                <Button
-                  variant="outline"
-                  onClick={onLoginClick}
-                  className="justify-start"
-                >
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Login
-                </Button>
-                <Button
-                  onClick={onSignupClick}
-                  className="bg-blue-600 hover:bg-blue-700 text-white justify-start"
-                >
-                  <User className="h-4 w-4 mr-2" />
-                  Join Platform
-                </Button>
+                {user ? (
+                  <>
+                    <span className="text-gray-700">Welcome, {user.firstName}!</span>
+                    <Button
+                      variant="outline"
+                      onClick={logout}
+                      className="justify-start"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      onClick={onLoginClick}
+                      className="justify-start"
+                    >
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Login
+                    </Button>
+                    <Button
+                      onClick={onSignupClick}
+                      className="bg-blue-600 hover:bg-blue-700 text-white justify-start"
+                    >
+                      <User className="h-4 w-4 mr-2" />
+                      Join Platform
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
