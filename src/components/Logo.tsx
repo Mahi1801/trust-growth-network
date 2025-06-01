@@ -1,9 +1,17 @@
 
 import React from 'react';
 
-const Logo = ({ className = "h-8 w-8" }: { className?: string }) => {
+interface LogoProps {
+  className?: string;
+  onClick?: () => void;
+}
+
+const Logo = ({ className = "h-8 w-8", onClick }: LogoProps) => {
   return (
-    <div className="flex items-center space-x-2">
+    <div 
+      className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity" 
+      onClick={onClick}
+    >
       <svg
         className={className}
         viewBox="0 0 50 50"
