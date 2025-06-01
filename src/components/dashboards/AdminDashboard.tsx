@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -5,12 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts';
-import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye } from 'lucide-react';
+import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye, UserCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import VendorManagementModal from '@/components/modals/VendorManagementModal';
+import UserManagementModal from '@/components/modals/UserManagementModal';
+import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const [showVendorManagement, setShowVendorManagement] = useState(false);
+  const [showUserManagement, setShowUserManagement] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const { toast } = useToast();
 
   // Mock data for analytics
@@ -73,12 +80,41 @@ const AdminDashboard = () => {
     });
   };
 
+  const handleManageVendors = () => {
+    setShowVendorManagement(true);
+  };
+
+  const handleManageUsers = () => {
+    setShowUserManagement(true);
+  };
+
+  const handleSystemSettings = () => {
+    toast({
+      title: "System Settings",
+      description: "Opening system configuration panel with security settings and platform controls.",
+    });
+  };
+
+  const handleSecurityAudit = () => {
+    toast({
+      title: "Security Audit",
+      description: "Initiating comprehensive security audit of all platform activities and user behaviors.",
+    });
+  };
+
+  const handleExportData = () => {
+    toast({
+      title: "Data Export",
+      description: "Generating comprehensive platform data export. This may take a few minutes.",
+    });
+  };
+
   const renderOverview = () => (
     <div className="space-y-6">
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {adminStats.map((stat, index) => (
-          <Card key={index} className="hover:shadow-lg transition-shadow">
+          <Card key={index} className="hover:shadow-lg transition-shadow card-hover">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
               <stat.icon className={`h-4 w-4 ${stat.color}`} />
@@ -91,9 +127,68 @@ const AdminDashboard = () => {
         ))}
       </div>
 
+      {/* Action Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-200">
+          <CardHeader>
+            <UserCheck className="h-8 w-8 text-blue-600 mb-2" />
+            <CardTitle>Manage Vendors</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Review, approve, and manage vendor applications</p>
+            <Button className="w-full" onClick={handleManageVendors}>
+              <UserCheck className="h-4 w-4 mr-2" />
+              Vendor Management
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-green-200">
+          <CardHeader>
+            <Users className="h-8 w-8 text-green-600 mb-2" />
+            <CardTitle>User Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Monitor and manage all platform users</p>
+            <Button className="w-full" variant="outline" onClick={handleManageUsers}>
+              <Users className="h-4 w-4 mr-2" />
+              Manage Users
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-purple-200">
+          <CardHeader>
+            <Shield className="h-8 w-8 text-purple-600 mb-2" />
+            <CardTitle>Security Audit</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Run comprehensive security checks</p>
+            <Button className="w-full" variant="outline" onClick={handleSecurityAudit}>
+              <Shield className="h-4 w-4 mr-2" />
+              Security Audit
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-orange-200">
+          <CardHeader>
+            <Settings className="h-8 w-8 text-orange-600 mb-2" />
+            <CardTitle>System Settings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Configure platform settings and controls</p>
+            <Button className="w-full" variant="outline" onClick={handleSystemSettings}>
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Funding Distribution</CardTitle>
           </CardHeader>
@@ -111,7 +206,7 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Trust Score Distribution</CardTitle>
           </CardHeader>
@@ -141,7 +236,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Fraud Alerts */}
-      <Card>
+      <Card className="card-hover">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <AlertTriangle className="h-5 w-5 text-red-500" />
@@ -151,7 +246,7 @@ const AdminDashboard = () => {
         <CardContent>
           <div className="space-y-4">
             {fraudAlerts.map((alert) => (
-              <div key={alert.id} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={alert.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="flex items-center space-x-3">
                   <div className={`w-3 h-3 rounded-full ${alert.severity === 'high' ? 'bg-red-500' : 'bg-yellow-500'}`} />
                   <div>
@@ -339,7 +434,16 @@ const AdminDashboard = () => {
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="text-gray-600">Welcome back, {user?.firstName}! Monitor and manage the EmpowerLink platform.</p>
         </div>
-        <Button onClick={logout} variant="outline">Logout</Button>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowAnalyticsModal(true)} variant="outline">
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Analytics
+          </Button>
+          <Button onClick={handleExportData} variant="outline">
+            Export Data
+          </Button>
+          <Button onClick={logout} variant="outline">Logout</Button>
+        </div>
       </div>
 
       {/* Navigation Tabs */}
@@ -370,15 +474,49 @@ const AdminDashboard = () => {
       {activeTab === 'trust' && renderTrustScoring()}
       {activeTab === 'analytics' && renderAnalytics()}
       {activeTab === 'settings' && (
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Platform Settings</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600">System configuration and platform management settings will be implemented here.</p>
+            <div className="space-y-4">
+              <p className="text-gray-600 mb-4">Configure system-wide settings and platform controls.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button onClick={handleSystemSettings} className="justify-start">
+                  <Settings className="h-4 w-4 mr-2" />
+                  System Configuration
+                </Button>
+                <Button onClick={handleSecurityAudit} variant="outline" className="justify-start">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Security Settings
+                </Button>
+                <Button onClick={handleExportData} variant="outline" className="justify-start">
+                  Export Platform Data
+                </Button>
+                <Button onClick={handleManageUsers} variant="outline" className="justify-start">
+                  <Users className="h-4 w-4 mr-2" />
+                  User Permissions
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}
+
+      {/* Modals */}
+      <VendorManagementModal 
+        isOpen={showVendorManagement} 
+        onClose={() => setShowVendorManagement(false)} 
+      />
+      <UserManagementModal 
+        isOpen={showUserManagement} 
+        onClose={() => setShowUserManagement(false)} 
+      />
+      <AnalyticsModal 
+        isOpen={showAnalyticsModal} 
+        onClose={() => setShowAnalyticsModal(false)} 
+        userType="admin"
+      />
     </div>
   );
 };

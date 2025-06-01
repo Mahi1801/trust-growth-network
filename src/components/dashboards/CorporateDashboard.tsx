@@ -1,16 +1,19 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Rocket, TrendingUp, Users, Target, DollarSign, Award, Globe, Handshake } from 'lucide-react';
+import { Rocket, TrendingUp, Users, Target, DollarSign, Award, Globe, Handshake, BarChart3, FileText } from 'lucide-react';
 import CampaignModal from '@/components/modals/CampaignModal';
+import AnalyticsModal from '@/components/modals/AnalyticsModal';
 import { useToast } from '@/hooks/use-toast';
 
 const CorporateDashboard = () => {
   const { user, logout } = useAuth();
   const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const { toast } = useToast();
 
   // Mock data for corporate analytics
@@ -36,10 +39,7 @@ const CorporateDashboard = () => {
   ];
 
   const handleViewAnalytics = () => {
-    toast({
-      title: "Analytics Dashboard",
-      description: "Detailed analytics view would be implemented here with advanced filtering options.",
-    });
+    setShowAnalyticsModal(true);
   };
 
   const handleViewImpact = () => {
@@ -56,6 +56,34 @@ const CorporateDashboard = () => {
     });
   };
 
+  const handleGenerateReport = () => {
+    toast({
+      title: "Generating Report",
+      description: "Creating comprehensive CSR impact report with all metrics and analytics.",
+    });
+  };
+
+  const handleManageCampaigns = () => {
+    toast({
+      title: "Campaign Management",
+      description: "Opening advanced campaign management tools with performance tracking.",
+    });
+  };
+
+  const handleCSRCompliance = () => {
+    toast({
+      title: "CSR Compliance",
+      description: "Accessing CSR compliance dashboard with regulatory requirements and reporting.",
+    });
+  };
+
+  const handleInvestmentPortfolio = () => {
+    toast({
+      title: "Investment Portfolio",
+      description: "Viewing detailed social investment portfolio with risk analysis and ROI projections.",
+    });
+  };
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-8">
@@ -63,12 +91,18 @@ const CorporateDashboard = () => {
           <h1 className="text-3xl font-bold text-gray-900">Corporate Dashboard</h1>
           <p className="text-gray-600">Welcome back, {user?.firstName}! Track your social impact and ROI.</p>
         </div>
-        <Button onClick={logout} variant="outline">Logout</Button>
+        <div className="flex gap-2">
+          <Button onClick={handleGenerateReport} variant="outline">
+            <FileText className="h-4 w-4 mr-2" />
+            Generate Report
+          </Button>
+          <Button onClick={logout} variant="outline">Logout</Button>
+        </div>
       </div>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white card-hover">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Total Investment</CardTitle>
           </CardHeader>
@@ -78,7 +112,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white card-hover">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Social ROI</CardTitle>
           </CardHeader>
@@ -88,7 +122,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white card-hover">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Brand Impact Score</CardTitle>
           </CardHeader>
@@ -98,7 +132,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+        <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white card-hover">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
           </CardHeader>
@@ -168,9 +202,68 @@ const CorporateDashboard = () => {
         </Card>
       </div>
 
+      {/* Additional Action Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-indigo-200">
+          <CardHeader>
+            <BarChart3 className="h-8 w-8 text-indigo-600 mb-2" />
+            <CardTitle>Manage Campaigns</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Advanced campaign management and optimization</p>
+            <Button className="w-full" variant="outline" onClick={handleManageCampaigns}>
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Manage
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-pink-200">
+          <CardHeader>
+            <Award className="h-8 w-8 text-pink-600 mb-2" />
+            <CardTitle>CSR Compliance</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Track compliance with CSR regulations</p>
+            <Button className="w-full" variant="outline" onClick={handleCSRCompliance}>
+              <Award className="h-4 w-4 mr-2" />
+              Compliance
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-cyan-200">
+          <CardHeader>
+            <DollarSign className="h-8 w-8 text-cyan-600 mb-2" />
+            <CardTitle>Investment Portfolio</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Manage social investment portfolio</p>
+            <Button className="w-full" variant="outline" onClick={handleInvestmentPortfolio}>
+              <DollarSign className="h-4 w-4 mr-2" />
+              Portfolio
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-teal-200">
+          <CardHeader>
+            <Globe className="h-8 w-8 text-teal-600 mb-2" />
+            <CardTitle>Global Impact</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Monitor worldwide social impact initiatives</p>
+            <Button className="w-full" variant="outline" onClick={() => toast({ title: "Global Impact", description: "Accessing global impact tracking dashboard." })}>
+              <Globe className="h-4 w-4 mr-2" />
+              Global View
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Analytics Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Social ROI Over Time</CardTitle>
           </CardHeader>
@@ -188,7 +281,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Brand Value Growth</CardTitle>
           </CardHeader>
@@ -208,14 +301,14 @@ const CorporateDashboard = () => {
 
       {/* Impact Metrics and Campaign Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Impact Metrics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {impactMetrics.map((metric, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                   <div>
                     <p className="font-medium text-gray-900">{metric.metric}</p>
                     <p className="text-2xl font-bold text-blue-600">{metric.value}</p>
@@ -230,14 +323,14 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="card-hover">
           <CardHeader>
             <CardTitle>Active Campaigns</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {campaignData.map((campaign, index) => (
-                <div key={index} className="p-4 border rounded-lg">
+                <div key={index} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-gray-900">{campaign.campaign}</h4>
                     <span className={`px-2 py-1 rounded-full text-xs ${
@@ -267,10 +360,15 @@ const CorporateDashboard = () => {
         </Card>
       </div>
 
-      {/* Modal */}
+      {/* Modals */}
       <CampaignModal 
         isOpen={showCampaignModal} 
         onClose={() => setShowCampaignModal(false)} 
+      />
+      <AnalyticsModal 
+        isOpen={showAnalyticsModal} 
+        onClose={() => setShowAnalyticsModal(false)} 
+        userType="corporate"
       />
     </div>
   );

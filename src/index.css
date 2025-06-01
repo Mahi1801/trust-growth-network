@@ -98,14 +98,15 @@
 
   body {
     @apply bg-background text-foreground;
-    background-image: 
-      radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.05) 2px, transparent 0),
-      radial-gradient(circle at 75px 75px, rgba(16, 185, 129, 0.05) 1px, transparent 0);
-    background-size: 100px 100px;
+    background: 
+      linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(16, 185, 129, 0.02) 100%),
+      radial-gradient(circle at 25px 25px, rgba(59, 130, 246, 0.08) 2px, transparent 0),
+      radial-gradient(circle at 75px 75px, rgba(16, 185, 129, 0.08) 1px, transparent 0);
+    background-size: 100% 100%, 100px 100px, 100px 100px;
     background-attachment: fixed;
   }
 
-  /* Subtle geometric pattern overlay */
+  /* Enhanced geometric pattern overlay */
   body::before {
     content: '';
     position: fixed;
@@ -114,23 +115,38 @@
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px),
-      linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px);
-    background-size: 20px 20px;
+      linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+      linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+      linear-gradient(45deg, rgba(16, 185, 129, 0.02) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(16, 185, 129, 0.02) 25%, transparent 25%);
+    background-size: 20px 20px, 20px 20px, 60px 60px, 60px 60px;
     pointer-events: none;
     z-index: -1;
+    opacity: 0.6;
   }
 
-  /* Enhanced card backgrounds */
+  /* Enhanced card backgrounds with better visibility */
   .bg-white {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(59, 130, 246, 0.1);
   }
 
   .bg-gray-50 {
     background: linear-gradient(135deg, 
-      rgba(248, 250, 252, 0.95) 0%, 
-      rgba(241, 245, 249, 0.95) 100%);
-    backdrop-filter: blur(10px);
+      rgba(248, 250, 252, 0.98) 0%, 
+      rgba(241, 245, 249, 0.98) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(59, 130, 246, 0.05);
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   }
 }
