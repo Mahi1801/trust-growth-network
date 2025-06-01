@@ -2,235 +2,233 @@ import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { FileText, DollarSign, Users, BarChart3, Eye, CheckCircle, Clock, AlertTriangle, MapPin } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { ChartContainer } from '@/components/ui/chart';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Users, MapPin, TrendingUp, DollarSign, CheckCircle, Clock, AlertCircle, Plus, Eye } from 'lucide-react';
+import CampaignModal from '@/components/modals/CampaignModal';
+import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
 const NGODashboard = () => {
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState('applications');
-  const { toast } = useToast();
+  const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
 
-  // Mock data
-  const fundingData = [
-    { month: 'Jan', approved: 45000, pending: 15000, rejected: 5000 },
-    { month: 'Feb', approved: 52000, pending: 18000, rejected: 7000 },
-    { month: 'Mar', approved: 38000, pending: 12000, rejected: 3000 },
-    { month: 'Apr', approved: 61000, pending: 22000, rejected: 8000 },
+  const vendorData = [
+    { id: 1, name: 'Eco Crafts', location: 'Mumbai', status: 'Verified', funding: 50000 },
+    { id: 2, name: 'Organic Foods Co', location: 'Delhi', status: 'Pending', funding: 30000 },
+    { id: 3, name: 'Sustainable Textiles', location: 'Bangalore', status: 'Verified', funding: 75000 },
+  ];
+
+  const campaignData = [
+    { id: 1, title: 'Empower Rural Artisans', goal: 100000, raised: 75000, status: 'Active' },
+    { id: 2, title: 'Support Urban Farmers', goal: 50000, raised: 42000, status: 'Completed' },
+  ];
+
+  const keyMetrics = [
+    { label: 'Vendors Supported', value: 156, icon: Users, color: 'text-blue-600' },
+    { label: 'Funds Distributed', value: '₹2.35M', icon: DollarSign, color: 'text-green-600' },
+    { label: 'Active Campaigns', value: 3, icon: TrendingUp, color: 'text-purple-600' },
+    { label: 'Regional Coverage', value: 7, icon: MapPin, color: 'text-orange-600' },
   ];
 
   const impactData = [
-    { category: 'Equipment', value: 45, color: '#3B82F6' },
-    { category: 'Infrastructure', value: 30, color: '#10B981' },
-    { category: 'Training', value: 15, color: '#F59E0B' },
-    { category: 'Technology', value: 10, color: '#EF4444' },
+    { month: 'Jan', vendorsHelped: 45, fundsDistributed: 450000 },
+    { month: 'Feb', vendorsHelped: 52, fundsDistributed: 520000 },
+    { month: 'Mar', vendorsHelped: 61, fundsDistributed: 610000 },
+    { month: 'Apr', vendorsHelped: 68, fundsDistributed: 680000 },
+    { month: 'May', vendorsHelped: 75, fundsDistributed: 750000 },
+    { month: 'Jun', vendorsHelped: 82, fundsDistributed: 820000 },
   ];
 
-  const pendingApplications = [
-    { id: 1, vendor: 'Local Market Vendor', amount: 50000, location: 'Mumbai', trustScore: 85, submitted: '2 days ago', priority: 'high' },
-    { id: 2, vendor: 'Street Food Corner', amount: 25000, location: 'Delhi', trustScore: 92, submitted: '3 days ago', priority: 'medium' },
-    { id: 3, vendor: 'Handicraft Store', amount: 75000, location: 'Jaipur', trustScore: 78, submitted: '5 days ago', priority: 'high' },
-    { id: 4, vendor: 'Electronics Repair', amount: 30000, location: 'Chennai', trustScore: 67, submitted: '1 week ago', priority: 'low' },
+  const regionData = [
+    { region: 'Mumbai', vendors: 45, funding: 450000 },
+    { region: 'Delhi', vendors: 38, funding: 380000 },
+    { region: 'Bangalore', vendors: 32, funding: 320000 },
+    { region: 'Chennai', vendors: 28, funding: 280000 },
+    { region: 'Kolkata', vendors: 25, funding: 250000 },
   ];
-
-  const stats = [
-    { title: 'Applications Reviewed', value: '234', icon: FileText, color: 'text-blue-600' },
-    { title: 'Funds Distributed', value: '₹2.4M', icon: DollarSign, color: 'text-green-600' },
-    { title: 'Vendors Helped', value: '156', icon: Users, color: 'text-purple-600' },
-    { title: 'Success Rate', value: '87%', icon: BarChart3, color: 'text-orange-600' },
-  ];
-
-  const handleViewApplication = (appId: number) => {
-    toast({
-      title: "Application Details",
-      description: `Viewing detailed application #${appId} with documents and verification status.`,
-    });
-  };
-
-  const handleApproveApplication = (appId: number, vendor: string) => {
-    toast({
-      title: "Application Approved",
-      description: `Funding request from ${vendor} has been approved and will be processed.`,
-    });
-  };
-
-  const renderApplications = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Pending Applications</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Vendor</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Trust Score</TableHead>
-              <TableHead>Submitted</TableHead>
-              <TableHead>Priority</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {pendingApplications.map((app) => (
-              <TableRow key={app.id}>
-                <TableCell className="font-medium">{app.vendor}</TableCell>
-                <TableCell>₹{app.amount.toLocaleString()}</TableCell>
-                <TableCell className="flex items-center space-x-1">
-                  <MapPin className="h-4 w-4 text-gray-500" />
-                  <span>{app.location}</span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center space-x-2">
-                    <div className={`w-2 h-2 rounded-full ${
-                      app.trustScore >= 80 ? 'bg-green-500' : 
-                      app.trustScore >= 70 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`} />
-                    <span>{app.trustScore}/100</span>
-                  </div>
-                </TableCell>
-                <TableCell>{app.submitted}</TableCell>
-                <TableCell>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    app.priority === 'high' ? 'bg-red-100 text-red-800' :
-                    app.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {app.priority}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
-                    <Button size="sm" variant="outline" onClick={() => handleViewApplication(app.id)}>
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleApproveApplication(app.id, app.vendor)}>
-                      <CheckCircle className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  );
-
-  const renderAnalytics = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Funding Distribution by Month</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{ approved: { label: 'Approved', color: '#10B981' } }} className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={fundingData}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Bar dataKey="approved" fill="#10B981" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="pending" fill="#F59E0B" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Impact by Category</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{ value: { label: 'Percentage', color: '#3B82F6' } }} className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={impactData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    dataKey="value"
-                    label={({ category, value }) => `${category}: ${value}%`}
-                  >
-                    {impactData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">NGO Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user?.firstName}! Review applications and distribute funding.</p>
+          <p className="text-gray-600">Welcome back, {user?.firstName}! Track your campaigns and vendor impact.</p>
         </div>
         <Button onClick={logout} variant="outline">Logout</Button>
       </div>
 
-      {/* Stats Grid */}
+      {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
+        {keyMetrics.map((metric, index) => (
+          <Card key={index} className="border-l-4 border-l-blue-600">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">{metric.label}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
+              <div className="flex items-center space-x-2">
+                <metric.icon className={`h-5 w-5 ${metric.color}`} />
+                <span className="text-2xl font-bold text-gray-900">{metric.value}</span>
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex space-x-1 mb-6 bg-white p-1 rounded-lg shadow-sm">
-        {[
-          { id: 'applications', label: 'Review Applications', icon: FileText },
-          { id: 'analytics', label: 'Impact Analytics', icon: BarChart3 },
-          { id: 'monitoring', label: 'Monitor Progress', icon: Users },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
-              activeTab === tab.id
-                ? 'bg-blue-600 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
-          >
-            <tab.icon className="h-4 w-4" />
-            <span>{tab.label}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Tab Content */}
-      {activeTab === 'applications' && renderApplications()}
-      {activeTab === 'analytics' && renderAnalytics()}
-      {activeTab === 'monitoring' && (
-        <Card>
+      {/* Action Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-200">
           <CardHeader>
-            <CardTitle>Vendor Progress Monitoring</CardTitle>
+            <Plus className="h-8 w-8 text-blue-600 mb-2" />
+            <CardTitle>Create Campaign</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600">Real-time vendor progress tracking and milestone monitoring will be implemented here.</p>
+            <p className="text-gray-600 mb-4">Launch new funding campaigns for vendor support</p>
+            <Button className="w-full" onClick={() => setShowCampaignModal(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              New Campaign
+            </Button>
           </CardContent>
         </Card>
-      )}
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-green-200">
+          <CardHeader>
+            <Users className="h-8 w-8 text-green-600 mb-2" />
+            <CardTitle>Vendor Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Review and verify vendor applications</p>
+            <Button className="w-full" variant="outline">
+              <Users className="h-4 w-4 mr-2" />
+              Manage Vendors
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-purple-200">
+          <CardHeader>
+            <Eye className="h-8 w-8 text-purple-600 mb-2" />
+            <CardTitle>View Analytics</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Track impact metrics and funding distribution</p>
+            <Button className="w-full" variant="outline" onClick={() => setShowAnalyticsModal(true)}>
+              <Eye className="h-4 w-4 mr-2" />
+              View Analytics
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts and Data */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Impact Over Time</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={{}} className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={impactData}>
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Line type="monotone" dataKey="vendorsHelped" stroke="#10B981" strokeWidth={3} name="Vendors Helped" />
+                  <Line type="monotone" dataKey="fundsDistributed" stroke="#3B82F6" strokeWidth={2} name="Funds Distributed" />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Regional Distribution</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {regionData.map((region, index) => (
+                <div key={region.region} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div>
+                    <span className="font-medium">{region.region}</span>
+                    <p className="text-sm text-gray-600">{region.vendors} vendors</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-bold text-green-600">₹{region.funding.toLocaleString()}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recent Activities */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Recent Activities</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">Distributed funds to Eco Crafts</p>
+                <p className="text-sm text-gray-600">Mumbai, Maharashtra</p>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-green-600">₹50,000</p>
+                <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">Completed</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">Campaign "Support Urban Farmers" completed</p>
+                <p className="text-sm text-gray-600">Raised ₹42,000</p>
+              </div>
+              <div className="text-right">
+                <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">Completed</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Vendor Applications */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Vendor Applications</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {vendorData.map((vendor) => (
+              <div key={vendor.id} className="flex items-center justify-between p-4 border rounded-lg">
+                <div>
+                  <p className="font-medium text-gray-900">{vendor.name}</p>
+                  <p className="text-sm text-gray-600">{vendor.location}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold text-green-600">₹{vendor.funding.toLocaleString()}</p>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    vendor.status === 'Verified' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {vendor.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Modals */}
+      <CampaignModal 
+        isOpen={showCampaignModal} 
+        onClose={() => setShowCampaignModal(false)} 
+      />
+      <AnalyticsModal 
+        isOpen={showAnalyticsModal} 
+        onClose={() => setShowAnalyticsModal(false)} 
+        userType="ngo"
+      />
     </div>
   );
 };

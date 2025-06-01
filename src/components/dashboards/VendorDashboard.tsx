@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { PlusCircle, Camera, TrendingUp, MapPin, Star, Upload, FileText, CheckCircle, AlertTriangle, DollarSign } from 'lucide-react';
 import FundingRequestModal from '@/components/modals/FundingRequestModal';
 import PhotoUploadModal from '@/components/modals/PhotoUploadModal';
+import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
 const VendorDashboard = () => {
   const { user, logout } = useAuth();
@@ -14,6 +15,7 @@ const VendorDashboard = () => {
   const [currentLocation] = useState("Mumbai, Maharashtra");
   const [showFundingModal, setShowFundingModal] = useState(false);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
 
   // More realistic data for vendor progress
   const progressData = [
@@ -227,7 +229,7 @@ const VendorDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Monitor trust score, funding status and business metrics</p>
-            <Button className="w-full" variant="outline">
+            <Button className="w-full" variant="outline" onClick={() => setShowAnalyticsModal(true)}>
               <TrendingUp className="h-4 w-4 mr-2" />
               View Analytics
             </Button>
@@ -340,6 +342,11 @@ const VendorDashboard = () => {
       <PhotoUploadModal 
         isOpen={showPhotoModal} 
         onClose={() => setShowPhotoModal(false)} 
+      />
+      <AnalyticsModal 
+        isOpen={showAnalyticsModal} 
+        onClose={() => setShowAnalyticsModal(false)} 
+        userType="vendor"
       />
     </div>
   );
