@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Globe, Users, Building2, Heart, TrendingUp, Shield } from "lucide-react";
+import { CountUp } from "@/components/ui/count-up";
 
 interface HeroProps {
   onGetStarted: () => void;
@@ -58,19 +59,27 @@ const Hero = ({ onGetStarted }: HeroProps) => {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-gray-200">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">2.5K+</div>
+                <div className="text-3xl font-bold text-blue-600">
+                  <CountUp end={2500} duration={2500} suffix="+" />
+                </div>
                 <div className="text-sm text-gray-600">Active Vendors</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-600">150+</div>
+                <div className="text-3xl font-bold text-green-600">
+                  <CountUp end={150} duration={2000} suffix="+" />
+                </div>
                 <div className="text-sm text-gray-600">Partner NGOs</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">50+</div>
+                <div className="text-3xl font-bold text-purple-600">
+                  <CountUp end={50} duration={1800} suffix="+" />
+                </div>
                 <div className="text-sm text-gray-600">Corporations</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600">$2M+</div>
+                <div className="text-3xl font-bold text-orange-600">
+                  <CountUp end={2} duration={2200} prefix="₹" suffix="M+" />
+                </div>
                 <div className="text-sm text-gray-600">Impact Funded</div>
               </div>
             </div>

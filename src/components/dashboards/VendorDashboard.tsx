@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { PlusCircle, Camera, TrendingUp, MapPin, Star, Upload, FileText, CheckCircle, AlertTriangle, DollarSign } from 'lucide-react';
+import { CountUp } from '@/components/ui/count-up';
 import FundingRequestModal from '@/components/modals/FundingRequestModal';
 import PhotoUploadModal from '@/components/modals/PhotoUploadModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
@@ -130,7 +131,9 @@ const VendorDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-2">
-              <span className={`text-3xl font-bold ${getTrustScoreColor(trustScore)}`}>{trustScore}</span>
+              <span className={`text-3xl font-bold ${getTrustScoreColor(trustScore)}`}>
+                <CountUp end={trustScore} duration={2000} />
+              </span>
               <span className="text-xl text-gray-400">/100</span>
               <Star className={`h-6 w-6 ${getTrustScoreColor(trustScore)}`} fill="currentColor" />
             </div>
@@ -151,11 +154,15 @@ const VendorDashboard = () => {
             <CardTitle className="text-sm font-medium text-gray-600">Total Funding Received</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">₹2,35,000</div>
+            <div className="text-2xl font-bold text-green-600">
+              <CountUp end={235000} duration={2500} prefix="₹" />
+            </div>
             <p className="text-xs text-green-600">+₹75,000 this month</p>
             <div className="flex items-center mt-1">
               <DollarSign className="h-4 w-4 text-green-600" />
-              <span className="text-xs text-gray-600 ml-1">3 approved requests</span>
+              <span className="text-xs text-gray-600 ml-1">
+                <CountUp end={3} duration={1500} /> approved requests
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -165,11 +172,15 @@ const VendorDashboard = () => {
             <CardTitle className="text-sm font-medium text-gray-600">Business Growth</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">+28%</div>
+            <div className="text-2xl font-bold text-blue-600">
+              +<CountUp end={28} duration={2000} />%
+            </div>
             <p className="text-xs text-blue-600">Revenue increase (6 months)</p>
             <div className="flex items-center mt-1">
               <TrendingUp className="h-4 w-4 text-blue-600" />
-              <span className="text-xs text-gray-600 ml-1">₹78,000 current monthly</span>
+              <span className="text-xs text-gray-600 ml-1">
+                ₹<CountUp end={78000} duration={2200} /> current monthly
+              </span>
             </div>
           </CardContent>
         </Card>

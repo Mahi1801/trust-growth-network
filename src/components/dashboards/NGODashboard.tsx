@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { Users, MapPin, TrendingUp, DollarSign, CheckCircle, Clock, AlertCircle, Plus, Eye } from 'lucide-react';
+import { CountUp } from '@/components/ui/count-up';
 import CampaignModal from '@/components/modals/CampaignModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
@@ -60,19 +61,61 @@ const NGODashboard = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {keyMetrics.map((metric, index) => (
-          <Card key={index} className="border-l-4 border-l-blue-600">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">{metric.label}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center space-x-2">
-                <metric.icon className={`h-5 w-5 ${metric.color}`} />
-                <span className="text-2xl font-bold text-gray-900">{metric.value}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        <Card className="border-l-4 border-l-blue-600">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Vendors Supported</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-2">
+              <Users className="h-5 w-5 text-blue-600" />
+              <span className="text-2xl font-bold text-gray-900">
+                <CountUp end={156} duration={2000} />
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-green-600">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Funds Distributed</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-2">
+              <DollarSign className="h-5 w-5 text-green-600" />
+              <span className="text-2xl font-bold text-gray-900">
+                ₹<CountUp end={2.35} duration={2500} />M
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-purple-600">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Active Campaigns</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-2">
+              <TrendingUp className="h-5 w-5 text-purple-600" />
+              <span className="text-2xl font-bold text-gray-900">
+                <CountUp end={3} duration={1500} />
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-orange-600">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">Regional Coverage</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center space-x-2">
+              <MapPin className="h-5 w-5 text-orange-600" />
+              <span className="text-2xl font-bold text-gray-900">
+                <CountUp end={7} duration={1800} />
+              </span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Action Cards */}

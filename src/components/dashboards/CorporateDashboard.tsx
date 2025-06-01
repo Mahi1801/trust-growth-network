@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { Rocket, TrendingUp, Users, Target, DollarSign, Award, Globe, Handshake, BarChart3, FileText } from 'lucide-react';
+import { CountUp } from '@/components/ui/count-up';
 import CampaignModal from '@/components/modals/CampaignModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 import { useToast } from '@/hooks/use-toast';
@@ -107,7 +107,9 @@ const CorporateDashboard = () => {
             <CardTitle className="text-sm font-medium">Total Investment</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹15.2M</div>
+            <div className="text-2xl font-bold">
+              ₹<CountUp end={15.2} duration={2500} />M
+            </div>
             <p className="text-xs opacity-90">+22% from last quarter</p>
           </CardContent>
         </Card>
@@ -117,8 +119,12 @@ const CorporateDashboard = () => {
             <CardTitle className="text-sm font-medium">Social ROI</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">3.4x</div>
-            <p className="text-xs opacity-90">₹51.7M social value created</p>
+            <div className="text-2xl font-bold">
+              <CountUp end={3.4} duration={2000} />x
+            </div>
+            <p className="text-xs opacity-90">
+              ₹<CountUp end={51.7} duration={2300} />M social value created
+            </p>
           </CardContent>
         </Card>
 
@@ -127,7 +133,9 @@ const CorporateDashboard = () => {
             <CardTitle className="text-sm font-medium">Brand Impact Score</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">92/100</div>
+            <div className="text-2xl font-bold">
+              <CountUp end={92} duration={1800} />/100
+            </div>
             <p className="text-xs opacity-90">Excellent brand perception</p>
           </CardContent>
         </Card>
@@ -137,8 +145,12 @@ const CorporateDashboard = () => {
             <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs opacity-90">Across 8 cities</p>
+            <div className="text-2xl font-bold">
+              <CountUp end={12} duration={1500} />
+            </div>
+            <p className="text-xs opacity-90">
+              Across <CountUp end={8} duration={1200} /> cities
+            </p>
           </CardContent>
         </Card>
       </div>
