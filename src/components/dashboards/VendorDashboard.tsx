@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,11 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { PlusCircle, Camera, TrendingUp, MapPin, Star, Upload, FileText, CheckCircle, AlertTriangle, DollarSign } from 'lucide-react';
+import FundingRequestModal from '@/components/modals/FundingRequestModal';
+import PhotoUploadModal from '@/components/modals/PhotoUploadModal';
 
 const VendorDashboard = () => {
   const { user, logout } = useAuth();
   const [trustScore] = useState(87);
   const [currentLocation] = useState("Mumbai, Maharashtra");
+  const [showFundingModal, setShowFundingModal] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   // More realistic data for vendor progress
   const progressData = [
@@ -187,7 +190,7 @@ const VendorDashboard = () => {
         </Card>
       </div>
 
-      {/* Action Cards */}
+      {/* Action Cards with working buttons */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-200">
           <CardHeader>
@@ -196,7 +199,7 @@ const VendorDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Request funding for business improvements, equipment, or expansion</p>
-            <Button className="w-full">
+            <Button className="w-full" onClick={() => setShowFundingModal(true)}>
               <FileText className="h-4 w-4 mr-2" />
               New Request
             </Button>
@@ -210,7 +213,7 @@ const VendorDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Share before/after photos with fraud detection verification</p>
-            <Button className="w-full" variant="outline">
+            <Button className="w-full" variant="outline" onClick={() => setShowPhotoModal(true)}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Photos
             </Button>
@@ -328,6 +331,16 @@ const VendorDashboard = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modals */}
+      <FundingRequestModal 
+        isOpen={showFundingModal} 
+        onClose={() => setShowFundingModal(false)} 
+      />
+      <PhotoUploadModal 
+        isOpen={showPhotoModal} 
+        onClose={() => setShowPhotoModal(false)} 
+      />
     </div>
   );
 };

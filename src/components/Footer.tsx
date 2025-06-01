@@ -1,12 +1,49 @@
 
 import { Globe, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Heart, Users, Building, Store } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Footer = () => {
+  const { toast } = useToast();
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handlePlatformClick = (platform: string) => {
+    toast({
+      title: `${platform} Portal`,
+      description: `Redirecting to the ${platform.toLowerCase()} dedicated portal and registration page.`,
+    });
+  };
+
+  const handleSocialClick = (platform: string) => {
+    toast({
+      title: `${platform} Page`,
+      description: `Opening EmpowerLink's ${platform} page in a new tab.`,
+    });
+  };
+
+  const handleContactClick = (method: string, value: string) => {
+    if (method === 'email') {
+      window.location.href = `mailto:${value}`;
+    } else if (method === 'phone') {
+      window.location.href = `tel:${value}`;
+    } else {
+      toast({
+        title: "Location",
+        description: "Opening location in maps application.",
+      });
+    }
+  };
+
+  const handlePolicyClick = (policy: string) => {
+    toast({
+      title: policy,
+      description: `${policy} page would be displayed here with detailed legal information.`,
+    });
   };
 
   return (
@@ -24,10 +61,22 @@ const Footer = () => {
               and sustainable partnerships that create lasting social impact.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
-              <Twitter className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
-              <Linkedin className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
-              <Github className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" />
+              <Facebook 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                onClick={() => handleSocialClick('Facebook')}
+              />
+              <Twitter 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                onClick={() => handleSocialClick('Twitter')}
+              />
+              <Linkedin 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                onClick={() => handleSocialClick('LinkedIn')}
+              />
+              <Github 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                onClick={() => handleSocialClick('GitHub')}
+              />
             </div>
           </div>
 
@@ -36,25 +85,37 @@ const Footer = () => {
             <h3 className="text-lg font-semibold">Platform</h3>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                <button 
+                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  onClick={() => handlePlatformClick('Vendors')}
+                >
                   <Store className="h-4 w-4" />
                   <span>For Vendors</span>
                 </button>
               </li>
               <li>
-                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                <button 
+                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  onClick={() => handlePlatformClick('NGOs')}
+                >
                   <Heart className="h-4 w-4" />
                   <span>For NGOs</span>
                 </button>
               </li>
               <li>
-                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                <button 
+                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  onClick={() => handlePlatformClick('Corporations')}
+                >
                   <Building className="h-4 w-4" />
                   <span>For Corporations</span>
                 </button>
               </li>
               <li>
-                <button className="hover:text-white transition-colors flex items-center space-x-2">
+                <button 
+                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  onClick={() => handlePlatformClick('Admins')}
+                >
                   <Users className="h-4 w-4" />
                   <span>For Admins</span>
                 </button>
@@ -91,10 +152,20 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <button className="hover:text-white transition-colors">Privacy Policy</button>
+                <button 
+                  className="hover:text-white transition-colors"
+                  onClick={() => handlePolicyClick('Privacy Policy')}
+                >
+                  Privacy Policy
+                </button>
               </li>
               <li>
-                <button className="hover:text-white transition-colors">Terms of Service</button>
+                <button 
+                  className="hover:text-white transition-colors"
+                  onClick={() => handlePolicyClick('Terms of Service')}
+                >
+                  Terms of Service
+                </button>
               </li>
             </ul>
           </div>
@@ -103,15 +174,24 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Contact</h3>
             <div className="space-y-3 text-gray-400">
-              <div className="flex items-center space-x-3">
+              <div 
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors"
+                onClick={() => handleContactClick('email', 'hello@empowerlink.org')}
+              >
                 <Mail className="h-5 w-5" />
                 <span>hello@empowerlink.org</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div 
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors"
+                onClick={() => handleContactClick('phone', '+15551234567')}
+              >
                 <Phone className="h-5 w-5" />
                 <span>+1 (555) 123-4567</span>
               </div>
-              <div className="flex items-center space-x-3">
+              <div 
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors"
+                onClick={() => handleContactClick('location', 'San Francisco, CA')}
+              >
                 <MapPin className="h-5 w-5" />
                 <span>San Francisco, CA</span>
               </div>

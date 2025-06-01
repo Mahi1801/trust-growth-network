@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -7,10 +6,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts';
 import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+  const { toast } = useToast();
 
   // Mock data for analytics
   const fundingData = [
@@ -50,6 +51,27 @@ const AdminDashboard = () => {
     { title: 'NGO Partners', value: '89', icon: Heart, color: 'text-red-600', change: '+15%' },
     { title: 'Corporate Partners', value: '45', icon: Building2, color: 'text-purple-600', change: '+5%' },
   ];
+
+  const handleViewVendor = (vendorId: number, vendorName: string) => {
+    toast({
+      title: "Vendor Details",
+      description: `Viewing detailed profile and history for ${vendorName}.`,
+    });
+  };
+
+  const handleFlagVendor = (vendorId: number, vendorName: string) => {
+    toast({
+      title: "Vendor Flagged",
+      description: `${vendorName} has been flagged for manual review. Admin team will investigate.`,
+    });
+  };
+
+  const handleReviewAlert = (alertId: number, issue: string) => {
+    toast({
+      title: "Alert Under Review",
+      description: `Reviewing fraud alert: "${issue}". Investigation started.`,
+    });
+  };
 
   const renderOverview = () => (
     <div className="space-y-6">
@@ -139,7 +161,9 @@ const AdminDashboard = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">{alert.time}</p>
-                  <Button size="sm" variant="outline">Review</Button>
+                  <Button size="sm" variant="outline" onClick={() => handleReviewAlert(alert.id, alert.issue)}>
+                    Review
+                  </Button>
                 </div>
               </div>
             ))}
@@ -194,11 +218,11 @@ const AdminDashboard = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => handleViewVendor(vendor.id, vendor.name)}>
                         <Eye className="h-4 w-4" />
                       </Button>
                       {vendor.flagged && (
-                        <Button size="sm" variant="destructive">
+                        <Button size="sm" variant="destructive" onClick={() => handleFlagVendor(vendor.id, vendor.name)}>
                           <AlertTriangle className="h-4 w-4" />
                         </Button>
                       )}

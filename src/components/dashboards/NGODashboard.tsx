@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -7,10 +6,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { FileText, DollarSign, Users, BarChart3, Eye, CheckCircle, Clock, AlertTriangle, MapPin } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const NGODashboard = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('applications');
+  const { toast } = useToast();
 
   // Mock data
   const fundingData = [
@@ -40,6 +41,20 @@ const NGODashboard = () => {
     { title: 'Vendors Helped', value: '156', icon: Users, color: 'text-purple-600' },
     { title: 'Success Rate', value: '87%', icon: BarChart3, color: 'text-orange-600' },
   ];
+
+  const handleViewApplication = (appId: number) => {
+    toast({
+      title: "Application Details",
+      description: `Viewing detailed application #${appId} with documents and verification status.`,
+    });
+  };
+
+  const handleApproveApplication = (appId: number, vendor: string) => {
+    toast({
+      title: "Application Approved",
+      description: `Funding request from ${vendor} has been approved and will be processed.`,
+    });
+  };
 
   const renderApplications = () => (
     <Card>
@@ -89,10 +104,10 @@ const NGODashboard = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" onClick={() => handleViewApplication(app.id)}>
                       <Eye className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleApproveApplication(app.id, app.vendor)}>
                       <CheckCircle className="h-4 w-4" />
                     </Button>
                   </div>

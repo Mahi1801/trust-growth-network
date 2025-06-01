@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,9 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { Rocket, TrendingUp, Users, Target, DollarSign, Award, Globe, Handshake } from 'lucide-react';
+import CampaignModal from '@/components/modals/CampaignModal';
+import { useToast } from '@/hooks/use-toast';
 
 const CorporateDashboard = () => {
   const { user, logout } = useAuth();
+  const [showCampaignModal, setShowCampaignModal] = useState(false);
+  const { toast } = useToast();
 
   // Mock data for corporate analytics
   const roiData = [
@@ -31,6 +34,27 @@ const CorporateDashboard = () => {
     { campaign: 'Delhi Tech Empowerment', invested: 750000, impact: 92, vendors: 62, status: 'completed' },
     { campaign: 'Rural Business Boost', invested: 300000, impact: 76, vendors: 28, status: 'active' },
   ];
+
+  const handleViewAnalytics = () => {
+    toast({
+      title: "Analytics Dashboard",
+      description: "Detailed analytics view would be implemented here with advanced filtering options.",
+    });
+  };
+
+  const handleViewImpact = () => {
+    toast({
+      title: "Impact Dashboard",
+      description: "Comprehensive impact metrics and detailed reports would be displayed here.",
+    });
+  };
+
+  const handleFindPartners = () => {
+    toast({
+      title: "Partner Network",
+      description: "NGO partner discovery and collaboration features would be implemented here.",
+    });
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -85,7 +109,7 @@ const CorporateDashboard = () => {
         </Card>
       </div>
 
-      {/* Action Cards */}
+      {/* Action Cards with working buttons */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-200">
           <CardHeader>
@@ -94,7 +118,7 @@ const CorporateDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Create new social impact funding campaigns</p>
-            <Button className="w-full">
+            <Button className="w-full" onClick={() => setShowCampaignModal(true)}>
               <Rocket className="h-4 w-4 mr-2" />
               New Campaign
             </Button>
@@ -108,7 +132,7 @@ const CorporateDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Monitor return on social investment in real-time</p>
-            <Button className="w-full" variant="outline">
+            <Button className="w-full" variant="outline" onClick={handleViewAnalytics}>
               <TrendingUp className="h-4 w-4 mr-2" />
               View Analytics
             </Button>
@@ -122,7 +146,7 @@ const CorporateDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">View detailed impact analytics and reports</p>
-            <Button className="w-full" variant="outline">
+            <Button className="w-full" variant="outline" onClick={handleViewImpact}>
               <Target className="h-4 w-4 mr-2" />
               View Impact
             </Button>
@@ -136,7 +160,7 @@ const CorporateDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Connect with NGO partners and expand reach</p>
-            <Button className="w-full" variant="outline">
+            <Button className="w-full" variant="outline" onClick={handleFindPartners}>
               <Handshake className="h-4 w-4 mr-2" />
               Find Partners
             </Button>
@@ -242,6 +266,12 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal */}
+      <CampaignModal 
+        isOpen={showCampaignModal} 
+        onClose={() => setShowCampaignModal(false)} 
+      />
     </div>
   );
 };
