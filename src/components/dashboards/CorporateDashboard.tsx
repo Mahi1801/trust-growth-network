@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -26,10 +27,10 @@ const CorporateDashboard = () => {
   ];
 
   const impactMetrics = [
-    { metric: 'Lives Impacted', value: '2,450', change: '+18%' },
-    { metric: 'Communities Reached', value: '45', change: '+12%' },
-    { metric: 'Businesses Supported', value: '156', change: '+25%' },
-    { metric: 'Sustainability Score', value: '8.7/10', change: '+0.5' },
+    { metric: 'Lives Impacted', value: 2450, change: '+18%' },
+    { metric: 'Communities Reached', value: 45, change: '+12%' },
+    { metric: 'Businesses Supported', value: 156, change: '+25%' },
+    { metric: 'Sustainability Score', value: 8.7, change: '+0.5' },
   ];
 
   const campaignData = [
@@ -100,55 +101,55 @@ const CorporateDashboard = () => {
         </div>
       </div>
 
-      {/* Key Metrics */}
+      {/* Key Metrics - Enhanced visibility */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white card-hover">
-          <CardHeader className="pb-2">
+        <Card className="bg-white border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          <CardHeader className="pb-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
             <CardTitle className="text-sm font-medium">Total Investment</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="pt-4 bg-white">
+            <div className="text-3xl font-bold text-blue-600">
               ₹<CountUp end={15.2} duration={2500} />M
             </div>
-            <p className="text-xs opacity-90">+22% from last quarter</p>
+            <p className="text-sm text-gray-600 mt-1">+<CountUp end={22} duration={2000} />% from last quarter</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white card-hover">
-          <CardHeader className="pb-2">
+        <Card className="bg-white border-2 border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          <CardHeader className="pb-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-t-lg">
             <CardTitle className="text-sm font-medium">Social ROI</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="pt-4 bg-white">
+            <div className="text-3xl font-bold text-green-600">
               <CountUp end={3.4} duration={2000} />x
             </div>
-            <p className="text-xs opacity-90">
+            <p className="text-sm text-gray-600 mt-1">
               ₹<CountUp end={51.7} duration={2300} />M social value created
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white card-hover">
-          <CardHeader className="pb-2">
+        <Card className="bg-white border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          <CardHeader className="pb-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-t-lg">
             <CardTitle className="text-sm font-medium">Brand Impact Score</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="pt-4 bg-white">
+            <div className="text-3xl font-bold text-purple-600">
               <CountUp end={92} duration={1800} />/100
             </div>
-            <p className="text-xs opacity-90">Excellent brand perception</p>
+            <p className="text-sm text-gray-600 mt-1">Excellent brand perception</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white card-hover">
-          <CardHeader className="pb-2">
+        <Card className="bg-white border-2 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          <CardHeader className="pb-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-lg">
             <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="pt-4 bg-white">
+            <div className="text-3xl font-bold text-orange-600">
               <CountUp end={12} duration={1500} />
             </div>
-            <p className="text-xs opacity-90">
+            <p className="text-sm text-gray-600 mt-1">
               Across <CountUp end={8} duration={1200} /> cities
             </p>
           </CardContent>
@@ -157,7 +158,7 @@ const CorporateDashboard = () => {
 
       {/* Action Cards with working buttons */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-200 bg-white">
           <CardHeader>
             <Rocket className="h-8 w-8 text-blue-600 mb-2" />
             <CardTitle>Launch Campaign</CardTitle>
@@ -171,7 +172,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-green-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-green-200 bg-white">
           <CardHeader>
             <TrendingUp className="h-8 w-8 text-green-600 mb-2" />
             <CardTitle>Track ROI</CardTitle>
@@ -185,7 +186,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-purple-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-purple-200 bg-white">
           <CardHeader>
             <Target className="h-8 w-8 text-purple-600 mb-2" />
             <CardTitle>Impact Dashboard</CardTitle>
@@ -199,7 +200,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-orange-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-orange-200 bg-white">
           <CardHeader>
             <Users className="h-8 w-8 text-orange-600 mb-2" />
             <CardTitle>Partner Network</CardTitle>
@@ -216,7 +217,7 @@ const CorporateDashboard = () => {
 
       {/* Additional Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-indigo-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-indigo-200 bg-white">
           <CardHeader>
             <BarChart3 className="h-8 w-8 text-indigo-600 mb-2" />
             <CardTitle>Manage Campaigns</CardTitle>
@@ -230,7 +231,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-pink-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-pink-200 bg-white">
           <CardHeader>
             <Award className="h-8 w-8 text-pink-600 mb-2" />
             <CardTitle>CSR Compliance</CardTitle>
@@ -244,7 +245,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-cyan-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-cyan-200 bg-white">
           <CardHeader>
             <DollarSign className="h-8 w-8 text-cyan-600 mb-2" />
             <CardTitle>Investment Portfolio</CardTitle>
@@ -258,7 +259,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-teal-200">
+        <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-teal-200 bg-white">
           <CardHeader>
             <Globe className="h-8 w-8 text-teal-600 mb-2" />
             <CardTitle>Global Impact</CardTitle>
@@ -275,7 +276,7 @@ const CorporateDashboard = () => {
 
       {/* Analytics Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card className="card-hover">
+        <Card className="card-hover bg-white border-2 border-gray-200">
           <CardHeader>
             <CardTitle>Social ROI Over Time</CardTitle>
           </CardHeader>
@@ -293,7 +294,7 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="card-hover">
+        <Card className="card-hover bg-white border-2 border-gray-200">
           <CardHeader>
             <CardTitle>Brand Value Growth</CardTitle>
           </CardHeader>
@@ -313,17 +314,26 @@ const CorporateDashboard = () => {
 
       {/* Impact Metrics and Campaign Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="card-hover">
+        <Card className="card-hover bg-white border-2 border-gray-200">
           <CardHeader>
             <CardTitle>Impact Metrics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">
               {impactMetrics.map((metric, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200">
                   <div>
                     <p className="font-medium text-gray-900">{metric.metric}</p>
-                    <p className="text-2xl font-bold text-blue-600">{metric.value}</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {metric.metric === 'Sustainability Score' ? (
+                        <>
+                          <CountUp end={metric.value} duration={2000} />
+                          /10
+                        </>
+                      ) : (
+                        <CountUp end={metric.value} duration={2000} />
+                      )}
+                    </p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-green-600 font-medium">{metric.change}</p>
@@ -335,14 +345,14 @@ const CorporateDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="card-hover">
+        <Card className="card-hover bg-white border-2 border-gray-200">
           <CardHeader>
             <CardTitle>Active Campaigns</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {campaignData.map((campaign, index) => (
-                <div key={index} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                <div key={index} className="p-4 border-2 border-gray-200 rounded-lg hover:shadow-md transition-shadow bg-white">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-gray-900">{campaign.campaign}</h4>
                     <span className={`px-2 py-1 rounded-full text-xs ${
@@ -354,15 +364,21 @@ const CorporateDashboard = () => {
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
                       <p className="text-gray-600">Investment</p>
-                      <p className="font-medium">₹{campaign.invested.toLocaleString()}</p>
+                      <p className="font-medium text-lg">
+                        ₹<CountUp end={campaign.invested} duration={2000} />
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-600">Impact Score</p>
-                      <p className="font-medium">{campaign.impact}/100</p>
+                      <p className="font-medium text-lg">
+                        <CountUp end={campaign.impact} duration={1800} />/100
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-600">Vendors</p>
-                      <p className="font-medium">{campaign.vendors}</p>
+                      <p className="font-medium text-lg">
+                        <CountUp end={campaign.vendors} duration={1500} />
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -58,29 +58,29 @@ const Hero = ({ onGetStarted }: HeroProps) => {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-gray-200">
-              <div className="text-center">
+              <div className="text-center bg-white p-4 rounded-lg shadow-md border-2 border-blue-100">
                 <div className="text-3xl font-bold text-blue-600">
                   <CountUp end={2500} duration={2500} suffix="+" />
                 </div>
-                <div className="text-sm text-gray-600">Active Vendors</div>
+                <div className="text-sm text-gray-600 font-medium">Active Vendors</div>
               </div>
-              <div className="text-center">
+              <div className="text-center bg-white p-4 rounded-lg shadow-md border-2 border-green-100">
                 <div className="text-3xl font-bold text-green-600">
                   <CountUp end={150} duration={2000} suffix="+" />
                 </div>
-                <div className="text-sm text-gray-600">Partner NGOs</div>
+                <div className="text-sm text-gray-600 font-medium">Partner NGOs</div>
               </div>
-              <div className="text-center">
+              <div className="text-center bg-white p-4 rounded-lg shadow-md border-2 border-purple-100">
                 <div className="text-3xl font-bold text-purple-600">
                   <CountUp end={50} duration={1800} suffix="+" />
                 </div>
-                <div className="text-sm text-gray-600">Corporations</div>
+                <div className="text-sm text-gray-600 font-medium">Corporations</div>
               </div>
-              <div className="text-center">
+              <div className="text-center bg-white p-4 rounded-lg shadow-md border-2 border-orange-100">
                 <div className="text-3xl font-bold text-orange-600">
                   <CountUp end={2} duration={2200} prefix="₹" suffix="M+" />
                 </div>
-                <div className="text-sm text-gray-600">Impact Funded</div>
+                <div className="text-sm text-gray-600 font-medium">Impact Funded</div>
               </div>
             </div>
           </div>
@@ -88,24 +88,24 @@ const Hero = ({ onGetStarted }: HeroProps) => {
           <div className="relative">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+                <div className="bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-100 hover:shadow-xl transition-all duration-300 group">
                   <Globe className="h-8 w-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform" />
                   <h3 className="font-semibold text-gray-900 mb-2">Global Reach</h3>
                   <p className="text-sm text-gray-600">Connect with impact partners worldwide</p>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+                <div className="bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-100 hover:shadow-xl transition-all duration-300 group">
                   <Shield className="h-8 w-8 text-red-600 mb-3 group-hover:scale-110 transition-transform" />
                   <h3 className="font-semibold text-gray-900 mb-2">AI-Verified Impact</h3>
                   <p className="text-sm text-gray-600">Advanced verification ensures real results</p>
                 </div>
               </div>
               <div className="space-y-4 pt-8">
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+                <div className="bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-100 hover:shadow-xl transition-all duration-300 group">
                   <Users className="h-8 w-8 text-green-600 mb-3 group-hover:scale-110 transition-transform" />
                   <h3 className="font-semibold text-gray-900 mb-2">Community First</h3>
                   <p className="text-sm text-gray-600">Empowering local vendors and businesses</p>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+                <div className="bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-100 hover:shadow-xl transition-all duration-300 group">
                   <TrendingUp className="h-8 w-8 text-purple-600 mb-3 group-hover:scale-110 transition-transform" />
                   <h3 className="font-semibold text-gray-900 mb-2">Transparent ROI</h3>
                   <p className="text-sm text-gray-600">Real-time impact metrics and analytics</p>
