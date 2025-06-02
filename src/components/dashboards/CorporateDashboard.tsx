@@ -101,55 +101,57 @@ const CorporateDashboard = () => {
         </div>
       </div>
 
-      {/* Key Metrics - Enhanced visibility */}
+      {/* Key Metrics - Enhanced visibility with proper background */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-white border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        <Card className="bg-white border-2 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
           <CardHeader className="pb-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
-            <CardTitle className="text-sm font-medium">Total Investment</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">Total Investment</CardTitle>
           </CardHeader>
-          <CardContent className="pt-4 bg-white">
-            <div className="text-3xl font-bold text-blue-600">
+          <CardContent className="pt-4 bg-white rounded-b-lg">
+            <div className="text-3xl font-bold text-blue-600 mb-1">
               ₹<CountUp end={15.2} duration={2500} />M
             </div>
-            <p className="text-sm text-gray-600 mt-1">+<CountUp end={22} duration={2000} />% from last quarter</p>
+            <p className="text-sm text-gray-600">
+              +<CountUp end={22} duration={2000} />% from last quarter
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        <Card className="bg-white border-2 border-green-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
           <CardHeader className="pb-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-t-lg">
-            <CardTitle className="text-sm font-medium">Social ROI</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">Social ROI</CardTitle>
           </CardHeader>
-          <CardContent className="pt-4 bg-white">
-            <div className="text-3xl font-bold text-green-600">
+          <CardContent className="pt-4 bg-white rounded-b-lg">
+            <div className="text-3xl font-bold text-green-600 mb-1">
               <CountUp end={3.4} duration={2000} />x
             </div>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-600">
               ₹<CountUp end={51.7} duration={2300} />M social value created
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        <Card className="bg-white border-2 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
           <CardHeader className="pb-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-t-lg">
-            <CardTitle className="text-sm font-medium">Brand Impact Score</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">Brand Impact Score</CardTitle>
           </CardHeader>
-          <CardContent className="pt-4 bg-white">
-            <div className="text-3xl font-bold text-purple-600">
+          <CardContent className="pt-4 bg-white rounded-b-lg">
+            <div className="text-3xl font-bold text-purple-600 mb-1">
               <CountUp end={92} duration={1800} />/100
             </div>
-            <p className="text-sm text-gray-600 mt-1">Excellent brand perception</p>
+            <p className="text-sm text-gray-600">Excellent brand perception</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        <Card className="bg-white border-2 border-orange-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
           <CardHeader className="pb-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-t-lg">
-            <CardTitle className="text-sm font-medium">Active Campaigns</CardTitle>
+            <CardTitle className="text-sm font-medium text-white">Active Campaigns</CardTitle>
           </CardHeader>
-          <CardContent className="pt-4 bg-white">
-            <div className="text-3xl font-bold text-orange-600">
+          <CardContent className="pt-4 bg-white rounded-b-lg">
+            <div className="text-3xl font-bold text-orange-600 mb-1">
               <CountUp end={12} duration={1500} />
             </div>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-600">
               Across <CountUp end={8} duration={1200} /> cities
             </p>
           </CardContent>
