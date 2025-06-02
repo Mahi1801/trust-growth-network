@@ -101,11 +101,11 @@ const CorporateDashboard = () => {
         </div>
       </div>
 
-      {/* Key Metrics - Enhanced visibility with better headings */}
+      {/* Key Metrics - Enhanced visibility with black headings */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="bg-white border-2 border-blue-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-          <CardHeader className="pb-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
-            <CardTitle className="text-lg font-bold text-white flex items-center justify-center">
+          <CardHeader className="pb-3 bg-white rounded-t-lg border-b border-gray-200">
+            <CardTitle className="text-lg font-bold text-black text-center">
               Total Investment
             </CardTitle>
           </CardHeader>
@@ -120,8 +120,8 @@ const CorporateDashboard = () => {
         </Card>
 
         <Card className="bg-white border-2 border-green-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-          <CardHeader className="pb-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-t-lg">
-            <CardTitle className="text-lg font-bold text-white flex items-center justify-center">
+          <CardHeader className="pb-3 bg-white rounded-t-lg border-b border-gray-200">
+            <CardTitle className="text-lg font-bold text-black text-center">
               Social ROI
             </CardTitle>
           </CardHeader>
@@ -136,8 +136,8 @@ const CorporateDashboard = () => {
         </Card>
 
         <Card className="bg-white border-2 border-purple-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-          <CardHeader className="pb-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-t-lg">
-            <CardTitle className="text-lg font-bold text-white flex items-center justify-center">
+          <CardHeader className="pb-3 bg-white rounded-t-lg border-b border-gray-200">
+            <CardTitle className="text-lg font-bold text-black text-center">
               Brand Impact Score
             </CardTitle>
           </CardHeader>
@@ -150,8 +150,8 @@ const CorporateDashboard = () => {
         </Card>
 
         <Card className="bg-white border-2 border-orange-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-          <CardHeader className="pb-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-t-lg">
-            <CardTitle className="text-lg font-bold text-white flex items-center justify-center">
+          <CardHeader className="pb-3 bg-white rounded-t-lg border-b border-gray-200">
+            <CardTitle className="text-lg font-bold text-black text-center">
               Active Campaigns
             </CardTitle>
           </CardHeader>
