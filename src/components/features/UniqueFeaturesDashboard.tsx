@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, Shield, Sparkles, TrendingUp, Target, Award, VrHeadset, Trophy, BookOpen } from 'lucide-react';
+import { Brain, Shield, Sparkles, TrendingUp, Target, Award, Headset, Trophy, BookOpen } from 'lucide-react';
 import AIImpactPredictor from './AIImpactPredictor';
 import BlockchainImpactCertificates from './BlockchainImpactCertificates';
 import VRImpactTours from './VRImpactTours';
@@ -58,7 +58,7 @@ const UniqueFeaturesDashboard = () => {
       id: 'vr-tours',
       title: 'Virtual Reality Impact Tours',
       description: 'Immersive VR experiences showing before/after transformations with 360° documentation',
-      icon: VrHeadset,
+      icon: Headset,
       color: 'from-cyan-600 to-blue-600',
       metrics: {
         toursCreated: '24',

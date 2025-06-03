@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { VrHeadset, Play, Eye, Camera, Globe, MapPin, Calendar, Users } from 'lucide-react';
+import { Headset, Play, Eye, Camera, Globe, MapPin, Calendar, Users } from 'lucide-react';
 
 interface VRTour {
   id: string;
@@ -121,7 +120,7 @@ const VRImpactTours = () => {
       <Card className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-2xl">
-            <VrHeadset className="h-8 w-8" />
+            <Headset className="h-8 w-8" />
             Virtual Reality Impact Tours
           </CardTitle>
         </CardHeader>
@@ -255,7 +254,7 @@ const VRImpactTours = () => {
                     onClick={() => playVRTour(tour)}
                     className="flex-1"
                   >
-                    <VrHeadset className="h-4 w-4 mr-2" />
+                    <Headset className="h-4 w-4 mr-2" />
                     Experience VR
                   </Button>
                   <Button variant="outline" size="sm">
@@ -420,7 +419,7 @@ const VRImpactTours = () => {
             <h3 className="text-lg font-bold mb-4">VR Tour Player</h3>
             <p className="mb-4">Launching VR experience for: <strong>{selectedTour.title}</strong></p>
             <div className="bg-gray-100 p-8 rounded-lg text-center mb-4">
-              <VrHeadset className="h-16 w-16 mx-auto mb-2 text-gray-400" />
+              <Headset className="h-16 w-16 mx-auto mb-2 text-gray-400" />
               <p className="text-sm text-gray-600">VR Player would launch here</p>
               <p className="text-xs text-gray-500">Put on VR headset for full experience</p>
             </div>
