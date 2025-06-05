@@ -54,7 +54,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
       {/* Main Hero Section */}
       <div className="relative min-h-screen flex items-center justify-center">
         {/* Background with enhanced gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-indigo-50/80 to-purple-50/80 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/60 via-indigo-50/60 to-purple-50/60" />
         
         <div className="relative z-10 container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto">
@@ -78,15 +78,15 @@ const Hero = ({ onGetStarted }: HeroProps) => {
 
             {/* Key Stats */}
             <div className="grid grid-cols-3 gap-6 mb-12 max-w-2xl mx-auto animate-scale-in animate-delay-300">
-              <div className="text-center bg-white/50 backdrop-blur-sm rounded-lg p-4">
+              <div className="text-center bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-blue-200/50">
                 <div className="text-3xl font-bold text-blue-600">₹15M+</div>
                 <div className="text-sm text-gray-600">Impact Value</div>
               </div>
-              <div className="text-center bg-white/50 backdrop-blur-sm rounded-lg p-4">
+              <div className="text-center bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50">
                 <div className="text-3xl font-bold text-emerald-600">98.7%</div>
                 <div className="text-sm text-gray-600">AI Accuracy</div>
               </div>
-              <div className="text-center bg-white/50 backdrop-blur-sm rounded-lg p-4">
+              <div className="text-center bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50">
                 <div className="text-3xl font-bold text-purple-600">5</div>
                 <div className="text-sm text-gray-600">Unique Tech</div>
               </div>
@@ -116,7 +116,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
             </div>
 
             {/* Unique Features Showcase */}
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-200 animate-slide-up animate-delay-300">
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-200/50 animate-slide-up animate-delay-300">
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 Revolutionary Features That Set Us Apart
               </h3>
@@ -154,8 +154,8 @@ const Hero = ({ onGetStarted }: HeroProps) => {
       </div>
 
       {/* Bottom "Start Your Journey" Section */}
-      <div className="relative py-20 bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900">
-        <div className="absolute inset-0 bg-black/20" />
+      <div className="relative py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+        <div className="absolute inset-0 bg-black/30" />
         <div className="relative z-10 container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 shadow-2xl">
@@ -173,17 +173,17 @@ const Hero = ({ onGetStarted }: HeroProps) => {
 
               {/* Enhanced Benefits Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
                   <Brain className="h-8 w-8 text-blue-400 mx-auto mb-3" />
                   <h3 className="font-semibold text-white mb-2">AI-Powered Insights</h3>
                   <p className="text-white/80 text-sm">Predict impact with 98.7% accuracy</p>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
                   <Shield className="h-8 w-8 text-emerald-400 mx-auto mb-3" />
                   <h3 className="font-semibold text-white mb-2">Blockchain Verified</h3>
                   <p className="text-white/80 text-sm">Immutable proof of social impact</p>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
                   <Headset className="h-8 w-8 text-purple-400 mx-auto mb-3" />
                   <h3 className="font-semibold text-white mb-2">VR Experiences</h3>
                   <p className="text-white/80 text-sm">Virtual tours of impact sites</p>
@@ -195,7 +195,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                 <Button 
                   size="lg" 
                   onClick={onGetStarted}
-                  className="bg-gradient-to-r from-yellow-400 to-pink-500 hover:from-yellow-500 hover:to-pink-600 text-black font-bold px-10 py-4 text-xl shadow-2xl hover:shadow-pink-500/25"
+                  className="bg-gradient-to-r from-yellow-400 to-pink-500 hover:from-yellow-500 hover:to-pink-600 text-black font-bold px-10 py-4 text-xl shadow-2xl hover:shadow-pink-500/25 transform hover:scale-105 transition-all duration-200"
                 >
                   <Sparkles className="mr-2 h-6 w-6" />
                   Begin Your Journey
@@ -206,7 +206,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                   size="lg" 
                   variant="outline"
                   onClick={scrollToFeatures}
-                  className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white px-8 py-4 text-lg backdrop-blur-sm"
+                  className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white px-8 py-4 text-lg backdrop-blur-sm transform hover:scale-105 transition-all duration-200"
                 >
                   Learn More
                 </Button>
@@ -214,15 +214,15 @@ const Hero = ({ onGetStarted }: HeroProps) => {
 
               {/* Trust Indicators */}
               <div className="mt-8 flex flex-wrap justify-center items-center gap-6 text-white/70">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 hover:text-white/90 transition-colors">
                   <CheckCircle className="h-4 w-4 text-green-400" />
                   <span className="text-sm">Free to Start</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 hover:text-white/90 transition-colors">
                   <CheckCircle className="h-4 w-4 text-green-400" />
                   <span className="text-sm">No Setup Required</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 hover:text-white/90 transition-colors">
                   <CheckCircle className="h-4 w-4 text-green-400" />
                   <span className="text-sm">24/7 Support</span>
                 </div>

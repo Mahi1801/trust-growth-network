@@ -84,16 +84,16 @@
   body {
     @apply bg-background text-foreground;
     background: 
-      linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(147, 51, 234, 0.12) 50%, rgba(16, 185, 129, 0.12) 100%),
-      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.2) 0%, transparent 50%),
-      radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
-    background-size: 100% 100%, 800px 800px, 600px 600px, 1000px 1000px;
+      linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 51, 234, 0.08) 50%, rgba(16, 185, 129, 0.08) 100%),
+      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
+    background-size: 100% 100%, 600px 600px, 500px 500px, 800px 800px;
     background-attachment: fixed;
     min-height: 100vh;
   }
 
-  /* Enhanced geometric pattern overlay */
+  /* Subtle geometric pattern overlay */
   body::before {
     content: '';
     position: fixed;
@@ -102,73 +102,71 @@
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px),
-      linear-gradient(rgba(147, 51, 234, 0.08) 1px, transparent 1px),
-      linear-gradient(45deg, rgba(16, 185, 129, 0.06) 25%, transparent 25%),
-      linear-gradient(-45deg, rgba(16, 185, 129, 0.06) 25%, transparent 25%);
-    background-size: 40px 40px, 40px 40px, 120px 120px, 120px 120px;
+      linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+      linear-gradient(rgba(147, 51, 234, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px, 50px 50px;
     pointer-events: none;
     z-index: -1;
-    opacity: 1;
+    opacity: 0.7;
   }
 
   /* Smooth animations */
   * {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Enhanced card backgrounds */
   .bg-white {
-    background: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    border: 1px solid rgba(59, 130, 246, 0.15) !important;
     box-shadow: 
-      0 8px 32px rgba(59, 130, 246, 0.12),
-      0 4px 16px rgba(147, 51, 234, 0.08),
-      0 2px 8px rgba(0, 0, 0, 0.05);
+      0 4px 24px rgba(59, 130, 246, 0.08),
+      0 2px 12px rgba(147, 51, 234, 0.05),
+      0 1px 6px rgba(0, 0, 0, 0.03);
   }
 
   .bg-gray-50 {
     background: linear-gradient(135deg, 
-      rgba(248, 250, 252, 0.95) 0%, 
-      rgba(241, 245, 249, 0.95) 100%) !important;
+      rgba(248, 250, 252, 0.98) 0%, 
+      rgba(241, 245, 249, 0.98) 100%) !important;
     backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(59, 130, 246, 0.15) !important;
+    border: 1px solid rgba(59, 130, 246, 0.1) !important;
     box-shadow: 
-      0 4px 16px rgba(59, 130, 246, 0.08),
-      0 2px 8px rgba(0, 0, 0, 0.03);
+      0 2px 12px rgba(59, 130, 246, 0.05),
+      0 1px 6px rgba(0, 0, 0, 0.02);
   }
 
   /* Card hover effects */
   .card-hover {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.95) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(59, 130, 246, 0.15) !important;
   }
 
   .card-hover:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-4px) scale(1.01);
     box-shadow: 
-      0 25px 50px rgba(59, 130, 246, 0.25),
-      0 15px 35px rgba(147, 51, 234, 0.15),
-      0 8px 20px rgba(0, 0, 0, 0.1);
+      0 20px 40px rgba(59, 130, 246, 0.15),
+      0 10px 25px rgba(147, 51, 234, 0.1),
+      0 5px 15px rgba(0, 0, 0, 0.08);
     background: rgba(255, 255, 255, 1) !important;
-    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    border: 1px solid rgba(59, 130, 246, 0.25) !important;
   }
 
   /* Gradient backgrounds enhanced */
   [class*="bg-gradient-to-"] {
     backdrop-filter: blur(16px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   /* Text shadow for better readability */
   .text-3xl, .text-2xl, .text-xl, .text-4xl, .text-5xl, .text-6xl {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   /* Smooth scroll */
@@ -178,15 +176,25 @@
 
   /* Button animations */
   button {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   button:active {
     transform: translateY(0);
+  }
+
+  /* Remove any potential layout shifts */
+  .container {
+    contain: layout;
+  }
+
+  /* Prevent background flickering */
+  .bg-white, .bg-gray-50, .card-hover {
+    will-change: transform, box-shadow;
   }
 }
 
@@ -194,7 +202,7 @@
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -205,7 +213,7 @@
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.98);
   }
   to {
     opacity: 1;
@@ -216,7 +224,7 @@
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -225,15 +233,15 @@
 }
 
 .animate-fade-in {
-  animation: fade-in 0.6s ease-out;
+  animation: fade-in 0.5s ease-out;
 }
 
 .animate-scale-in {
-  animation: scale-in 0.4s ease-out;
+  animation: scale-in 0.3s ease-out;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.5s ease-out;
+  animation: slide-up 0.4s ease-out;
 }
 
 /* Staggered animations */

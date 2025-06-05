@@ -1,6 +1,7 @@
 
 import { Globe, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Heart, Users, Building, Store } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Logo from "./Logo";
 
 const Footer = () => {
   const { toast } = useToast();
@@ -46,35 +47,36 @@ const Footer = () => {
     });
   };
 
+  const handleLogoClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900/95 backdrop-blur-sm text-white border-t border-gray-800">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Globe className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold">EmpowerLink</span>
-            </div>
+            <Logo className="h-8 w-8" onClick={handleLogoClick} />
             <p className="text-gray-400 leading-relaxed">
               Empowering communities through transparent funding, AI-verified improvements, 
               and sustainable partnerships that create lasting social impact.
             </p>
             <div className="flex space-x-4">
               <Facebook 
-                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('Facebook')}
               />
               <Twitter 
-                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('Twitter')}
               />
               <Linkedin 
-                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('LinkedIn')}
               />
               <Github 
-                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('GitHub')}
               />
             </div>
@@ -82,11 +84,11 @@ const Footer = () => {
 
           {/* Platform */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Platform</h3>
-            <ul className="space-y-2 text-gray-400">
+            <h3 className="text-lg font-semibold text-white">Platform</h3>
+            <ul className="space-y-3 text-gray-400">
               <li>
                 <button 
-                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('Vendors')}
                 >
                   <Store className="h-4 w-4" />
@@ -95,7 +97,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('NGOs')}
                 >
                   <Heart className="h-4 w-4" />
@@ -104,7 +106,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('Corporations')}
                 >
                   <Building className="h-4 w-4" />
@@ -113,7 +115,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white transition-colors flex items-center space-x-2"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('Admins')}
                 >
                   <Users className="h-4 w-4" />
@@ -125,12 +127,12 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-2 text-gray-400">
+            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <ul className="space-y-3 text-gray-400">
               <li>
                 <button 
                   onClick={() => scrollToSection('features')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 >
                   Features
                 </button>
@@ -138,7 +140,7 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => scrollToSection('about')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 >
                   About Us
                 </button>
@@ -146,14 +148,14 @@ const Footer = () => {
               <li>
                 <button 
                   onClick={() => scrollToSection('how-it-works')}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 >
                   How It Works
                 </button>
               </li>
               <li>
                 <button 
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                   onClick={() => handlePolicyClick('Privacy Policy')}
                 >
                   Privacy Policy
@@ -161,7 +163,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                   onClick={() => handlePolicyClick('Terms of Service')}
                 >
                   Terms of Service
@@ -172,24 +174,24 @@ const Footer = () => {
 
           {/* Contact */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Contact</h3>
+            <h3 className="text-lg font-semibold text-white">Contact</h3>
             <div className="space-y-3 text-gray-400">
               <div 
-                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors"
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 onClick={() => handleContactClick('email', 'hello@empowerlink.org')}
               >
                 <Mail className="h-5 w-5" />
                 <span>hello@empowerlink.org</span>
               </div>
               <div 
-                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors"
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 onClick={() => handleContactClick('phone', '+15551234567')}
               >
                 <Phone className="h-5 w-5" />
                 <span>+1 (555) 123-4567</span>
               </div>
               <div 
-                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors"
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 onClick={() => handleContactClick('location', 'San Francisco, CA')}
               >
                 <MapPin className="h-5 w-5" />
@@ -205,11 +207,11 @@ const Footer = () => {
               &copy; 2024 EmpowerLink. All rights reserved. Built with ❤️ for social impact.
             </p>
             <div className="flex items-center space-x-4 text-sm text-gray-400">
-              <span>Powered by AI</span>
+              <span className="hover:text-white transition-colors cursor-default">Powered by AI</span>
               <span>•</span>
-              <span>Verified Impact</span>
+              <span className="hover:text-white transition-colors cursor-default">Verified Impact</span>
               <span>•</span>
-              <span>Global Community</span>
+              <span className="hover:text-white transition-colors cursor-default">Global Community</span>
             </div>
           </div>
         </div>
