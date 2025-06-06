@@ -48,44 +48,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to fetch user profile
   const fetchProfile = async (userId: string) => {
     try {
-      // Use raw SQL query to avoid TypeScript issues with missing table definitions
-      const { data, error } = await supabase.rpc('get_user_profile', { user_id: userId });
+      // Simple direct query with explicit typing to avoid TypeScript issues
+      const { data, error } = await (supabase as any)
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
       if (error) {
         console.error('Error fetching profile:', error);
-        // If RPC doesn't exist, try direct query as fallback
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('profiles' as any)
-          .select('*')
-          .eq('id', userId)
-          .single();
-        
-        if (fallbackError) {
-          console.error('Error fetching profile with fallback:', fallbackError);
-          return;
-        }
-        
-        setProfile(fallbackData);
         return;
       }
 
       setProfile(data);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
-      // Fallback to direct query
-      try {
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('profiles' as any)
-          .select('*')
-          .eq('id', userId)
-          .single();
-        
-        if (!fallbackError && fallbackData) {
-          setProfile(fallbackData);
-        }
-      } catch (fallbackError) {
-        console.error('Fallback profile fetch failed:', fallbackError);
-      }
     }
   };
 
