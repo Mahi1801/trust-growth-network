@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,7 @@ import CampaignModal from '@/components/modals/CampaignModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
 const NGODashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
 
@@ -54,7 +55,7 @@ const NGODashboard = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">NGO Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user?.firstName}! Track your campaigns and vendor impact.</p>
+          <p className="text-gray-600">Welcome back, {profile?.first_name || user?.email}! Track your campaigns and vendor impact.</p>
         </div>
         <Button onClick={logout} variant="outline">Logout</Button>
       </div>

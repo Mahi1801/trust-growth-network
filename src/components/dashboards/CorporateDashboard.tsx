@@ -12,7 +12,7 @@ import AnalyticsModal from '@/components/modals/AnalyticsModal';
 import { useToast } from '@/hooks/use-toast';
 
 const CorporateDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const { toast } = useToast();
@@ -90,7 +90,7 @@ const CorporateDashboard = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Corporate Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user?.firstName}! Track your social impact and ROI.</p>
+          <p className="text-gray-600">Welcome back, {profile?.first_name || user?.email}! Track your social impact and ROI.</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={handleGenerateReport} variant="outline">

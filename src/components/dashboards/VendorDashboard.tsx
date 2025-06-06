@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,7 @@ import PhotoUploadModal from '@/components/modals/PhotoUploadModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
 const VendorDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const [trustScore] = useState(87);
   const [currentLocation] = useState("Mumbai, Maharashtra");
   const [showFundingModal, setShowFundingModal] = useState(false);
@@ -95,7 +96,7 @@ const VendorDashboard = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Vendor Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user?.firstName}! Track your business growth and funding opportunities.</p>
+          <p className="text-gray-600">Welcome back, {profile?.first_name || user?.email}! Track your business growth and funding opportunities.</p>
         </div>
         <Button onClick={logout} variant="outline">Logout</Button>
       </div>
