@@ -86,31 +86,31 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               🚀 Revolutionary Social Impact Platform
             </Badge>
             
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-slide-up">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight animate-slide-up drop-shadow-lg">
               Empower Communities Through
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-extrabold">
                 {" "}Transparent Funding
               </span>
             </h1>
             
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in animate-delay-200">
+            <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in animate-delay-200 font-medium">
               Connect corporations, NGOs, and vendors through AI-verified improvements, 
               blockchain certificates, and immersive impact experiences that create lasting social change.
             </p>
 
             {/* Key Stats */}
             <div className="grid grid-cols-3 gap-6 mb-12 max-w-2xl mx-auto animate-scale-in animate-delay-300">
-              <div className="text-center bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-blue-200/50">
+              <div className="text-center bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-blue-200/50 shadow-lg">
                 <div className="text-3xl font-bold text-blue-600">₹15M+</div>
-                <div className="text-sm text-gray-600">Impact Value</div>
+                <div className="text-sm text-gray-700 font-semibold">Impact Value</div>
               </div>
-              <div className="text-center bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50">
+              <div className="text-center bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-emerald-200/50 shadow-lg">
                 <div className="text-3xl font-bold text-emerald-600">98.7%</div>
-                <div className="text-sm text-gray-600">AI Accuracy</div>
+                <div className="text-sm text-gray-700 font-semibold">AI Accuracy</div>
               </div>
-              <div className="text-center bg-white/60 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50">
+              <div className="text-center bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-purple-200/50 shadow-lg">
                 <div className="text-3xl font-bold text-purple-600">5</div>
-                <div className="text-sm text-gray-600">Unique Tech</div>
+                <div className="text-sm text-gray-700 font-semibold">Unique Tech</div>
               </div>
             </div>
 
@@ -119,7 +119,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               <Button 
                 size="lg" 
                 onClick={onGetStarted}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
               >
                 <Target className="mr-2 h-5 w-5" />
                 Start Your Impact Journey
@@ -130,7 +130,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                 size="lg" 
                 variant="outline"
                 onClick={handleWatchDemo}
-                className="border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 px-8 py-3 text-lg backdrop-blur-sm"
+                className="border-2 border-blue-500 text-blue-600 hover:border-blue-600 hover:bg-blue-50 px-8 py-3 text-lg font-semibold backdrop-blur-sm transform hover:scale-105 transition-all"
               >
                 <Play className="mr-2 h-5 w-5" />
                 Watch Demo
@@ -140,7 +140,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                 size="lg" 
                 variant="outline"
                 onClick={handleLearnMore}
-                className="border-2 border-green-200 hover:border-green-400 hover:bg-green-50 px-8 py-3 text-lg backdrop-blur-sm"
+                className="border-2 border-green-500 text-green-600 hover:border-green-600 hover:bg-green-50 px-8 py-3 text-lg font-semibold backdrop-blur-sm transform hover:scale-105 transition-all"
               >
                 <Zap className="mr-2 h-5 w-5" />
                 Learn More
@@ -149,10 +149,10 @@ const Hero = ({ onGetStarted }: HeroProps) => {
 
             {/* Technology Showcase - Made More Prominent */}
             <div className="bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-200/50 animate-slide-up animate-delay-300 mb-8">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 drop-shadow-md">
                 Revolutionary Technology That Changes Everything
-              </h3>
-              <p className="text-gray-600 mb-8 text-lg">
+              </h2>
+              <p className="text-gray-700 mb-8 text-lg font-medium">
                 Experience cutting-edge AI, Blockchain, VR, and Gamification that transforms social impact measurement
               </p>
               
@@ -165,7 +165,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                         <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
                           <Icon className="h-8 w-8 text-white" />
                         </div>
-                        <h4 className="font-semibold text-base mb-2">{feature.title}</h4>
+                        <h4 className="font-semibold text-base mb-2 text-gray-900">{feature.title}</h4>
                         <p className="text-sm text-gray-600">{feature.description}</p>
                       </CardContent>
                     </Card>
@@ -176,7 +176,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
                   onClick={scrollToFeatures}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-8 py-3"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-8 py-3 font-semibold"
                 >
                   Explore Technology
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -185,7 +185,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                 <Button 
                   onClick={handleWatchDemo}
                   variant="outline"
-                  className="border-2 border-blue-200 hover:border-blue-400 px-8 py-3"
+                  className="border-2 border-blue-400 text-blue-600 hover:border-blue-600 px-8 py-3 font-semibold"
                 >
                   <Play className="mr-2 h-5 w-5" />
                   Watch Tech Demo
@@ -202,14 +202,14 @@ const Hero = ({ onGetStarted }: HeroProps) => {
         <div className="relative z-10 container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 border border-white/20 shadow-2xl">
-              <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
                 Ready to Transform Communities?
-                <span className="block mt-2 bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
+                <span className="block mt-2 bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent font-extrabold">
                   Start Your Impact Journey
                 </span>
               </h2>
               
-              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
                 Join thousands of organizations already making a difference with our revolutionary platform. 
                 Every journey begins with a single step.
               </p>
@@ -218,17 +218,17 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
                   <Brain className="h-8 w-8 text-blue-400 mx-auto mb-3" />
-                  <h3 className="font-semibold text-white mb-2">AI-Powered Insights</h3>
+                  <h3 className="font-semibold text-xl text-white mb-2">AI-Powered Insights</h3>
                   <p className="text-white/80 text-sm">Predict impact with 98.7% accuracy</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
                   <Shield className="h-8 w-8 text-emerald-400 mx-auto mb-3" />
-                  <h3 className="font-semibold text-white mb-2">Blockchain Verified</h3>
+                  <h3 className="font-semibold text-xl text-white mb-2">Blockchain Verified</h3>
                   <p className="text-white/80 text-sm">Immutable proof of social impact</p>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-colors">
                   <Headset className="h-8 w-8 text-purple-400 mx-auto mb-3" />
-                  <h3 className="font-semibold text-white mb-2">VR Experiences</h3>
+                  <h3 className="font-semibold text-xl text-white mb-2">VR Experiences</h3>
                   <p className="text-white/80 text-sm">Virtual tours of impact sites</p>
                 </div>
               </div>
@@ -249,7 +249,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                   size="lg" 
                   variant="outline"
                   onClick={handleLearnMore}
-                  className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white px-8 py-4 text-lg backdrop-blur-sm transform hover:scale-105 transition-all duration-200"
+                  className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white px-8 py-4 text-lg backdrop-blur-sm transform hover:scale-105 transition-all duration-200 font-semibold"
                 >
                   Learn More
                 </Button>
@@ -259,15 +259,15 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               <div className="mt-8 flex flex-wrap justify-center items-center gap-6 text-white/70">
                 <div className="flex items-center gap-2 hover:text-white/90 transition-colors">
                   <CheckCircle className="h-4 w-4 text-green-400" />
-                  <span className="text-sm">Free to Start</span>
+                  <span className="text-sm font-medium">Free to Start</span>
                 </div>
                 <div className="flex items-center gap-2 hover:text-white/90 transition-colors">
                   <CheckCircle className="h-4 w-4 text-green-400" />
-                  <span className="text-sm">No Setup Required</span>
+                  <span className="text-sm font-medium">No Setup Required</span>
                 </div>
                 <div className="flex items-center gap-2 hover:text-white/90 transition-colors">
                   <CheckCircle className="h-4 w-4 text-green-400" />
-                  <span className="text-sm">24/7 Support</span>
+                  <span className="text-sm font-medium">24/7 Support</span>
                 </div>
               </div>
             </div>
