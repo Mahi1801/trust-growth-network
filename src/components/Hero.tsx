@@ -1,18 +1,40 @@
 
-import { ArrowRight, CheckCircle, Globe, Users, TrendingUp, Brain, Shield, Headset, Trophy, BookOpen, Sparkles, Target, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle, Globe, Users, TrendingUp, Brain, Shield, Headset, Trophy, BookOpen, Sparkles, Target, Zap, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 interface HeroProps {
   onGetStarted: () => void;
 }
 
 const Hero = ({ onGetStarted }: HeroProps) => {
+  const { toast } = useToast();
+
   const scrollToFeatures = () => {
     const element = document.getElementById('features');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleWatchDemo = () => {
+    toast({
+      title: "Demo Video",
+      description: "Opening comprehensive platform demo showcasing all features in action.",
+    });
+  };
+
+  const handleLearnMore = () => {
+    const element = document.getElementById('about');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      toast({
+        title: "Learn More",
+        description: "Navigating to detailed information about our platform.",
+      });
     }
   };
 
@@ -107,47 +129,68 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               <Button 
                 size="lg" 
                 variant="outline"
-                onClick={scrollToFeatures}
+                onClick={handleWatchDemo}
                 className="border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 px-8 py-3 text-lg backdrop-blur-sm"
               >
+                <Play className="mr-2 h-5 w-5" />
+                Watch Demo
+              </Button>
+
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={handleLearnMore}
+                className="border-2 border-green-200 hover:border-green-400 hover:bg-green-50 px-8 py-3 text-lg backdrop-blur-sm"
+              >
                 <Zap className="mr-2 h-5 w-5" />
-                Explore Features
+                Learn More
               </Button>
             </div>
 
-            {/* Unique Features Showcase */}
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-200/50 animate-slide-up animate-delay-300">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                Revolutionary Features That Set Us Apart
+            {/* Technology Showcase - Made More Prominent */}
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-blue-200/50 animate-slide-up animate-delay-300 mb-8">
+              <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                Revolutionary Technology That Changes Everything
               </h3>
-              <p className="text-gray-600 mb-6">
-                Experience cutting-edge technology that transforms social impact measurement
+              <p className="text-gray-600 mb-8 text-lg">
+                Experience cutting-edge AI, Blockchain, VR, and Gamification that transforms social impact measurement
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
                 {uniqueFeatures.map((feature, index) => {
                   const Icon = feature.icon;
                   return (
                     <Card key={index} className="hover:shadow-lg transition-all duration-300 cursor-pointer group card-hover">
-                      <CardContent className="p-4 text-center">
-                        <div className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform`}>
-                          <Icon className="h-6 w-6 text-white" />
+                      <CardContent className="p-6 text-center">
+                        <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                          <Icon className="h-8 w-8 text-white" />
                         </div>
-                        <h4 className="font-semibold text-sm mb-1">{feature.title}</h4>
-                        <p className="text-xs text-gray-600">{feature.description}</p>
+                        <h4 className="font-semibold text-base mb-2">{feature.title}</h4>
+                        <p className="text-sm text-gray-600">{feature.description}</p>
                       </CardContent>
                     </Card>
                   );
                 })}
               </div>
               
-              <Button 
-                onClick={scrollToFeatures}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700"
-              >
-                See Features in Action
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  onClick={scrollToFeatures}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 px-8 py-3"
+                >
+                  Explore Technology
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                
+                <Button 
+                  onClick={handleWatchDemo}
+                  variant="outline"
+                  className="border-2 border-blue-200 hover:border-blue-400 px-8 py-3"
+                >
+                  <Play className="mr-2 h-5 w-5" />
+                  Watch Tech Demo
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -205,7 +248,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
                 <Button 
                   size="lg" 
                   variant="outline"
-                  onClick={scrollToFeatures}
+                  onClick={handleLearnMore}
                   className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white px-8 py-4 text-lg backdrop-blur-sm transform hover:scale-105 transition-all duration-200"
                 >
                   Learn More

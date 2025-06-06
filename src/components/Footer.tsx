@@ -10,13 +10,18 @@ const Footer = () => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      toast({
+        title: "Navigation",
+        description: `Navigating to ${sectionId} section.`,
+      });
     }
   };
 
   const handlePlatformClick = (platform: string) => {
     toast({
       title: `${platform} Portal`,
-      description: `Redirecting to the ${platform.toLowerCase()} dedicated portal and registration page.`,
+      description: `Opening ${platform.toLowerCase()} dedicated portal and registration page.`,
     });
   };
 
@@ -172,7 +177,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact - Updated for India */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Contact</h3>
             <div className="space-y-3 text-gray-400">
@@ -185,17 +190,17 @@ const Footer = () => {
               </div>
               <div 
                 className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
-                onClick={() => handleContactClick('phone', '+15551234567')}
+                onClick={() => handleContactClick('phone', '+919876543210')}
               >
                 <Phone className="h-5 w-5" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 98765 43210</span>
               </div>
               <div 
                 className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
-                onClick={() => handleContactClick('location', 'San Francisco, CA')}
+                onClick={() => handleContactClick('location', 'Mumbai, Maharashtra, India')}
               >
                 <MapPin className="h-5 w-5" />
-                <span>San Francisco, CA</span>
+                <span>Mumbai, Maharashtra, India</span>
               </div>
             </div>
           </div>
@@ -204,7 +209,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-center md:text-left">
-              &copy; 2024 EmpowerLink. All rights reserved. Built with ❤️ for social impact.
+              &copy; 2024 EmpowerLink. All rights reserved. Transforming communities across India.
             </p>
             <div className="flex items-center space-x-4 text-sm text-gray-400">
               <span className="hover:text-white transition-colors cursor-default">Powered by AI</span>

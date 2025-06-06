@@ -30,30 +30,44 @@ const ContactSection = () => {
     }));
   };
 
+  const handleContactClick = (method: string, value: string) => {
+    if (method === 'email') {
+      window.location.href = `mailto:${value}`;
+    } else if (method === 'phone') {
+      window.location.href = `tel:${value}`;
+    } else if (method === 'location') {
+      window.open('https://maps.google.com/?q=Mumbai,Maharashtra,India', '_blank');
+    }
+  };
+
   const contactInfo = [
     {
       icon: <Mail className="h-6 w-6 text-blue-600" />,
       title: "Email Us",
       content: "hello@empowerlink.org",
-      description: "Send us an email anytime!"
+      description: "Send us an email anytime!",
+      action: () => handleContactClick('email', 'hello@empowerlink.org')
     },
     {
       icon: <Phone className="h-6 w-6 text-green-600" />,
       title: "Call Us",
-      content: "+1 (555) 123-4567",
-      description: "Mon-Fri from 9am to 6pm EST"
+      content: "+91 98765 43210",
+      description: "Mon-Fri from 9am to 6pm IST",
+      action: () => handleContactClick('phone', '+919876543210')
     },
     {
       icon: <MapPin className="h-6 w-6 text-purple-600" />,
       title: "Visit Us",
-      content: "San Francisco, CA",
-      description: "Global headquarters"
+      content: "Mumbai, Maharashtra, India",
+      description: "India headquarters",
+      action: () => handleContactClick('location', 'Mumbai, Maharashtra, India')
     },
     {
       icon: <Clock className="h-6 w-6 text-orange-600" />,
       title: "Response Time",
       content: "24-48 hours",
-      description: "We respond quickly!"
+      description: "We respond quickly!",
+      action: () => {}
     }
   ];
 
@@ -140,7 +154,11 @@ const ContactSection = () => {
           {/* Contact Information */}
           <div className="space-y-6">
             {contactInfo.map((info, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+              <Card 
+                key={index} 
+                className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+                onClick={info.action}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div className="p-3 rounded-full bg-gray-100">
