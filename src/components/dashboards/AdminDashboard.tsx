@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ import UserManagementModal from '@/components/modals/UserManagementModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [showVendorManagement, setShowVendorManagement] = useState(false);
   const [showUserManagement, setShowUserManagement] = useState(false);
@@ -432,7 +431,7 @@ const AdminDashboard = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user?.firstName}! Monitor and manage the EmpowerLink platform.</p>
+          <p className="text-gray-600">Welcome back, {profile?.first_name || user?.email}! Monitor and manage the EmpowerLink platform.</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={() => setShowAnalyticsModal(true)} variant="outline">
