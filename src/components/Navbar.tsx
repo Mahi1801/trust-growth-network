@@ -12,7 +12,7 @@ interface NavbarProps {
 
 const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, profile, logout } = useAuth();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -60,9 +60,11 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
             </button>
             
             <div className="flex items-center space-x-3">
-              {user ? (
+              {user && profile ? (
                 <>
-                  <span className="text-gray-700">Welcome, {user.firstName}!</span>
+                  <span className="text-gray-700">
+                    Welcome, {profile.first_name || user.email}!
+                  </span>
                   <Button
                     variant="ghost"
                     onClick={logout}
@@ -136,9 +138,11 @@ const Navbar = ({ onLoginClick, onSignupClick }: NavbarProps) => {
               </button>
               
               <div className="flex flex-col space-y-2 pt-4 border-t border-gray-200">
-                {user ? (
+                {user && profile ? (
                   <>
-                    <span className="text-gray-700">Welcome, {user.firstName}!</span>
+                    <span className="text-gray-700">
+                      Welcome, {profile.first_name || user.email}!
+                    </span>
                     <Button
                       variant="outline"
                       onClick={logout}

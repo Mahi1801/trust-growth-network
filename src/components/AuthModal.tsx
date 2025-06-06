@@ -45,15 +45,21 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
       return;
     }
 
-    const success = await login(loginData.email, loginData.password);
+    const { error } = await login(loginData.email, loginData.password);
     
-    if (success) {
+    if (!error) {
       toast.success("Login successful!");
       onClose();
       // Reset form
       setLoginData({ email: "", password: "" });
     } else {
-      toast.error("Invalid email or password");
+      if (error.message.includes('Invalid login credentials')) {
+        toast.error("Invalid email or password");
+      } else if (error.message.includes('Email not confirmed')) {
+        toast.error("Please check your email and confirm your account");
+      } else {
+        toast.error(error.message || "Login failed");
+      }
     }
   };
 
@@ -71,13 +77,13 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
       return;
     }
 
-    const success = await signup({
+    const { error } = await signup({
       ...signupData,
       userType: userType || "vendor"
     });
     
-    if (success) {
-      toast.success("Account created successfully! Welcome email sent.");
+    if (!error) {
+      toast.success("Account created successfully! Please check your email to confirm your account.");
       onClose();
       // Reset form
       setSignupData({
@@ -90,7 +96,11 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
         password: ""
       });
     } else {
-      toast.error("Failed to create account");
+      if (error.message.includes('already registered')) {
+        toast.error("An account with this email already exists");
+      } else {
+        toast.error(error.message || "Failed to create account");
+      }
     }
   };
 

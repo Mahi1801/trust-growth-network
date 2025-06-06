@@ -7,12 +7,12 @@ import CorporateDashboard from './dashboards/CorporateDashboard';
 import AdminDashboard from './dashboards/AdminDashboard';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
-  if (!user) return null;
+  if (!user || !profile) return null;
 
   const renderDashboard = () => {
-    switch (user.userType) {
+    switch (profile.user_type) {
       case 'vendor':
         return <VendorDashboard />;
       case 'ngo':
