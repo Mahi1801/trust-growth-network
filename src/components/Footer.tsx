@@ -1,4 +1,3 @@
-
 import { Globe, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Heart, Users, Building, Store } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Logo from "./Logo";
@@ -25,6 +24,10 @@ const Footer = ({ onNavigate }: FooterProps) => {
   const handlePlatformClick = (platform: string) => {
     if (onNavigate) {
       onNavigate(platform);
+      toast({
+        title: `${platform.replace('Platform', '')} Portal`,
+        description: `Welcome to the ${platform.replace('Platform', '').toLowerCase()} platform. You can register or login to get started.`,
+      });
     } else {
       toast({
         title: `${platform} Portal`,
@@ -69,31 +72,31 @@ const Footer = ({ onNavigate }: FooterProps) => {
   };
 
   return (
-    <footer className="bg-gray-900/95 dark:bg-gray-950/95 backdrop-blur-sm text-white border-t border-gray-800 dark:border-gray-700 transition-colors duration-200">
+    <footer className="bg-gray-900/95 backdrop-blur-sm text-white border-t border-gray-800 transition-colors duration-200">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <Logo className="h-8 w-8" onClick={handleLogoClick} />
-            <p className="text-gray-400 dark:text-gray-300 leading-relaxed">
+            <p className="text-gray-400 leading-relaxed">
               Empowering communities through transparent funding, AI-verified improvements, 
               and sustainable partnerships that create lasting social impact.
             </p>
             <div className="flex space-x-4">
               <Facebook 
-                className="h-5 w-5 text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('Facebook')}
               />
               <Twitter 
-                className="h-5 w-5 text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('Twitter')}
               />
               <Linkedin 
-                className="h-5 w-5 text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('LinkedIn')}
               />
               <Github 
-                className="h-5 w-5 text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
+                className="h-5 w-5 text-gray-400 hover:text-blue-400 cursor-pointer transition-colors hover:scale-110 transform duration-200" 
                 onClick={() => handleSocialClick('GitHub')}
               />
             </div>
@@ -102,10 +105,10 @@ const Footer = ({ onNavigate }: FooterProps) => {
           {/* Platform */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Platform</h3>
-            <ul className="space-y-3 text-gray-400 dark:text-gray-300">
+            <ul className="space-y-3 text-gray-400">
               <li>
                 <button 
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('VendorPlatform')}
                 >
                   <Store className="h-4 w-4" />
@@ -114,7 +117,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white dark:hover:text-pink-300 transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('NGOPlatform')}
                 >
                   <Heart className="h-4 w-4" />
@@ -123,7 +126,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('CorporatePlatform')}
                 >
                   <Building className="h-4 w-4" />
@@ -132,7 +135,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white dark:hover:text-purple-300 transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors flex items-center space-x-2 hover:translate-x-1 transform duration-200"
                   onClick={() => handlePlatformClick('AdminPlatform')}
                 >
                   <Users className="h-4 w-4" />
@@ -145,11 +148,11 @@ const Footer = ({ onNavigate }: FooterProps) => {
           {/* Quick Links */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
-            <ul className="space-y-3 text-gray-400 dark:text-gray-300">
+            <ul className="space-y-3 text-gray-400">
               <li>
                 <button 
                   onClick={() => scrollToSection('features')}
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 >
                   Features
                 </button>
@@ -157,7 +160,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
               <li>
                 <button 
                   onClick={() => scrollToSection('about')}
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 >
                   About Us
                 </button>
@@ -165,14 +168,14 @@ const Footer = ({ onNavigate }: FooterProps) => {
               <li>
                 <button 
                   onClick={() => scrollToSection('how-it-works')}
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 >
                   How It Works
                 </button>
               </li>
               <li>
                 <button 
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                   onClick={() => handlePolicyClick('PrivacyPolicy')}
                 >
                   Privacy Policy
@@ -180,7 +183,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
               </li>
               <li>
                 <button 
-                  className="hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                  className="hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                   onClick={() => handlePolicyClick('TermsOfService')}
                 >
                   Terms of Service
@@ -192,23 +195,23 @@ const Footer = ({ onNavigate }: FooterProps) => {
           {/* Contact - Updated for India */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Contact</h3>
-            <div className="space-y-3 text-gray-400 dark:text-gray-300">
+            <div className="space-y-3 text-gray-400">
               <div 
-                className="flex items-center space-x-3 cursor-pointer hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 onClick={() => handleContactClick('email', 'hello@empowerlink.org')}
               >
                 <Mail className="h-5 w-5" />
                 <span>hello@empowerlink.org</span>
               </div>
               <div 
-                className="flex items-center space-x-3 cursor-pointer hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 onClick={() => handleContactClick('phone', '+919876543210')}
               >
                 <Phone className="h-5 w-5" />
                 <span>Call Us: +91 98765 43210</span>
               </div>
               <div 
-                className="flex items-center space-x-3 cursor-pointer hover:text-white dark:hover:text-blue-300 transition-colors hover:translate-x-1 transform duration-200"
+                className="flex items-center space-x-3 cursor-pointer hover:text-white transition-colors hover:translate-x-1 transform duration-200"
                 onClick={() => handleContactClick('location', 'Mumbai, Maharashtra, India')}
               >
                 <MapPin className="h-5 w-5" />
@@ -218,17 +221,17 @@ const Footer = ({ onNavigate }: FooterProps) => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 dark:border-gray-700 mt-12 pt-8">
+        <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-400 dark:text-gray-300 text-center md:text-left">
+            <p className="text-gray-400 text-center md:text-left">
               &copy; 2024 EmpowerLink. All rights reserved. Transforming communities across India.
             </p>
-            <div className="flex items-center space-x-4 text-sm text-gray-400 dark:text-gray-300">
-              <span className="hover:text-white dark:hover:text-blue-300 transition-colors cursor-default">Powered by AI</span>
+            <div className="flex items-center space-x-4 text-sm text-gray-400">
+              <span className="hover:text-white transition-colors cursor-default">Powered by AI</span>
               <span>•</span>
-              <span className="hover:text-white dark:hover:text-blue-300 transition-colors cursor-default">Verified Impact</span>
+              <span className="hover:text-white transition-colors cursor-default">Verified Impact</span>
               <span>•</span>
-              <span className="hover:text-white dark:hover:text-blue-300 transition-colors cursor-default">Global Community</span>
+              <span className="hover:text-white transition-colors cursor-default">Global Community</span>
             </div>
           </div>
         </div>
