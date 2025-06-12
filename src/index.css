@@ -46,33 +46,33 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --sidebar-background: 0 0% 3.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 9%;
+    --sidebar-accent: 0 0% 14.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 14.9%;
+    --sidebar-ring: 0 0% 83.1%;
   }
 }
 
@@ -93,6 +93,15 @@
     min-height: 100vh;
   }
 
+  .dark body {
+    background: 
+      linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.98) 50%, rgba(0, 0, 0, 1) 100%),
+      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
+    background-size: 100% 100%, 600px 600px, 500px 500px;
+    background-attachment: fixed;
+  }
+
   /* Subtle geometric pattern overlay */
   body::before {
     content: '';
@@ -108,6 +117,13 @@
     pointer-events: none;
     z-index: -1;
     opacity: 0.7;
+  }
+
+  .dark body::before {
+    background-image: 
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    opacity: 0.3;
   }
 
   /* Smooth animations */
@@ -126,6 +142,15 @@
       0 1px 6px rgba(0, 0, 0, 0.03);
   }
 
+  .dark .bg-white {
+    background: rgba(0, 0, 0, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 
+      0 4px 24px rgba(0, 0, 0, 0.3),
+      0 2px 12px rgba(0, 0, 0, 0.2),
+      0 1px 6px rgba(0, 0, 0, 0.1);
+  }
+
   .bg-gray-50 {
     background: linear-gradient(135deg, 
       rgba(248, 250, 252, 0.98) 0%, 
@@ -137,12 +162,27 @@
       0 1px 6px rgba(0, 0, 0, 0.02);
   }
 
+  .dark .bg-gray-50 {
+    background: linear-gradient(135deg, 
+      rgba(0, 0, 0, 0.98) 0%, 
+      rgba(10, 10, 10, 0.98) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 
+      0 2px 12px rgba(0, 0, 0, 0.2),
+      0 1px 6px rgba(0, 0, 0, 0.1);
+  }
+
   /* Card hover effects */
   .card-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(59, 130, 246, 0.15) !important;
+  }
+
+  .dark .card-hover {
+    background: rgba(0, 0, 0, 0.98) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 
   .card-hover:hover {
@@ -155,6 +195,15 @@
     border: 1px solid rgba(59, 130, 246, 0.25) !important;
   }
 
+  .dark .card-hover:hover {
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.4),
+      0 10px 25px rgba(0, 0, 0, 0.3),
+      0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
   /* Gradient backgrounds enhanced */
   [class*="bg-gradient-to-"] {
     backdrop-filter: blur(16px) saturate(180%) !important;
@@ -164,9 +213,20 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
+  .dark [class*="bg-gradient-to-"] {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
   /* Text shadow for better readability */
   .text-3xl, .text-2xl, .text-xl, .text-4xl, .text-5xl, .text-6xl {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .text-3xl, .dark .text-2xl, .dark .text-xl, .dark .text-4xl, .dark .text-5xl, .dark .text-6xl {
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
   }
 
   /* Smooth scroll */
