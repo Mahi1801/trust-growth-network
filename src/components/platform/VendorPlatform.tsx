@@ -1,7 +1,6 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Store, DollarSign, Users, TrendingUp, ArrowLeft, LogIn, CreditCard, Wallet, Building2, Smartphone } from "lucide-react";
+import { Store, DollarSign, Users, TrendingUp, ArrowLeft, CreditCard, Wallet, Building2, Smartphone } from "lucide-react";
 import { useState } from "react";
 import AuthModal from "@/components/AuthModal";
 
@@ -11,8 +10,15 @@ interface VendorPlatformProps {
 
 const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("signup");
 
   const handleJoinAsVendor = () => {
+    setAuthModalTab("signup");
+    setShowAuthModal(true);
+  };
+
+  const handleLoginAsVendor = () => {
+    setAuthModalTab("login");
     setShowAuthModal(true);
   };
 
@@ -38,9 +44,29 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
             Vendor Platform
             <span className="block text-green-600">Join Our Network</span>
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
             Connect with NGOs and corporations to provide essential services and products for social impact projects.
           </p>
+          
+          {/* Call-to-action buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Button 
+              size="lg" 
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
+              onClick={handleJoinAsVendor}
+            >
+              <Users className="h-5 w-5 mr-2" />
+              Join as Vendor
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-green-600 text-green-600 hover:bg-green-50 px-8 py-3 text-lg"
+              onClick={handleLoginAsVendor}
+            >
+              Already a vendor? Login
+            </Button>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -190,16 +216,8 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
           </div>
         </div>
 
-        <div className="text-center space-y-4">
-          <Button 
-            size="lg" 
-            className="bg-green-600 hover:bg-green-700 text-white"
-            onClick={handleJoinAsVendor}
-          >
-            <Users className="h-5 w-5 mr-2" />
-            Register as Vendor
-          </Button>
-          <p className="text-gray-600">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">
             Join thousands of vendors making a difference in communities worldwide
           </p>
         </div>
@@ -208,7 +226,7 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        initialTab="signup"
+        initialTab={authModalTab}
         userType="vendor"
       />
     </div>

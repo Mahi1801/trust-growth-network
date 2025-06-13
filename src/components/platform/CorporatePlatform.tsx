@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building, TrendingUp, Award, Globe, ArrowLeft, CreditCard, Wallet, Building2, DollarSign, Shield, Banknote } from "lucide-react";
@@ -11,8 +10,15 @@ interface CorporatePlatformProps {
 
 const CorporatePlatform = ({ onBack }: CorporatePlatformProps) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("signup");
 
   const handlePartnerWithUs = () => {
+    setAuthModalTab("signup");
+    setShowAuthModal(true);
+  };
+
+  const handleLoginAsCorporate = () => {
+    setAuthModalTab("login");
     setShowAuthModal(true);
   };
 
@@ -38,9 +44,29 @@ const CorporatePlatform = ({ onBack }: CorporatePlatformProps) => {
             Corporate Platform
             <span className="block text-blue-600">Fund Impact</span>
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
             Partner with verified NGOs to create measurable social impact and meet your CSR objectives.
           </p>
+          
+          {/* Call-to-action buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Button 
+              size="lg" 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+              onClick={handlePartnerWithUs}
+            >
+              <Globe className="h-5 w-5 mr-2" />
+              Partner with Us
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 text-lg"
+              onClick={handleLoginAsCorporate}
+            >
+              Corporate Login
+            </Button>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -252,16 +278,8 @@ const CorporatePlatform = ({ onBack }: CorporatePlatformProps) => {
           </div>
         </div>
 
-        <div className="text-center space-y-4">
-          <Button 
-            size="lg" 
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-            onClick={handlePartnerWithUs}
-          >
-            <Globe className="h-5 w-5 mr-2" />
-            Partner with Us
-          </Button>
-          <p className="text-gray-600">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">
             Transform your CSR strategy with transparent, measurable impact
           </p>
         </div>
@@ -270,7 +288,7 @@ const CorporatePlatform = ({ onBack }: CorporatePlatformProps) => {
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        initialTab="signup"
+        initialTab={authModalTab}
         userType="corporate"
       />
     </div>

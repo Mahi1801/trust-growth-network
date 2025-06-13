@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Users, Target, Shield, ArrowLeft, CreditCard, Wallet, Building2, Smartphone, DollarSign, Globe } from "lucide-react";
@@ -11,8 +10,15 @@ interface NGOPlatformProps {
 
 const NGOPlatform = ({ onBack }: NGOPlatformProps) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("signup");
 
   const handleJoinAsNGO = () => {
+    setAuthModalTab("signup");
+    setShowAuthModal(true);
+  };
+
+  const handleLoginAsNGO = () => {
+    setAuthModalTab("login");
     setShowAuthModal(true);
   };
 
@@ -38,9 +44,29 @@ const NGOPlatform = ({ onBack }: NGOPlatformProps) => {
             NGO Platform
             <span className="block text-pink-600">Create Impact</span>
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
             Connect with funding partners and vendors to amplify your social impact projects across communities.
           </p>
+          
+          {/* Call-to-action buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Button 
+              size="lg" 
+              className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 text-lg"
+              onClick={handleJoinAsNGO}
+            >
+              <Target className="h-5 w-5 mr-2" />
+              Join as NGO
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-pink-600 text-pink-600 hover:bg-pink-50 px-8 py-3 text-lg"
+              onClick={handleLoginAsNGO}
+            >
+              Already registered? Login
+            </Button>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -204,16 +230,8 @@ const NGOPlatform = ({ onBack }: NGOPlatformProps) => {
           </div>
         </div>
 
-        <div className="text-center space-y-4">
-          <Button 
-            size="lg" 
-            className="bg-pink-600 hover:bg-pink-700 text-white"
-            onClick={handleJoinAsNGO}
-          >
-            <Target className="h-5 w-5 mr-2" />
-            Join as NGO
-          </Button>
-          <p className="text-gray-600">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">
             Empower your organization with resources to maximize social impact
           </p>
         </div>
@@ -222,7 +240,7 @@ const NGOPlatform = ({ onBack }: NGOPlatformProps) => {
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        initialTab="signup"
+        initialTab={authModalTab}
         userType="ngo"
       />
     </div>
