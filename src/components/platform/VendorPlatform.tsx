@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Store, DollarSign, Users, TrendingUp, ArrowLeft, LogIn } from "lucide-react";
+import { Store, DollarSign, Users, TrendingUp, ArrowLeft, LogIn, CreditCard, Wallet, Building2, Smartphone } from "lucide-react";
 import { useState } from "react";
 import AuthModal from "@/components/AuthModal";
 
@@ -14,6 +14,11 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
 
   const handleJoinAsVendor = () => {
     setShowAuthModal(true);
+  };
+
+  const handlePaymentGateway = (gateway: string) => {
+    console.log(`Integrating with ${gateway} payment gateway`);
+    // This would typically open the payment gateway integration flow
   };
 
   return (
@@ -74,6 +79,115 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
               </p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Payment Section */}
+        <div className="bg-white rounded-lg shadow-xl p-8 mb-12">
+          <div className="text-center mb-8">
+            <CreditCard className="h-16 w-16 text-green-600 mx-auto mb-4" />
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Seamless Payment Solutions</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Receive payments securely and instantly with our integrated payment gateways
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-blue-300">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CreditCard className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-lg">Stripe</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">Global payment processing with instant transfers</p>
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  onClick={() => handlePaymentGateway('Stripe')}
+                >
+                  Connect Stripe
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-yellow-300">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Wallet className="h-8 w-8 text-yellow-600" />
+                </div>
+                <CardTitle className="text-lg">PayPal</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">Trusted worldwide payment solution</p>
+                <Button 
+                  className="w-full bg-yellow-600 hover:bg-yellow-700"
+                  onClick={() => handlePaymentGateway('PayPal')}
+                >
+                  Connect PayPal
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-purple-300">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Building2 className="h-8 w-8 text-purple-600" />
+                </div>
+                <CardTitle className="text-lg">Razorpay</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">India's leading payment gateway</p>
+                <Button 
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  onClick={() => handlePaymentGateway('Razorpay')}
+                >
+                  Connect Razorpay
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-transparent hover:border-green-300">
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Smartphone className="h-8 w-8 text-green-600" />
+                </div>
+                <CardTitle className="text-lg">UPI & Digital</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-gray-600 mb-4">Google Pay, PhonePe, Paytm integration</p>
+                <Button 
+                  className="w-full bg-green-600 hover:bg-green-700"
+                  onClick={() => handlePaymentGateway('UPI')}
+                >
+                  Connect UPI
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Payment Features</h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                  <DollarSign className="h-4 w-4 text-green-600" />
+                </div>
+                <span className="text-gray-700">Instant Fund Transfer</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <CreditCard className="h-4 w-4 text-blue-600" />
+                </div>
+                <span className="text-gray-700">Multi-Currency Support</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                  <Building2 className="h-4 w-4 text-purple-600" />
+                </div>
+                <span className="text-gray-700">Secure Transactions</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="text-center space-y-4">
