@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 
 interface Profile {
   id: string;
@@ -50,24 +51,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Function to fetch user profile with retry logic
   const fetchProfile = async (userId: string, retryCount = 0) => {
     try {
-      const { data, error } = await (supabase as any)
+      console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
+      
+      const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
       if (error) {
+        console.error('Error fetching profile:', error);
         // If profile doesn't exist and we haven't retried too many times, wait and retry
         if (error.code === 'PGRST116' && retryCount < 3) {
+          console.log(`Profile not found, retrying in ${1000 * (retryCount + 1)}ms...`);
           setTimeout(() => {
             fetchProfile(userId, retryCount + 1);
           }, 1000 * (retryCount + 1)); // Exponential backoff
           return;
         }
-        console.error('Error fetching profile:', error);
         return;
       }
 
+      console.log('Profile fetched successfully:', data);
       setProfile(data);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
@@ -127,6 +132,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!mounted) return;
       
+      console.log('Initial session check:', session?.user?.id);
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -153,6 +159,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticating(true);
     
     try {
+      console.log('Attempting login for:', email);
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
@@ -164,6 +172,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       console.log('Login successful:', data.user?.id);
+      
+      // Wait a moment for the profile to be fetched
+      setTimeout(() => {
+        toast.success("Successfully logged in!");
+      }, 500);
+      
       return { error: null };
     } catch (error) {
       console.error('Login exception:', error);
@@ -179,6 +193,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticating(true);
     
     try {
+      console.log('Attempting signup for:', userData.email);
+      
       const redirectUrl = `${window.location.origin}/`;
       
       const { data, error } = await supabase.auth.signUp({
@@ -203,6 +219,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       console.log('Signup successful:', data.user?.id);
+      
+      if (data.user && !data.user.email_confirmed_at) {
+        toast.success("Account created! Please check your email to confirm your account.");
+      } else {
+        toast.success("Account created successfully!");
+      }
+      
       return { error: null };
     } catch (error) {
       console.error('Signup exception:', error);
@@ -214,6 +237,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
+      console.log('Logging out...');
+      
       // Clean up auth state first
       cleanupAuthState();
       
@@ -225,8 +250,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setProfile(null);
       setSession(null);
       
+      toast.success("Successfully logged out!");
+      
+      // Force page refresh to ensure clean state
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 500);
+      
     } catch (error) {
       console.error('Error during logout:', error);
+      // Force logout even if there's an error
+      setUser(null);
+      setProfile(null);
+      setSession(null);
+      window.location.href = '/';
     }
   };
 
