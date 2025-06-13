@@ -1,10 +1,9 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, Lock, User, Phone, Building, MapPin, Loader2, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -18,7 +17,7 @@ interface AuthModalProps {
 
 const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModalProps) => {
   const [activeTab, setActiveTab] = useState(initialTab);
-  const { login, signup, isLoading } = useAuth();
+  const { login, signup, isAuthenticating, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   
@@ -42,6 +41,32 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
   // Form validation states
   const [loginErrors, setLoginErrors] = useState<{[key: string]: string}>({});
   const [signupErrors, setSignupErrors] = useState<{[key: string]: string}>({});
+
+  // Close modal and reset forms when user is authenticated
+  useEffect(() => {
+    if (user && isOpen) {
+      toast.success("Successfully logged in!");
+      onClose();
+      resetForms();
+    }
+  }, [user, isOpen, onClose]);
+
+  const resetForms = () => {
+    setLoginData({ email: "", password: "" });
+    setSignupData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      organization: "",
+      location: "",
+      password: ""
+    });
+    setLoginErrors({});
+    setSignupErrors({});
+    setShowPassword(false);
+    setShowSignupPassword(false);
+  };
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -118,83 +143,66 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateLoginForm()) {
+    if (!validateLoginForm() || isAuthenticating) {
       return;
     }
 
-    const { error } = await login(loginData.email, loginData.password);
-    
-    if (!error) {
-      toast.success("Login successful! Welcome back!", {
-        icon: <CheckCircle className="h-4 w-4" />,
-      });
-      onClose();
-      setLoginData({ email: "", password: "" });
-      setLoginErrors({});
-    } else {
-      if (error.message.includes('Invalid login credentials')) {
-        toast.error("Invalid email or password. Please check your credentials.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
-      } else if (error.message.includes('Email not confirmed')) {
-        toast.error("Please check your email and confirm your account before logging in.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
-      } else if (error.message.includes('Too many requests')) {
-        toast.error("Too many login attempts. Please wait a moment before trying again.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
-      } else {
-        toast.error(error.message || "Login failed. Please try again.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
+    console.log('Attempting login for:', loginData.email);
+
+    try {
+      const { error } = await login(loginData.email, loginData.password);
+      
+      if (error) {
+        console.error('Login failed:', error);
+        
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error("Invalid email or password. Please check your credentials.");
+        } else if (error.message.includes('Email not confirmed')) {
+          toast.error("Please check your email and confirm your account before logging in.");
+        } else if (error.message.includes('Too many requests')) {
+          toast.error("Too many login attempts. Please wait a moment before trying again.");
+        } else {
+          toast.error(error.message || "Login failed. Please try again.");
+        }
       }
+    } catch (error) {
+      console.error('Login exception:', error);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateSignupForm()) {
+    if (!validateSignupForm() || isAuthenticating) {
       return;
     }
 
-    const { error } = await signup({
-      ...signupData,
-      userType: userType || "vendor"
-    });
-    
-    if (!error) {
-      toast.success("Account created successfully! Please check your email to confirm your account.", {
-        icon: <CheckCircle className="h-4 w-4" />,
-        duration: 6000,
+    console.log('Attempting signup for:', signupData.email);
+
+    try {
+      const { error } = await signup({
+        ...signupData,
+        userType: userType || "vendor"
       });
-      onClose();
-      setSignupData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        organization: "",
-        location: "",
-        password: ""
-      });
-      setSignupErrors({});
-    } else {
-      if (error.message.includes('already registered')) {
-        toast.error("An account with this email already exists. Please try logging in instead.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
-        setActiveTab("login");
-      } else if (error.message.includes('Password should be at least')) {
-        toast.error("Password must be at least 6 characters long.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
+      
+      if (error) {
+        console.error('Signup failed:', error);
+        
+        if (error.message.includes('already registered')) {
+          toast.error("An account with this email already exists. Please try logging in instead.");
+          setActiveTab("login");
+        } else if (error.message.includes('Password should be at least')) {
+          toast.error("Password must be at least 6 characters long.");
+        } else {
+          toast.error(error.message || "Failed to create account. Please try again.");
+        }
       } else {
-        toast.error(error.message || "Failed to create account. Please try again.", {
-          icon: <AlertCircle className="h-4 w-4" />,
-        });
+        toast.success("Account created successfully! Please check your email to confirm your account.");
       }
+    } catch (error) {
+      console.error('Signup exception:', error);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -269,6 +277,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (loginErrors.email) setLoginErrors({...loginErrors, email: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                 </div>
                 {loginErrors.email && (
@@ -296,11 +305,13 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (loginErrors.password) setLoginErrors({...loginErrors, password: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    disabled={isAuthenticating}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -316,9 +327,9 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
               <Button
                 type="submit"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white h-11"
-                disabled={isLoading}
+                disabled={isAuthenticating}
               >
-                {isLoading ? (
+                {isAuthenticating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Logging in...
@@ -334,6 +345,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                   type="button"
                   onClick={() => setActiveTab("signup")}
                   className="text-blue-600 hover:underline font-medium"
+                  disabled={isAuthenticating}
                 >
                   Sign up here
                 </button>
@@ -360,6 +372,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                         if (signupErrors.firstName) setSignupErrors({...signupErrors, firstName: ""});
                       }}
                       required
+                      disabled={isAuthenticating}
                     />
                   </div>
                   {signupErrors.firstName && (
@@ -383,6 +396,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (signupErrors.lastName) setSignupErrors({...signupErrors, lastName: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                   {signupErrors.lastName && (
                     <p className="text-red-500 text-xs flex items-center gap-1">
@@ -410,6 +424,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (signupErrors.email) setSignupErrors({...signupErrors, email: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                 </div>
                 {signupErrors.email && (
@@ -437,6 +452,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (signupErrors.phone) setSignupErrors({...signupErrors, phone: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                 </div>
                 {signupErrors.phone && (
@@ -464,6 +480,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                         if (signupErrors.organization) setSignupErrors({...signupErrors, organization: ""});
                       }}
                       required
+                      disabled={isAuthenticating}
                     />
                   </div>
                   {signupErrors.organization && (
@@ -491,6 +508,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (signupErrors.location) setSignupErrors({...signupErrors, location: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                 </div>
                 {signupErrors.location && (
@@ -518,11 +536,13 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                       if (signupErrors.password) setSignupErrors({...signupErrors, password: ""});
                     }}
                     required
+                    disabled={isAuthenticating}
                   />
                   <button
                     type="button"
                     onClick={() => setShowSignupPassword(!showSignupPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    disabled={isAuthenticating}
                   >
                     {showSignupPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -538,9 +558,9 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
               <Button
                 type="submit"
                 className="w-full bg-green-600 hover:bg-green-700 text-white h-11"
-                disabled={isLoading}
+                disabled={isAuthenticating}
               >
-                {isLoading ? (
+                {isAuthenticating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Creating Account...
@@ -556,6 +576,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
                   type="button"
                   onClick={() => setActiveTab("login")}
                   className="text-blue-600 hover:underline font-medium"
+                  disabled={isAuthenticating}
                 >
                   Login here
                 </button>
