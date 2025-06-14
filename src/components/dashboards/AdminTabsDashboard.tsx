@@ -10,6 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "../ui/button";
 import { Building, Heart, Shield, Store, Users, BarChart3, Settings } from "lucide-react";
+import { useState } from "react";
+import Footer from "../Footer";
 
 const platformData = {
   vendor: {
@@ -56,62 +58,72 @@ const platformData = {
 
 const AdminTabsDashboard = () => {
   const { logout, user, profile } = useAuth();
+  const [activeTab, setActiveTab] = useState("vendor");
+
+  const handlePlatformSelect = (platformKey: string) => {
+    if (Object.keys(platformData).includes(platformKey)) {
+        setActiveTab(platformKey);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-      <header className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600">Welcome, {profile?.first_name || user?.email}. Manage the ecosystem.</p>
-        </div>
-        <Button onClick={logout} variant="outline">Logout</Button>
-      </header>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <main className="flex-grow p-4 sm:p-6 lg:p-8">
+        <header className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-gray-600">Welcome, {profile?.first_name || user?.email}. Manage the ecosystem.</p>
+          </div>
+          <Button onClick={logout} variant="outline">Logout</Button>
+        </header>
 
-      <Tabs defaultValue="vendor" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-          <TabsTrigger value="vendor">Vendor Platform</TabsTrigger>
-          <TabsTrigger value="ngo">NGO Platform</TabsTrigger>
-          <TabsTrigger value="corporate">Corporate Platform</TabsTrigger>
-          <TabsTrigger value="admin">Admin Tools</TabsTrigger>
-        </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+            <TabsTrigger value="vendor">Vendor Platform</TabsTrigger>
+            <TabsTrigger value="ngo">NGO Platform</TabsTrigger>
+            <TabsTrigger value="corporate">Corporate Platform</TabsTrigger>
+            <TabsTrigger value="admin">Admin Tools</TabsTrigger>
+          </TabsList>
 
-        {Object.entries(platformData).map(([key, data]) => (
-          <TabsContent value={key} key={key}>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  {data.icon}
-                  <div>
-                    <CardTitle className="text-2xl">{data.title}</CardTitle>
-                    <CardDescription>{data.description}</CardDescription>
+          {Object.entries(platformData).map(([key, data]) => (
+            <TabsContent value={key} key={key}>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-4">
+                    {data.icon}
+                    <div>
+                      <CardTitle className="text-2xl">{data.title}</CardTitle>
+                      <CardDescription>{data.description}</CardDescription>
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <h3 className="font-semibold mb-2">Key Features:</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-700">
-                  {data.features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        ))}
-      </Tabs>
-      
-      <Card className="mt-6">
-        <CardHeader>
-            <CardTitle>Admin Quick Actions</CardTitle>
-            <CardDescription>Access core administrative functionalities.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline"><Users className="mr-2 h-4 w-4" /> User Management</Button>
-            <Button variant="outline"><BarChart3 className="mr-2 h-4 w-4" /> Platform Analytics</Button>
-            <Button variant="outline"><Settings className="mr-2 h-4 w-4" /> System Settings</Button>
-        </CardContent>
-      </Card>
-
+                </CardHeader>
+                <CardContent>
+                  <h3 className="font-semibold mb-2">Key Features:</h3>
+                  <ul className="list-disc list-inside space-y-1 text-gray-700">
+                    {data.features.map((feature, index) => (
+                      <li key={index}>{feature}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
+        </Tabs>
+        
+        <Card className="mt-6">
+          <CardHeader>
+              <CardTitle>Admin Quick Actions</CardTitle>
+              <CardDescription>Access core administrative functionalities.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Button variant="outline"><Users className="mr-2 h-4 w-4" /> User Management</Button>
+              <Button variant="outline"><BarChart3 className="mr-2 h-4 w-4" /> Platform Analytics</Button>
+              <Button variant="outline"><Settings className="mr-2 h-4 w-4" /> System Settings</Button>
+          </CardContent>
+        </Card>
+      </main>
+      <Footer onPlatformSelect={handlePlatformSelect} />
     </div>
   );
 };

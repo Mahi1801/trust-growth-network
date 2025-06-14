@@ -1,12 +1,14 @@
+
 import { Globe, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Github, Heart, Users, Building, Store } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Logo from "./Logo";
 
 interface FooterProps {
   onNavigate?: (component: string) => void;
+  onPlatformSelect?: (platformKey: string) => void;
 }
 
-const Footer = ({ onNavigate }: FooterProps) => {
+const Footer = ({ onNavigate, onPlatformSelect }: FooterProps) => {
   const { toast } = useToast();
 
   const scrollToSection = (sectionId: string) => {
@@ -22,6 +24,13 @@ const Footer = ({ onNavigate }: FooterProps) => {
   };
 
   const handlePlatformClick = (platform: string) => {
+    const platformKey = platform.replace('Platform', '').toLowerCase();
+    
+    if (onPlatformSelect) {
+      onPlatformSelect(platformKey);
+      return;
+    }
+
     if (onNavigate) {
       onNavigate(platform);
       toast({
