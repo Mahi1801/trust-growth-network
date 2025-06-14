@@ -228,6 +228,7 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
         onClose={() => setShowAuthModal(false)}
         initialTab={authModalTab}
         userType="vendor"
+        redirectTo="VendorPlatform"
       />
     </div>
   );

@@ -21,11 +21,13 @@ interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   session: Session | null;
-  login: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signup: (userData: SignupData) => Promise<{ error: Error | null }>;
+  login: (email: string, password: string, redirectTo?: string) => Promise<{ error: Error | null }>;
+  signup: (userData: SignupData, redirectTo?: string) => Promise<{ error: Error | null }>;
   logout: () => Promise<void>;
   isLoading: boolean;
   isAuthenticating: boolean;
+  pendingRedirect: string | null;
+  setPendingRedirect: (redirect: string | null) => void;
 }
 
 interface SignupData {
@@ -47,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
 
   // Function to fetch user profile with retry logic
   const fetchProfile = async (userId: string, retryCount = 0) => {
@@ -188,10 +191,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, redirectTo?: string) => {
     if (isAuthenticating) return { error: new Error('Already authenticating') };
     
     setIsAuthenticating(true);
+    
+    // Store redirect preference
+    if (redirectTo) {
+      setPendingRedirect(redirectTo);
+    }
     
     try {
       console.log('Attempting login for:', email);
@@ -218,10 +226,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const signup = async (userData: SignupData) => {
+  const signup = async (userData: SignupData, redirectTo?: string) => {
     if (isAuthenticating) return { error: new Error('Already authenticating') };
     
     setIsAuthenticating(true);
+    
+    // Store redirect preference
+    if (redirectTo) {
+      setPendingRedirect(redirectTo);
+    }
     
     try {
       console.log('Attempting signup for:', userData.email);
@@ -268,6 +281,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log('Logging out...');
       
+      // Clear any pending redirects
+      setPendingRedirect(null);
+      
       // Clean up auth state first
       cleanupAuthState();
       
@@ -292,6 +308,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
       setProfile(null);
       setSession(null);
+      setPendingRedirect(null);
       window.location.href = '/';
     }
   };
@@ -305,7 +322,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signup, 
       logout, 
       isLoading,
-      isAuthenticating
+      isAuthenticating,
+      pendingRedirect,
+      setPendingRedirect
     }}>
       {children}
     </AuthContext.Provider>

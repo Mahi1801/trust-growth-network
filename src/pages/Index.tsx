@@ -17,6 +17,7 @@ import AdminPlatform from "@/components/platform/AdminPlatform";
 import PrivacyPolicy from "@/components/pages/PrivacyPolicy";
 import TermsOfService from "@/components/pages/TermsOfService";
 import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
 
 const Index = () => {
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
@@ -24,11 +25,39 @@ const Index = () => {
   const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("login");
   const [selectedUserType, setSelectedUserType] = useState<string>("");
   const [currentView, setCurrentView] = useState<string>("home");
-  const { user } = useAuth();
+  const { user, profile, pendingRedirect, setPendingRedirect } = useAuth();
 
-  // If user is logged in, show their dashboard
-  if (user) {
-    return <Dashboard />;
+  // Handle redirect after authentication
+  useEffect(() => {
+    if (user && profile && pendingRedirect) {
+      console.log('Redirecting authenticated user to:', pendingRedirect);
+      setCurrentView(pendingRedirect);
+      setPendingRedirect(null); // Clear the pending redirect
+    }
+  }, [user, profile, pendingRedirect, setPendingRedirect]);
+
+  // If user is logged in and no pending redirect, show their dashboard
+  if (user && profile && !pendingRedirect) {
+    // If user is on a platform view, stay there
+    if (currentView.includes('Platform')) {
+      // Check if the platform matches their user type
+      const platformUserTypeMap = {
+        'VendorPlatform': 'vendor',
+        'NGOPlatform': 'ngo', 
+        'CorporatePlatform': 'corporate',
+        'AdminPlatform': 'admin'
+      };
+      
+      const expectedUserType = platformUserTypeMap[currentView as keyof typeof platformUserTypeMap];
+      if (expectedUserType && profile.user_type === expectedUserType) {
+        // User is on the correct platform for their type, continue showing it
+      } else {
+        // User is on wrong platform, redirect to dashboard
+        return <Dashboard />;
+      }
+    } else {
+      return <Dashboard />;
+    }
   }
 
   const handleGetStarted = () => {
@@ -107,6 +136,7 @@ const Index = () => {
         onClose={() => setShowAuthModal(false)}
         initialTab={authModalTab}
         userType={selectedUserType}
+        redirectTo={currentView.includes('Platform') ? currentView : undefined}
       />
     </div>
   );

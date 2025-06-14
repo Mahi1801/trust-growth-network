@@ -13,9 +13,10 @@ interface AuthModalProps {
   onClose: () => void;
   initialTab?: "login" | "signup";
   userType?: string;
+  redirectTo?: string;
 }
 
-const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModalProps) => {
+const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo }: AuthModalProps) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const { login, signup, isAuthenticating, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -150,7 +151,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
     console.log('Attempting login for:', loginData.email);
 
     try {
-      const { error } = await login(loginData.email, loginData.password);
+      const { error } = await login(loginData.email, loginData.password, redirectTo);
       
       if (error) {
         console.error('Login failed:', error);
@@ -184,7 +185,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType }: AuthModa
       const { error } = await signup({
         ...signupData,
         userType: userType || "vendor"
-      });
+      }, redirectTo);
       
       if (error) {
         console.error('Signup failed:', error);

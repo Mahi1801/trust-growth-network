@@ -242,6 +242,7 @@ const NGOPlatform = ({ onBack }: NGOPlatformProps) => {
         onClose={() => setShowAuthModal(false)}
         initialTab={authModalTab}
         userType="ngo"
+        redirectTo="NGOPlatform"
       />
     </div>
   );
