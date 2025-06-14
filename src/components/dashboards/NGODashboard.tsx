@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -9,11 +8,13 @@ import { Users, MapPin, TrendingUp, DollarSign, CheckCircle, Clock, AlertCircle,
 import { CountUp } from '@/components/ui/count-up';
 import CampaignModal from '@/components/modals/CampaignModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
+import VendorManagementModal from '@/components/modals/VendorManagementModal';
 
 const NGODashboard = () => {
   const { user, profile, logout } = useAuth();
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showVendorManagementModal, setShowVendorManagementModal] = useState(false);
 
   const vendorData = [
     { id: 1, name: 'Eco Crafts', location: 'Mumbai', status: 'Verified', funding: 50000 },
@@ -142,7 +143,7 @@ const NGODashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Review and verify vendor applications</p>
-            <Button className="w-full" variant="outline">
+            <Button className="w-full" variant="outline" onClick={() => setShowVendorManagementModal(true)}>
               <Users className="h-4 w-4 mr-2" />
               Manage Vendors
             </Button>
@@ -272,6 +273,10 @@ const NGODashboard = () => {
         isOpen={showAnalyticsModal} 
         onClose={() => setShowAnalyticsModal(false)} 
         userType="ngo"
+      />
+      <VendorManagementModal 
+        isOpen={showVendorManagementModal} 
+        onClose={() => setShowVendorManagementModal(false)} 
       />
     </div>
   );

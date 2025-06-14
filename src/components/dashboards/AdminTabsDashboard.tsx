@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -12,6 +11,9 @@ import { Button } from "../ui/button";
 import { Building, Heart, Shield, Store, Users, BarChart3, Settings } from "lucide-react";
 import { useState } from "react";
 import Footer from "../Footer";
+import UserManagementModal from "../modals/UserManagementModal";
+import AnalyticsModal from "../modals/AnalyticsModal";
+import { toast } from "sonner";
 
 const platformData = {
   vendor: {
@@ -59,6 +61,8 @@ const platformData = {
 const AdminTabsDashboard = () => {
   const { logout, user, profile } = useAuth();
   const [activeTab, setActiveTab] = useState("vendor");
+  const [showUserManagementModal, setShowUserManagementModal] = useState(false);
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
 
   const handlePlatformSelect = (platformKey: string) => {
     if (Object.keys(platformData).includes(platformKey)) {
@@ -117,13 +121,15 @@ const AdminTabsDashboard = () => {
               <CardDescription>Access core administrative functionalities.</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button variant="outline"><Users className="mr-2 h-4 w-4" /> User Management</Button>
-              <Button variant="outline"><BarChart3 className="mr-2 h-4 w-4" /> Platform Analytics</Button>
-              <Button variant="outline"><Settings className="mr-2 h-4 w-4" /> System Settings</Button>
+              <Button variant="outline" onClick={() => setShowUserManagementModal(true)}><Users className="mr-2 h-4 w-4" /> User Management</Button>
+              <Button variant="outline" onClick={() => setShowAnalyticsModal(true)}><BarChart3 className="mr-2 h-4 w-4" /> Platform Analytics</Button>
+              <Button variant="outline" onClick={() => toast.info("System settings are managed via the platform's backend.")}><Settings className="mr-2 h-4 w-4" /> System Settings</Button>
           </CardContent>
         </Card>
       </main>
       <Footer onPlatformSelect={handlePlatformSelect} />
+      <UserManagementModal isOpen={showUserManagementModal} onClose={() => setShowUserManagementModal(false)} />
+      <AnalyticsModal isOpen={showAnalyticsModal} onClose={() => setShowAnalyticsModal(false)} userType="admin" />
     </div>
   );
 };

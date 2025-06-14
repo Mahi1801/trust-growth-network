@@ -1,8 +1,10 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Store, DollarSign, Users, TrendingUp, ArrowLeft, CreditCard, Wallet, Building2, Smartphone } from "lucide-react";
 import { useState } from "react";
 import AuthModal from "@/components/AuthModal";
+import { toast } from "sonner";
 
 interface VendorPlatformProps {
   onBack: () => void;
@@ -23,6 +25,7 @@ const VendorPlatform = ({ onBack }: VendorPlatformProps) => {
   };
 
   const handlePaymentGateway = (gateway: string) => {
+    toast.info(`Connecting to ${gateway} is a demo feature.`);
     console.log(`Integrating with ${gateway} payment gateway`);
     // This would typically open the payment gateway integration flow
   };
