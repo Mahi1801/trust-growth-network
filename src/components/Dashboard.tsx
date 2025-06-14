@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import VendorDashboard from './dashboards/VendorDashboard';
 import NGODashboard from './dashboards/NGODashboard';
 import CorporateDashboard from './dashboards/CorporateDashboard';
-import AdminDashboard from './dashboards/AdminDashboard';
+import AdminTabsDashboard from './dashboards/AdminTabsDashboard';
 
 const Dashboard = () => {
   const { user, profile, isLoading } = useAuth();
@@ -39,7 +39,7 @@ const Dashboard = () => {
       case 'corporate':
         return <CorporateDashboard />;
       case 'admin':
-        return <AdminDashboard />;
+        return <AdminTabsDashboard />;
       default:
         return (
           <div className="min-h-screen bg-gray-50 flex items-center justify-center">

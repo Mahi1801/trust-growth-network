@@ -25,11 +25,14 @@ const Index = () => {
   const [currentView, setCurrentView] = useState<string>("home");
   const { user, profile, pendingRedirect, setPendingRedirect, isLoading, isProfileLoading } = useAuth();
 
-  // Handle redirect after authentication
+  // Handle redirect for ancillary pages like Privacy Policy after authentication
   useEffect(() => {
     if (user && profile && pendingRedirect) {
-      console.log('Redirecting authenticated user to:', pendingRedirect);
-      setCurrentView(pendingRedirect);
+      console.log('User authenticated, checking for pending redirect:', pendingRedirect);
+      // We only redirect if it's not a platform page, which would be handled by the dashboard.
+      if (!pendingRedirect.includes('Platform') && pendingRedirect !== 'home') {
+        setCurrentView(pendingRedirect);
+      }
       setPendingRedirect(null); // Clear the pending redirect
     }
   }, [user, profile, pendingRedirect, setPendingRedirect]);
@@ -46,32 +49,16 @@ const Index = () => {
     );
   }
 
-  // If user is logged in, determine the correct view
-  if (user && profile && !pendingRedirect) {
-    const userTypeToPlatformMap = {
-      'vendor': 'VendorPlatform',
-      'ngo': 'NGOPlatform',
-      'corporate': 'CorporatePlatform',
-      'admin': 'AdminPlatform'
-    };
-    const correctPlatform = userTypeToPlatformMap[profile.user_type as keyof typeof userTypeToPlatformMap];
-
-    if (currentView.includes('Platform')) {
-      // If the user is on a platform view, but it's the wrong one, redirect them.
-      if (correctPlatform && currentView !== correctPlatform) {
-        setCurrentView(correctPlatform);
-      }
-    } else {
-      // If the user is on any other page (like 'home') after logging in,
-      // redirect them to their correct platform page.
-      if (currentView === 'home' && correctPlatform) {
-        setCurrentView(correctPlatform);
-      }
-      // If the user has a type that doesn't map to a platform, show the dashboard.
-      else if (!correctPlatform) {
-        return <Dashboard />;
-      }
+  // If user is logged in, show the main dashboard which handles role-based views.
+  if (user && profile) {
+    // If there's a specific view like ToS or Privacy, show that, otherwise dashboard.
+    if (currentView === "PrivacyPolicy") {
+      return <PrivacyPolicy onBack={() => setCurrentView('home')} />;
     }
+    if (currentView === "TermsOfService") {
+      return <TermsOfService onBack={() => setCurrentView('home')} />;
+    }
+    return <Dashboard />;
   }
 
   const handleGetStarted = () => {
