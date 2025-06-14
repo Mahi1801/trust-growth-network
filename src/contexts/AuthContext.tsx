@@ -53,8 +53,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
       
       // Try to fetch from profiles table
-      const { data, error } = await supabase
-        .from('profiles')
+      // WORKAROUND: Using 'as any' because the 'profiles' table might not be in the auto-generated types
+      // or might not exist in the DB, causing a TypeScript error.
+      const { data, error } = await (supabase.from as any)('profiles')
         .select('*')
         .eq('id', userId)
         .single();
@@ -72,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
         
         // If the profiles table doesn't exist or is not accessible, create a fallback profile
-        console.log('Creating fallback profile from user metadata');
+        console.log('Creating fallback profile from user metadata as profiles table might be missing or inaccessible.');
         const fallbackProfile: Profile = {
           id: userId,
           first_name: user?.user_metadata?.first_name || null,
@@ -95,7 +96,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error('Error in fetchProfile:', error);
       
       // Create fallback profile on any unexpected exception
-      console.log('Creating fallback profile due to exception');
+      console.log('Creating fallback profile due to exception in fetchProfile.');
       const fallbackProfile: Profile = {
         id: userId,
         first_name: user?.user_metadata?.first_name || null,
