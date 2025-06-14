@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -206,11 +207,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       console.log('Login successful:', data.user?.id);
-      
-      // Wait a moment for the profile to be fetched
-      setTimeout(() => {
-        toast.success("Successfully logged in!");
-      }, 500);
+      toast.success("Successfully logged in!");
       
       return { error: null };
     } catch (error) {
@@ -229,13 +226,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log('Attempting signup for:', userData.email);
       
-      const redirectUrl = `${window.location.origin}/`;
-      
       const { data, error } = await supabase.auth.signUp({
         email: userData.email.trim().toLowerCase(),
         password: userData.password,
         options: {
-          emailRedirectTo: redirectUrl,
           data: {
             first_name: userData.firstName.trim(),
             last_name: userData.lastName.trim(),
@@ -254,10 +248,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       console.log('Signup successful:', data.user?.id);
       
+      // Check if email confirmation is required
       if (data.user && !data.user.email_confirmed_at) {
         toast.success("Account created! Please check your email to confirm your account.");
       } else {
-        toast.success("Account created successfully!");
+        toast.success("Account created and logged in successfully!");
       }
       
       return { error: null };
