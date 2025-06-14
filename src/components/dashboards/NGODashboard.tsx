@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -268,6 +269,9 @@ const NGODashboard = () => {
       <CampaignModal 
         isOpen={showCampaignModal} 
         onClose={() => setShowCampaignModal(false)} 
+        onCampaignCreated={() => {
+          // This dashboard uses static data, so no action is needed here for now.
+        }}
       />
       <AnalyticsModal 
         isOpen={showAnalyticsModal} 
