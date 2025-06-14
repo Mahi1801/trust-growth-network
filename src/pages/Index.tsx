@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FeatureSection from "@/components/FeatureSection";
@@ -17,7 +16,6 @@ import AdminPlatform from "@/components/platform/AdminPlatform";
 import PrivacyPolicy from "@/components/pages/PrivacyPolicy";
 import TermsOfService from "@/components/pages/TermsOfService";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
 
 const Index = () => {
   const [showUserTypeSelector, setShowUserTypeSelector] = useState(false);
@@ -36,39 +34,31 @@ const Index = () => {
     }
   }, [user, profile, pendingRedirect, setPendingRedirect]);
 
-  // If user is logged in and no pending redirect, show their correct platform or dashboard
+  // If user is logged in, determine the correct view
   if (user && profile && !pendingRedirect) {
-    // If user is on a platform view, check if it matches their user type
+    const userTypeToPlatformMap = {
+      'vendor': 'VendorPlatform',
+      'ngo': 'NGOPlatform',
+      'corporate': 'CorporatePlatform',
+      'admin': 'AdminPlatform'
+    };
+    const correctPlatform = userTypeToPlatformMap[profile.user_type as keyof typeof userTypeToPlatformMap];
+
     if (currentView.includes('Platform')) {
-      const platformUserTypeMap = {
-        'VendorPlatform': 'vendor',
-        'NGOPlatform': 'ngo', 
-        'CorporatePlatform': 'corporate',
-        'AdminPlatform': 'admin'
-      };
-      
-      const expectedUserType = platformUserTypeMap[currentView as keyof typeof platformUserTypeMap];
-      if (expectedUserType && profile.user_type === expectedUserType) {
-        // User is on the correct platform for their type, continue showing it
-      } else {
-        // User is on wrong platform, redirect to their correct platform or dashboard
-        const userTypeToPlatformMap = {
-          'vendor': 'VendorPlatform',
-          'ngo': 'NGOPlatform',
-          'corporate': 'CorporatePlatform',
-          'admin': 'AdminPlatform'
-        };
-        
-        const correctPlatform = userTypeToPlatformMap[profile.user_type as keyof typeof userTypeToPlatformMap];
-        if (correctPlatform) {
-          setCurrentView(correctPlatform);
-        } else {
-          return <Dashboard />;
-        }
+      // If the user is on a platform view, but it's the wrong one, redirect them.
+      if (correctPlatform && currentView !== correctPlatform) {
+        setCurrentView(correctPlatform);
       }
     } else {
-      // User is not on a platform view, show their dashboard
-      return <Dashboard />;
+      // If the user is on any other page (like 'home') after logging in,
+      // redirect them to their correct platform page.
+      if (currentView === 'home' && correctPlatform) {
+        setCurrentView(correctPlatform);
+      }
+      // If the user has a type that doesn't map to a platform, show the dashboard.
+      else if (!correctPlatform) {
+        return <Dashboard />;
+      }
     }
   }
 
@@ -129,6 +119,7 @@ const Index = () => {
     return <TermsOfService onBack={handleBack} />;
   }
 
+  // Default view for unauthenticated users or during login/signup process
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       <Navbar onLoginClick={handleLoginClick} onSignupClick={handleSignupClick} />

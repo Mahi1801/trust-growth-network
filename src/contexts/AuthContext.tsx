@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -56,7 +55,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
       
-      // Try to fetch from profiles table
       const { data, error } = await (supabase.from as any)('profiles')
         .select('*')
         .eq('id', userId)
@@ -65,7 +63,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error) {
         console.error('Error fetching profile:', error);
         
-        // If profile doesn't exist and we haven't retried too many times, wait and retry
+        // If profile doesn't exist and we haven't retried too many times, wait and retry.
+        // This handles the small delay for the database trigger to run after signup.
         if (error.code === 'PGRST116' && retryCount < 3) {
           console.log(`Profile not found, retrying in ${1000 * (retryCount + 1)}ms...`);
           setTimeout(() => {
@@ -74,21 +73,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           return;
         }
         
-        // If the profiles table doesn't exist or is not accessible, create a fallback profile
-        console.log('Creating fallback profile from user metadata as profiles table might be missing or inaccessible.');
-        const fallbackProfile: Profile = {
-          id: userId,
-          first_name: user?.user_metadata?.first_name || null,
-          last_name: user?.user_metadata?.last_name || null,
-          email: user?.email || null,
-          phone: user?.user_metadata?.phone || null,
-          organization: user?.user_metadata?.organization || null,
-          location: user?.user_metadata?.location || null,
-          user_type: user?.user_metadata?.user_type || 'vendor',
-          created_at: user?.created_at || new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        setProfile(fallbackProfile);
+        // If retries fail or it's a different error, set profile to null to prevent using stale/wrong data.
+        setProfile(null);
+        toast.error("Could not load user profile. Please try logging in again.");
         return;
       }
 
@@ -96,22 +83,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setProfile(data as Profile);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
-      
-      // Create fallback profile on any unexpected exception
-      console.log('Creating fallback profile due to exception in fetchProfile.');
-      const fallbackProfile: Profile = {
-        id: userId,
-        first_name: user?.user_metadata?.first_name || null,
-        last_name: user?.user_metadata?.last_name || null,
-        email: user?.email || null,
-        phone: user?.user_metadata?.phone || null,
-        organization: user?.user_metadata?.organization || null,
-        location: user?.user_metadata?.location || null,
-        user_type: user?.user_metadata?.user_type || 'vendor',
-        created_at: user?.created_at || new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-      setProfile(fallbackProfile);
+      setProfile(null);
+      toast.error("An unexpected error occurred while fetching your profile.");
     }
   };
 
