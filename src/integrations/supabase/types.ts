@@ -19,6 +19,7 @@ export type Database = {
           location: string | null
           organization: string | null
           phone: string | null
+          status: string
           updated_at: string
           user_type: string | null
         }
@@ -31,6 +32,7 @@ export type Database = {
           location?: string | null
           organization?: string | null
           phone?: string | null
+          status?: string
           updated_at?: string
           user_type?: string | null
         }
@@ -43,6 +45,7 @@ export type Database = {
           location?: string | null
           organization?: string | null
           phone?: string | null
+          status?: string
           updated_at?: string
           user_type?: string | null
         }
@@ -53,7 +56,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
