@@ -53,9 +53,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
       
       // WORKAROUND: Using 'as any' due to potential issues with auto-generated Supabase types (types.ts)
-      // not recognizing the 'profiles' table. This allows the build to pass.
+      // not recognizing the 'profiles' table. This allows the build to pass if the types are stale.
       // The underlying types.ts file should ideally be updated by the system to reflect the database schema.
-      const { data, error } = await (supabase.from('profiles') as any)
+      // The primary issue might be that the 'profiles' table doesn't exist or isn't accessible.
+      const { data, error } = await (supabase.from as any)('profiles')
         .select('*')
         .eq('id', userId)
         .single();
