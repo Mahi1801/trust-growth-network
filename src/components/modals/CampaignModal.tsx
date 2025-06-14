@@ -8,35 +8,71 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Rocket, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CampaignModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onCampaignCreated: () => void;
 }
 
-const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
+const CampaignModal = ({ isOpen, onClose, onCampaignCreated }: CampaignModalProps) => {
+  const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [budget, setBudget] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      toast({ title: "Authentication Error", description: "You must be logged in to create a campaign.", variant: "destructive" });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { data, error } = await supabase
+      .from('campaigns')
+      .insert({
+        name: title,
+        funding_goal: Number(budget),
+        corporate_id: user.id,
+        description,
+        target_audience: location,
+        // The 'duration' field is not in the database schema, so it's not saved.
+        // The 'status' defaults to 'draft' in the database.
+      })
+      .select()
+      .single();
     
-    setTimeout(() => {
+    setIsLoading(false);
+
+    if (error) {
+      console.error("Error creating campaign:", error);
+      toast({
+        title: "Error Creating Campaign",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else if (data) {
       toast({
         title: "Campaign Created Successfully",
-        description: `Your campaign "${title}" has been launched with ₹${budget} budget.`,
+        description: `Your campaign "${data.name}" has been launched.`,
       });
+      onCampaignCreated(); // This will trigger a refetch of campaigns on the dashboard
       onClose();
+      // Reset form fields
       setTitle('');
       setBudget('');
       setLocation('');
       setDescription('');
       setDuration('');
-    }, 1000);
+    }
   };
 
   return (
@@ -57,6 +93,7 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              disabled={isLoading}
             />
           </div>
 
@@ -70,11 +107,12 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="duration">Duration</Label>
-              <Select value={duration} onValueChange={setDuration} required>
+              <Select value={duration} onValueChange={setDuration} required disabled={isLoading}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -99,6 +137,7 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                 onChange={(e) => setLocation(e.target.value)}
                 className="pl-10"
                 required
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -112,15 +151,16 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               required
+              disabled={isLoading}
             />
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1" disabled={isLoading}>
               Cancel
             </Button>
-            <Button type="submit" className="flex-1">
-              Launch Campaign
+            <Button type="submit" className="flex-1" disabled={isLoading}>
+              {isLoading ? 'Launching...' : 'Launch Campaign'}
             </Button>
           </div>
         </form>

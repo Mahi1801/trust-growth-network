@@ -10,14 +10,40 @@ import { CountUp } from '@/components/ui/count-up';
 import CampaignModal from '@/components/modals/CampaignModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 import { useToast } from '@/hooks/use-toast';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const CorporateDashboard = () => {
   const { user, profile, logout } = useAuth();
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  // Mock data for corporate analytics
+  const fetchCampaigns = async () => {
+    if (!user) return [];
+    const { data, error } = await supabase
+      .from('campaigns')
+      .select('*')
+      .eq('corporate_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching campaigns:', error);
+      toast({ title: "Error", description: "Could not fetch your campaigns.", variant: "destructive" });
+      return [];
+    }
+    return data;
+  };
+
+  const { data: campaignData, isLoading: isLoadingCampaigns } = useQuery({
+    queryKey: ['campaigns', user?.id],
+    queryFn: fetchCampaigns,
+    enabled: !!user,
+  });
+
+  // Mock data for corporate analytics (will be replaced in future steps)
   const roiData = [
     { month: 'Jan', investment: 100000, socialReturn: 120000, brandValue: 25000 },
     { month: 'Feb', investment: 150000, socialReturn: 180000, brandValue: 35000 },
@@ -33,11 +59,9 @@ const CorporateDashboard = () => {
     { metric: 'Sustainability Score', value: 8.7, change: '+0.5' },
   ];
 
-  const campaignData = [
-    { campaign: 'Mumbai Market Revival', invested: 500000, impact: 89, vendors: 45, status: 'active' },
-    { campaign: 'Delhi Tech Empowerment', invested: 750000, impact: 92, vendors: 62, status: 'completed' },
-    { campaign: 'Rural Business Boost', invested: 300000, impact: 76, vendors: 28, status: 'active' },
-  ];
+  const handleCampaignCreated = () => {
+    queryClient.invalidateQueries({ queryKey: ['campaigns', user?.id] });
+  };
 
   const handleViewAnalytics = () => {
     setShowAnalyticsModal(true);
@@ -361,38 +385,51 @@ const CorporateDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {campaignData.map((campaign, index) => (
-                <div key={index} className="p-4 border-2 border-gray-200 rounded-lg hover:shadow-md transition-shadow bg-white">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-gray-900">{campaign.campaign}</h4>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      campaign.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
-                    }`}>
-                      {campaign.status}
-                    </span>
+              {isLoadingCampaigns && (
+                <>
+                  <Skeleton className="h-24 w-full" />
+                  <Skeleton className="h-24 w-full" />
+                </>
+              )}
+              {!isLoadingCampaigns && campaignData && campaignData.length > 0 ? (
+                campaignData.map((campaign) => (
+                  <div key={campaign.id} className="p-4 border-2 border-gray-200 rounded-lg hover:shadow-md transition-shadow bg-white">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-medium text-gray-900">{campaign.name}</h4>
+                      <span className={`px-2 py-1 rounded-full text-xs capitalize ${
+                        campaign.status === 'active' || campaign.status === 'draft' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {campaign.status}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-600">Funding Goal</p>
+                        <p className="font-medium text-lg">
+                          ₹<CountUp end={Number(campaign.funding_goal)} duration={2000} />
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Impact Score</p>
+                        <p className="font-medium text-lg">
+                          <CountUp end={campaign.impact_score || 0} duration={1800} />/100
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">Amount Raised</p>
+                        <p className="font-medium text-lg">
+                          ₹<CountUp end={Number(campaign.amount_raised)} duration={1500} />
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-600">Investment</p>
-                      <p className="font-medium text-lg">
-                        ₹<CountUp end={campaign.invested} duration={2000} />
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Impact Score</p>
-                      <p className="font-medium text-lg">
-                        <CountUp end={campaign.impact} duration={1800} />/100
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">Vendors</p>
-                      <p className="font-medium text-lg">
-                        <CountUp end={campaign.vendors} duration={1500} />
-                      </p>
-                    </div>
-                  </div>
+                ))
+              ) : !isLoadingCampaigns && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No campaigns found.</p>
+                  <p className="text-gray-500 text-sm">Launch a new campaign to get started!</p>
                 </div>
-              ))}
+              )}
             </div>
           </CardContent>
         </Card>
@@ -401,7 +438,8 @@ const CorporateDashboard = () => {
       {/* Modals */}
       <CampaignModal 
         isOpen={showCampaignModal} 
-        onClose={() => setShowCampaignModal(false)} 
+        onClose={() => setShowCampaignModal(false)}
+        onCampaignCreated={handleCampaignCreated}
       />
       <AnalyticsModal 
         isOpen={showAnalyticsModal} 
