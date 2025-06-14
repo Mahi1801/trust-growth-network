@@ -1,31 +1,75 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Target, Users, Globe } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const sdgData = [
-  { name: 'No Poverty', value: 400 },
-  { name: 'Quality Education', value: 300 },
-  { name: 'Gender Equality', value: 300 },
-  { name: 'Clean Water', value: 200 },
-  { name: 'Good Health', value: 278 },
-  { name: 'Decent Work', value: 189 },
-];
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1943'];
 
-const impactTimelineData = [
-    { month: 'Jan', livesImpacted: 1200 },
-    { month: 'Feb', livesImpacted: 1500 },
-    { month: 'Mar', livesImpacted: 2100 },
-    { month: 'Apr', livesImpacted: 2400 },
-    { month: 'May', livesImpacted: 3200 },
-    { month: 'Jun', livesImpacted: 4000 },
-];
-
 const ImpactDashboardPage = () => {
+    const fetchCampaigns = async () => {
+        const { data, error } = await supabase.from('campaigns').select('sector, lives_impacted, communities_reached, amount_raised, created_at');
+        if (error) {
+            console.error(error);
+            return [];
+        }
+        return data;
+    }
+
+    const { data: campaigns, isLoading } = useQuery({
+        queryKey: ['impactDashboardCampaigns'],
+        queryFn: fetchCampaigns
+    });
+
+    const { totals, sdgData, impactTimelineData } = useMemo(() => {
+        if (!campaigns) {
+            return { totals: { lives: 0, communities: 0 }, sdgData: [], impactTimelineData: [] };
+        }
+
+        const livesTotal = campaigns.reduce((acc, c) => acc + (c.lives_impacted || 0), 0);
+        const communitiesTotal = campaigns.reduce((acc, c) => acc + (c.communities_reached || 0), 0);
+
+        const sdgDataMap: { [key: string]: number } = {};
+        campaigns.forEach(c => {
+            if (c.sector) {
+                if (!sdgDataMap[c.sector]) sdgDataMap[c.sector] = 0;
+                sdgDataMap[c.sector] += c.amount_raised || 0;
+            }
+        });
+        const sdgData = Object.keys(sdgDataMap).map(name => ({ name, value: sdgDataMap[name] }));
+
+        const timelineMap: { [key: string]: { [key: string]: number } } = {};
+        campaigns.forEach(c => {
+            const date = new Date(c.created_at);
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
+            const key = `${month} ${year}`;
+            
+            if (!timelineMap[key]) {
+              timelineMap[key] = { date: date.getTime(), livesImpacted: 0 };
+            }
+            timelineMap[key].livesImpacted += c.lives_impacted || 0;
+        });
+        
+        const impactTimelineData = Object.entries(timelineMap)
+            .map(([month, data]) => ({ month, livesImpacted: data.livesImpacted, date: data.date }))
+            .sort((a,b) => a.date - b.date)
+            .map(({month, livesImpacted}) => ({month, livesImpacted}));
+
+        return {
+            totals: { lives: livesTotal, communities: communitiesTotal },
+            sdgData,
+            impactTimelineData
+        };
+
+    }, [campaigns]);
+
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="container mx-auto">
@@ -43,8 +87,8 @@ const ImpactDashboardPage = () => {
                     <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">15,234</div>
-                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+                    {isLoading ? <Skeleton className="h-7 w-24 mb-1" /> : <div className="text-2xl font-bold">{totals.lives.toLocaleString()}</div>}
+                    <p className="text-xs text-muted-foreground">Across all campaigns</p>
                 </CardContent>
             </Card>
             <Card>
@@ -53,8 +97,8 @@ const ImpactDashboardPage = () => {
                     <Globe className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">89</div>
-                    <p className="text-xs text-muted-foreground">+12 since last quarter</p>
+                    {isLoading ? <Skeleton className="h-7 w-12 mb-1" /> : <div className="text-2xl font-bold">{totals.communities}</div>}
+                    <p className="text-xs text-muted-foreground">Across all regions</p>
                 </CardContent>
             </Card>
             <Card>
@@ -72,9 +116,10 @@ const ImpactDashboardPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>Impact by UN SDG</CardTitle>
+                    <CardTitle>Impact by Sector</CardTitle>
                 </CardHeader>
                 <CardContent>
+                   {isLoading ? <Skeleton className="h-[300px] w-full" /> : (
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie data={sdgData} cx="50%" cy="50%" labelLine={false} outerRadius={110} fill="#8884d8" dataKey="value" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
@@ -82,9 +127,10 @@ const ImpactDashboardPage = () => {
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
-                            <Tooltip />
+                            <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
                         </PieChart>
                     </ResponsiveContainer>
+                   )}
                 </CardContent>
             </Card>
             <Card>
@@ -92,6 +138,7 @@ const ImpactDashboardPage = () => {
                     <CardTitle>Impact Growth Over Time</CardTitle>
                 </CardHeader>
                 <CardContent>
+                    {isLoading ? <Skeleton className="h-[300px] w-full" /> : (
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={impactTimelineData}>
                             <CartesianGrid strokeDasharray="3 3" />
@@ -102,6 +149,7 @@ const ImpactDashboardPage = () => {
                             <Line type="monotone" dataKey="livesImpacted" name="Lives Impacted" stroke="#8884d8" activeDot={{ r: 8 }} />
                         </LineChart>
                     </ResponsiveContainer>
+                    )}
                 </CardContent>
             </Card>
         </div>

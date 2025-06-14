@@ -12,39 +12,54 @@ export type Database = {
       campaigns: {
         Row: {
           amount_raised: number
+          communities_reached: number | null
           corporate_id: string
           created_at: string
           description: string | null
           funding_goal: number
           id: string
           impact_score: number | null
+          lives_impacted: number | null
           name: string
+          projected_sroi: number | null
+          region: string | null
+          sector: string | null
           status: string
           target_audience: string | null
           updated_at: string
         }
         Insert: {
           amount_raised?: number
+          communities_reached?: number | null
           corporate_id: string
           created_at?: string
           description?: string | null
           funding_goal: number
           id?: string
           impact_score?: number | null
+          lives_impacted?: number | null
           name: string
+          projected_sroi?: number | null
+          region?: string | null
+          sector?: string | null
           status?: string
           target_audience?: string | null
           updated_at?: string
         }
         Update: {
           amount_raised?: number
+          communities_reached?: number | null
           corporate_id?: string
           created_at?: string
           description?: string | null
           funding_goal?: number
           id?: string
           impact_score?: number | null
+          lives_impacted?: number | null
           name?: string
+          projected_sroi?: number | null
+          region?: string | null
+          sector?: string | null
           status?: string
           target_audience?: string | null
           updated_at?: string
@@ -58,6 +73,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      compliance_items: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          status: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      connections: {
+        Row: {
+          corporate_id: string
+          created_at: string
+          id: string
+          ngo_id: string
+          status: string
+        }
+        Insert: {
+          corporate_id: string
+          created_at?: string
+          id?: string
+          ngo_id: string
+          status?: string
+        }
+        Update: {
+          corporate_id?: string
+          created_at?: string
+          id?: string
+          ngo_id?: string
+          status?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

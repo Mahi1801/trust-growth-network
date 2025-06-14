@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -9,6 +9,7 @@ import { ArrowLeft, DollarSign, Activity, TrendingUp } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 const InvestmentPortfolioPage = () => {
@@ -24,12 +25,36 @@ const InvestmentPortfolioPage = () => {
 
     const { data: campaigns, isLoading } = useQuery({ queryKey: ['portfolioCampaigns'], queryFn: fetchCampaigns });
 
-    const portfolioData = [
-        { name: 'Education', value: 400000 },
-        { name: 'Healthcare', value: 300000 },
-        { name: 'Environment', value: 200000 },
-        { name: 'Community', value: 250000 },
-    ];
+    const { portfolioData, totals } = useMemo(() => {
+        if (!campaigns) return { portfolioData: [], totals: { investment: 0, sroi: 0 } };
+
+        const sectorData: { [key: string]: number } = {};
+        let totalInvestment = 0;
+        let totalWeightedSROI = 0;
+
+        campaigns.forEach(c => {
+            if (c.sector) {
+                if (!sectorData[c.sector]) sectorData[c.sector] = 0;
+                sectorData[c.sector] += c.amount_raised || 0;
+            }
+            totalInvestment += c.amount_raised || 0;
+            if (c.projected_sroi && c.amount_raised) {
+                totalWeightedSROI += c.projected_sroi * c.amount_raised;
+            }
+        });
+        
+        const portfolioData = Object.keys(sectorData).map(key => ({ name: key, value: sectorData[key] }));
+        const averageSROI = totalInvestment > 0 ? totalWeightedSROI / totalInvestment : 0;
+        
+        const totals = {
+            investment: totalInvestment,
+            sroi: averageSROI
+        };
+
+        return { portfolioData, totals };
+
+    }, [campaigns]);
+
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   return (
@@ -48,6 +73,7 @@ const InvestmentPortfolioPage = () => {
                     <CardTitle>Investment by Sector</CardTitle>
                 </CardHeader>
                 <CardContent>
+                     {isLoading ? <Skeleton className="h-[300px] w-full" /> : (
                      <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie data={portfolioData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} label>
@@ -58,6 +84,7 @@ const InvestmentPortfolioPage = () => {
                             <Tooltip formatter={(value: number) => `₹${value.toLocaleString()}`} />
                         </PieChart>
                     </ResponsiveContainer>
+                    )}
                 </CardContent>
             </Card>
             <div className="space-y-6">
@@ -67,7 +94,7 @@ const InvestmentPortfolioPage = () => {
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">₹15.2M</div>
+                        {isLoading ? <Skeleton className="h-7 w-24" /> : <div className="text-2xl font-bold">₹{totals.investment.toLocaleString()}</div>}
                     </CardContent>
                 </Card>
                 <Card>
@@ -76,7 +103,7 @@ const InvestmentPortfolioPage = () => {
                         <TrendingUp className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">4.1x</div>
+                        {isLoading ? <Skeleton className="h-7 w-16" /> : <div className="text-2xl font-bold">{totals.sroi.toFixed(1)}x</div>}
                     </CardContent>
                 </Card>
             </div>
@@ -91,20 +118,36 @@ const InvestmentPortfolioPage = () => {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Campaign</TableHead>
+                            <TableHead>Sector</TableHead>
                             <TableHead>Amount Invested</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Impact Score</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
+                        {isLoading && Array.from({length: 3}).map((_, i) => (
+                            <TableRow key={i}>
+                                <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-16" /></TableCell>
+                                <TableCell><Skeleton className="h-5 w-12" /></TableCell>
+                            </TableRow>
+                        ))}
                         {campaigns?.map(c => (
                             <TableRow key={c.id}>
                                 <TableCell className="font-medium">{c.name}</TableCell>
+                                <TableCell>{c.sector}</TableCell>
                                 <TableCell>₹{Number(c.amount_raised).toLocaleString()}</TableCell>
                                 <TableCell><span className="capitalize">{c.status}</span></TableCell>
                                 <TableCell>{c.impact_score}/100</TableCell>
                             </TableRow>
                         ))}
+                         {!isLoading && campaigns?.length === 0 && (
+                            <TableRow>
+                                <TableCell colSpan={5} className="text-center">No active investments found.</TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </CardContent>

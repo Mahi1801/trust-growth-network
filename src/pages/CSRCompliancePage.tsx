@@ -4,17 +4,43 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, CheckCircle, Clock, Shield } from 'lucide-react';
-
-const complianceItems = [
-    { title: 'Annual CSR spending commitment (2% of net profit)', status: 'Met', details: '₹1.2Cr spent in FY 2024-25' },
-    { title: 'Formation of CSR Committee', status: 'Met', details: 'Committee formed on April 5, 2024' },
-    { title: 'Annual Report on CSR Activities', status: 'Pending', details: 'Due by March 31, 2026' },
-    { title: 'Impact Assessment for projects > ₹1Cr', status: 'Met', details: 'Assessment for "Clean Water Initiative" complete' },
-    { title: 'Disclosure in Board\'s Report', status: 'Pending', details: 'To be included in next annual report' },
-];
-
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 const CSRCompliancePage = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  const fetchComplianceItems = async () => {
+    if (!user) return [];
+    const { data, error } = await supabase
+      .from('compliance_items')
+      .select('*')
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast({ title: "Error", description: "Could not fetch compliance items.", variant: "destructive" });
+      return [];
+    }
+    return data;
+  };
+
+  const { data: complianceItems, isLoading } = useQuery({
+    queryKey: ['complianceItems', user?.id],
+    queryFn: fetchComplianceItems,
+    enabled: !!user,
+  });
+  
+  const metItems = complianceItems?.filter(item => item.status === 'Met').length || 0;
+  const totalItems = complianceItems?.length || 0;
+  const complianceStatus = totalItems > 0 && metItems === totalItems ? 'Fully Compliant' : 'Partially Compliant';
+  const complianceMessage = totalItems > 0 && metItems === totalItems 
+    ? `All ${totalItems} mandatory requirements have been met.`
+    : `${metItems} of ${totalItems} requirements met.`;
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
         <div className="container mx-auto">
@@ -30,13 +56,15 @@ const CSRCompliancePage = () => {
                     <CardTitle className="flex items-center"><Shield className="mr-2 h-5 w-5 text-green-600"/>Compliance Status</CardTitle>
                 </CardHeader>
                 <CardContent>
+                  {isLoading ? <Skeleton className="h-12 w-1/2" /> : (
                     <div className="flex items-center">
                         <CheckCircle className="h-8 w-8 text-green-600 mr-4" />
                         <div>
-                            <p className="font-bold text-xl">Fully Compliant</p>
-                            <p className="text-gray-600">All mandatory requirements for FY 2024-25 have been met.</p>
+                            <p className="font-bold text-xl">{complianceStatus}</p>
+                            <p className="text-gray-600">{complianceMessage}</p>
                         </div>
                     </div>
+                  )}
                 </CardContent>
             </Card>
             
@@ -46,8 +74,17 @@ const CSRCompliancePage = () => {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                    {complianceItems.map((item, index) => (
-                        <div key={index} className="flex items-start justify-between p-4 border rounded-lg">
+                    {isLoading && Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="flex items-start justify-between p-4 border rounded-lg">
+                        <div className="w-full">
+                          <Skeleton className="h-5 w-3/4 mb-2" />
+                          <Skeleton className="h-4 w-1/2" />
+                        </div>
+                        <Skeleton className="h-8 w-24" />
+                      </div>
+                    ))}
+                    {!isLoading && complianceItems?.map((item) => (
+                        <div key={item.id} className="flex items-start justify-between p-4 border rounded-lg">
                             <div>
                                 <p className="font-medium">{item.title}</p>
                                 <p className="text-sm text-gray-500">{item.details}</p>
@@ -58,6 +95,9 @@ const CSRCompliancePage = () => {
                             </div>
                         </div>
                     ))}
+                    {!isLoading && complianceItems?.length === 0 && (
+                      <p className="text-center text-gray-500 py-8">No compliance items found. Please log in to see your data.</p>
+                    )}
                     </div>
                 </CardContent>
             </Card>
@@ -67,3 +107,4 @@ const CSRCompliancePage = () => {
 };
 
 export default CSRCompliancePage;
+

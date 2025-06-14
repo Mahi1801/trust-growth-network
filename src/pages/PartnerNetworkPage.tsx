@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -9,10 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Search, Handshake, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const PartnerNetworkPage = () => {
     const { toast } = useToast();
     const [searchTerm, setSearchTerm] = useState('');
+    const { user } = useAuth();
+    const queryClient = useQueryClient();
 
     const fetchNgos = async () => {
         const { data, error } = await supabase
@@ -27,15 +30,54 @@ const PartnerNetworkPage = () => {
         return data;
     };
 
-    const { data: ngos, isLoading } = useQuery({
+    const { data: ngos, isLoading: isLoadingNgos } = useQuery({
         queryKey: ['ngos'],
         queryFn: fetchNgos,
     });
+
+    const fetchConnections = async () => {
+        if (!user) return [];
+        const { data, error } = await supabase.from('connections').select('*').eq('corporate_id', user.id);
+        if (error) {
+            toast({ title: "Error", description: "Could not fetch connections.", variant: "destructive" });
+            return [];
+        }
+        return data;
+    }
+
+    const { data: connections, isLoading: isLoadingConnections } = useQuery({
+        queryKey: ['connections', user?.id],
+        queryFn: fetchConnections,
+        enabled: !!user,
+    });
+
+    const connectMutation = useMutation({
+        mutationFn: async (ngoId: string) => {
+            if (!user) throw new Error("User not authenticated");
+            const { error } = await supabase.from('connections').insert({ corporate_id: user.id, ngo_id: ngoId });
+            if (error) throw new Error(error.message);
+        },
+        onSuccess: () => {
+            toast({ title: "Success", description: "Connection request sent." });
+            queryClient.invalidateQueries({ queryKey: ['connections', user?.id] });
+        },
+        onError: (error) => {
+            toast({ title: "Error", description: `Could not send request: ${error.message}`, variant: "destructive" });
+        }
+    });
     
     const filteredNgos = ngos?.filter(ngo => 
-        ngo.organization?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ngo.location?.toLowerCase().includes(searchTerm.toLowerCase())
+        (ngo.organization?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ngo.location?.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        ngo.id !== user?.id // don't show self
     );
+
+    const getConnectionStatus = (ngoId: string) => {
+        const connection = connections?.find(c => c.ngo_id === ngoId);
+        return connection?.status;
+    };
+
+    const isLoading = isLoadingNgos || isLoadingConnections;
 
     return (
         <div className="p-6 bg-gray-50 min-h-screen">
@@ -70,7 +112,9 @@ const PartnerNetworkPage = () => {
                             </CardContent>
                         </Card>
                     ))}
-                    {!isLoading && filteredNgos?.map(ngo => (
+                    {!isLoading && filteredNgos?.map(ngo => {
+                        const status = getConnectionStatus(ngo.id);
+                        return (
                         <Card key={ngo.id} className="hover:shadow-lg transition-shadow">
                             <CardHeader>
                                 <CardTitle>{ngo.organization || `${ngo.first_name} ${ngo.last_name}`}</CardTitle>
@@ -80,13 +124,23 @@ const PartnerNetworkPage = () => {
                                     <Globe className="h-4 w-4 mr-2" />
                                     <span>{ngo.location || 'Location not specified'}</span>
                                 </div>
-                                <Button className="w-full">
-                                    <Handshake className="h-4 w-4 mr-2" />
-                                    Connect
+                                <Button 
+                                    className="w-full"
+                                    onClick={() => connectMutation.mutate(ngo.id)}
+                                    disabled={!!status || connectMutation.isPending}
+                                >
+                                    {status ? (
+                                        <span className="capitalize">{status}</span>
+                                    ) : (
+                                        <>
+                                            <Handshake className="h-4 w-4 mr-2" />
+                                            Connect
+                                        </>
+                                    )}
                                 </Button>
                             </CardContent>
                         </Card>
-                    ))}
+                    )})}
                 </div>
                  {!isLoading && filteredNgos?.length === 0 && (
                     <div className="text-center py-16 col-span-full">
