@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
@@ -53,29 +52,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
       
-      const { data, error } = await supabase
-        .from('profiles')
+      // WORKAROUND: Using 'as any' due to potential issues with auto-generated Supabase types (types.ts)
+      // not recognizing the 'profiles' table. This allows the build to pass.
+      // The underlying types.ts file should ideally be updated by the system to reflect the database schema.
+      const { data, error } = await (supabase.from('profiles') as any)
         .select('*')
         .eq('id', userId)
         .single();
 
       if (error) {
         console.error('Error fetching profile:', error);
-        // If profile doesn't exist and we haven't retried too many times, wait and retry
+        // If profile doesn't exist (PGRST116: 'Fetched result contains 0 rows') 
+        // and we haven't retried too many times, wait and retry.
         if (error.code === 'PGRST116' && retryCount < 3) {
           console.log(`Profile not found, retrying in ${1000 * (retryCount + 1)}ms...`);
           setTimeout(() => {
-            fetchProfile(userId, retryCount + 1);
-          }, 1000 * (retryCount + 1)); // Exponential backoff
+            fetchProfile(userId, retryCount + 1); // Exponential backoff
+          }, 1000 * (retryCount + 1));
           return;
         }
+        // If error is not PGRST116 or retries exhausted, clear profile
+        setProfile(null); 
         return;
       }
 
       console.log('Profile fetched successfully:', data);
-      setProfile(data);
+      // Assuming 'data' matches the Profile interface structure after a successful fetch.
+      setProfile(data as Profile); 
     } catch (error) {
       console.error('Error in fetchProfile:', error);
+      setProfile(null); // Clear profile on any unexpected exception during fetch
     }
   };
 
