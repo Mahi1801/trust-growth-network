@@ -36,11 +36,10 @@ const Index = () => {
     }
   }, [user, profile, pendingRedirect, setPendingRedirect]);
 
-  // If user is logged in and no pending redirect, show their dashboard
+  // If user is logged in and no pending redirect, show their correct platform or dashboard
   if (user && profile && !pendingRedirect) {
-    // If user is on a platform view, stay there
+    // If user is on a platform view, check if it matches their user type
     if (currentView.includes('Platform')) {
-      // Check if the platform matches their user type
       const platformUserTypeMap = {
         'VendorPlatform': 'vendor',
         'NGOPlatform': 'ngo', 
@@ -52,10 +51,23 @@ const Index = () => {
       if (expectedUserType && profile.user_type === expectedUserType) {
         // User is on the correct platform for their type, continue showing it
       } else {
-        // User is on wrong platform, redirect to dashboard
-        return <Dashboard />;
+        // User is on wrong platform, redirect to their correct platform or dashboard
+        const userTypeToPlatformMap = {
+          'vendor': 'VendorPlatform',
+          'ngo': 'NGOPlatform',
+          'corporate': 'CorporatePlatform',
+          'admin': 'AdminPlatform'
+        };
+        
+        const correctPlatform = userTypeToPlatformMap[profile.user_type as keyof typeof userTypeToPlatformMap];
+        if (correctPlatform) {
+          setCurrentView(correctPlatform);
+        } else {
+          return <Dashboard />;
+        }
       }
     } else {
+      // User is not on a platform view, show their dashboard
       return <Dashboard />;
     }
   }

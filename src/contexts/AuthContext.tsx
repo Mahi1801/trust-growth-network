@@ -57,8 +57,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
       
       // Try to fetch from profiles table
-      // WORKAROUND: Using 'as any' because the 'profiles' table might not be in the auto-generated types
-      // or might not exist in the DB, causing a TypeScript error.
       const { data, error } = await (supabase.from as any)('profiles')
         .select('*')
         .eq('id', userId)
@@ -198,6 +196,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     // Store redirect preference
     if (redirectTo) {
+      console.log('Setting pending redirect to:', redirectTo);
       setPendingRedirect(redirectTo);
     }
     
@@ -233,16 +232,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     // Store redirect preference
     if (redirectTo) {
+      console.log('Setting pending redirect to:', redirectTo);
       setPendingRedirect(redirectTo);
     }
     
     try {
-      console.log('Attempting signup for:', userData.email);
+      console.log('Attempting signup for:', userData.email, 'with user type:', userData.userType);
       
       const { data, error } = await supabase.auth.signUp({
         email: userData.email.trim().toLowerCase(),
         password: userData.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/`,
           data: {
             first_name: userData.firstName.trim(),
             last_name: userData.lastName.trim(),
@@ -259,14 +260,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return { error };
       }
 
-      console.log('Signup successful:', data.user?.id);
-      
-      // Check if email confirmation is required
-      if (data.user && !data.user.email_confirmed_at) {
-        toast.success("Account created! Please check your email to confirm your account.");
-      } else {
-        toast.success("Account created and logged in successfully!");
-      }
+      console.log('Signup successful:', data.user?.id, 'User type:', userData.userType);
+      toast.success("Account created successfully!");
       
       return { error: null };
     } catch (error) {
