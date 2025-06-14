@@ -8,6 +8,12 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ManageCampaignsPage from './pages/ManageCampaignsPage';
+import ImpactDashboardPage from './pages/ImpactDashboardPage';
+import PartnerNetworkPage from './pages/PartnerNetworkPage';
+import ReportsPage from './pages/ReportsPage';
+import CSRCompliancePage from './pages/CSRCompliancePage';
+import InvestmentPortfolioPage from './pages/InvestmentPortfolioPage';
+import GlobalImpactPage from './pages/GlobalImpactPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 
 const queryClient = new QueryClient();
@@ -22,12 +28,12 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/manage-campaigns" element={<ManageCampaignsPage />} />
-            <Route path="/impact-dashboard" element={<PlaceholderPage title="Impact Dashboard" description="View detailed impact analytics and reports." />} />
-            <Route path="/partner-network" element={<PlaceholderPage title="Partner Network" description="Connect with NGO partners and expand reach." />} />
-            <Route path="/reports" element={<PlaceholderPage title="Reports" description="Generate comprehensive CSR impact reports." />} />
-            <Route path="/csr-compliance" element={<PlaceholderPage title="CSR Compliance" description="Track compliance with CSR regulations." />} />
-            <Route path="/investment-portfolio" element={<PlaceholderPage title="Investment Portfolio" description="Manage social investment portfolio." />} />
-            <Route path="/global-impact" element={<PlaceholderPage title="Global Impact" description="Monitor worldwide social impact initiatives." />} />
+            <Route path="/impact-dashboard" element={<ImpactDashboardPage />} />
+            <Route path="/partner-network" element={<PartnerNetworkPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+            <Route path="/csr-compliance" element={<CSRCompliancePage />} />
+            <Route path="/investment-portfolio" element={<InvestmentPortfolioPage />} />
+            <Route path="/global-impact" element={<GlobalImpactPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
