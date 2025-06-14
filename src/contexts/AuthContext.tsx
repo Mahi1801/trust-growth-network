@@ -52,37 +52,63 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log(`Fetching profile for user: ${userId}, attempt: ${retryCount + 1}`);
       
-      // WORKAROUND: Using 'as any' due to potential issues with auto-generated Supabase types (types.ts)
-      // not recognizing the 'profiles' table. This allows the build to pass if the types are stale.
-      // The underlying types.ts file should ideally be updated by the system to reflect the database schema.
-      // The primary issue might be that the 'profiles' table doesn't exist or isn't accessible.
-      const { data, error } = await (supabase.from as any)('profiles')
+      // Try to fetch from profiles table
+      const { data, error } = await supabase
+        .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
       if (error) {
         console.error('Error fetching profile:', error);
-        // If profile doesn't exist (PGRST116: 'Fetched result contains 0 rows') 
-        // and we haven't retried too many times, wait and retry.
+        
+        // If profile doesn't exist and we haven't retried too many times, wait and retry
         if (error.code === 'PGRST116' && retryCount < 3) {
           console.log(`Profile not found, retrying in ${1000 * (retryCount + 1)}ms...`);
           setTimeout(() => {
-            fetchProfile(userId, retryCount + 1); // Exponential backoff
+            fetchProfile(userId, retryCount + 1);
           }, 1000 * (retryCount + 1));
           return;
         }
-        // If error is not PGRST116 or retries exhausted, clear profile
-        setProfile(null); 
+        
+        // If the profiles table doesn't exist or is not accessible, create a fallback profile
+        console.log('Creating fallback profile from user metadata');
+        const fallbackProfile: Profile = {
+          id: userId,
+          first_name: user?.user_metadata?.first_name || null,
+          last_name: user?.user_metadata?.last_name || null,
+          email: user?.email || null,
+          phone: user?.user_metadata?.phone || null,
+          organization: user?.user_metadata?.organization || null,
+          location: user?.user_metadata?.location || null,
+          user_type: user?.user_metadata?.user_type || 'vendor',
+          created_at: user?.created_at || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setProfile(fallbackProfile);
         return;
       }
 
       console.log('Profile fetched successfully:', data);
-      // Assuming 'data' matches the Profile interface structure after a successful fetch.
-      setProfile(data as Profile); 
+      setProfile(data as Profile);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
-      setProfile(null); // Clear profile on any unexpected exception during fetch
+      
+      // Create fallback profile on any unexpected exception
+      console.log('Creating fallback profile due to exception');
+      const fallbackProfile: Profile = {
+        id: userId,
+        first_name: user?.user_metadata?.first_name || null,
+        last_name: user?.user_metadata?.last_name || null,
+        email: user?.email || null,
+        phone: user?.user_metadata?.phone || null,
+        organization: user?.user_metadata?.organization || null,
+        location: user?.user_metadata?.location || null,
+        user_type: user?.user_metadata?.user_type || 'vendor',
+        created_at: user?.created_at || new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      setProfile(fallbackProfile);
     }
   };
 
