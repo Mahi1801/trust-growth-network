@@ -23,7 +23,7 @@ const Index = () => {
   const [authModalTab, setAuthModalTab] = useState<"login" | "signup">("login");
   const [selectedUserType, setSelectedUserType] = useState<string>("");
   const [currentView, setCurrentView] = useState<string>("home");
-  const { user, profile, pendingRedirect, setPendingRedirect } = useAuth();
+  const { user, profile, pendingRedirect, setPendingRedirect, isLoading, isProfileLoading } = useAuth();
 
   // Handle redirect after authentication
   useEffect(() => {
@@ -33,6 +33,18 @@ const Index = () => {
       setPendingRedirect(null); // Clear the pending redirect
     }
   }, [user, profile, pendingRedirect, setPendingRedirect]);
+
+  // Show a loading screen while the initial auth state is loading or while the user's profile is being fetched.
+  if (isLoading || isProfileLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading your experience...</p>
+        </div>
+      </div>
+    );
+  }
 
   // If user is logged in, determine the correct view
   if (user && profile && !pendingRedirect) {

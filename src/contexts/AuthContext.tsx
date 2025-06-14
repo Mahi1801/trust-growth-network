@@ -25,6 +25,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   isLoading: boolean;
   isAuthenticating: boolean;
+  isProfileLoading: boolean;
   pendingRedirect: string | null;
   setPendingRedirect: (redirect: string | null) => void;
 }
@@ -48,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
   const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
 
   // Function to fetch user profile with retry logic
@@ -76,15 +78,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // If retries fail or it's a different error, set profile to null to prevent using stale/wrong data.
         setProfile(null);
         toast.error("Could not load user profile. Please try logging in again.");
+        setIsProfileLoading(false);
         return;
       }
 
       console.log('Profile fetched successfully:', data);
       setProfile(data as Profile);
+      setIsProfileLoading(false);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
       setProfile(null);
       toast.error("An unexpected error occurred while fetching your profile.");
+      setIsProfileLoading(false);
     }
   };
 
@@ -122,6 +127,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
+          setIsProfileLoading(true);
           // Defer profile fetching to prevent deadlocks
           setTimeout(() => {
             if (mounted) {
@@ -130,6 +136,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }, 100);
         } else {
           setProfile(null);
+          setIsProfileLoading(false);
         }
         
         // Set loading to false after processing auth change
@@ -146,11 +153,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
+        setIsProfileLoading(true);
         setTimeout(() => {
           if (mounted) {
             fetchProfile(session.user.id);
           }
         }, 100);
+      } else {
+        setIsProfileLoading(false);
       }
       
       setIsLoading(false);
@@ -291,6 +301,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       logout, 
       isLoading,
       isAuthenticating,
+      isProfileLoading,
       pendingRedirect,
       setPendingRedirect
     }}>
