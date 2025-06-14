@@ -73,13 +73,13 @@ interface UserTypeSelectorProps {
 
 const UserTypeSelector = ({ onSelectType }: UserTypeSelectorProps) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-20">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-16 md:py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-12 md:mb-16">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Choose Your Role
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Select the option that best describes your organization to get started with our platform
           </p>
         </div>
