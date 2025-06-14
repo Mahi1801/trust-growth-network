@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useNavigate } from 'react-router-dom';
 
 const CorporateDashboard = () => {
   const { user, profile, logout } = useAuth();
@@ -20,6 +20,7 @@ const CorporateDashboard = () => {
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const fetchCampaigns = async () => {
     if (!user) return [];
@@ -68,45 +69,31 @@ const CorporateDashboard = () => {
   };
 
   const handleViewImpact = () => {
-    toast({
-      title: "Impact Dashboard",
-      description: "Comprehensive impact metrics and detailed reports would be displayed here.",
-    });
+    navigate('/impact-dashboard');
   };
 
   const handleFindPartners = () => {
-    toast({
-      title: "Partner Network",
-      description: "NGO partner discovery and collaboration features would be implemented here.",
-    });
+    navigate('/partner-network');
   };
 
   const handleGenerateReport = () => {
-    toast({
-      title: "Generating Report",
-      description: "Creating comprehensive CSR impact report with all metrics and analytics.",
-    });
+    navigate('/reports');
   };
 
   const handleManageCampaigns = () => {
-    toast({
-      title: "Campaign Management",
-      description: "Opening advanced campaign management tools with performance tracking.",
-    });
+    navigate('/manage-campaigns');
   };
 
   const handleCSRCompliance = () => {
-    toast({
-      title: "CSR Compliance",
-      description: "Accessing CSR compliance dashboard with regulatory requirements and reporting.",
-    });
+    navigate('/csr-compliance');
   };
 
   const handleInvestmentPortfolio = () => {
-    toast({
-      title: "Investment Portfolio",
-      description: "Viewing detailed social investment portfolio with risk analysis and ROI projections.",
-    });
+    navigate('/investment-portfolio');
+  };
+
+  const handleGlobalImpact = () => {
+    navigate('/global-impact');
   };
 
   return (
@@ -300,7 +287,7 @@ const CorporateDashboard = () => {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">Monitor worldwide social impact initiatives</p>
-            <Button className="w-full" variant="outline" onClick={() => toast({ title: "Global Impact", description: "Accessing global impact tracking dashboard." })}>
+            <Button className="w-full" variant="outline" onClick={handleGlobalImpact}>
               <Globe className="h-4 w-4 mr-2" />
               Global View
             </Button>
