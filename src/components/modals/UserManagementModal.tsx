@@ -8,10 +8,14 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Users, Search, Trash2, Ban, Loader2 } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
+import { Users, Search, Loader2, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
-import { Tables } from '@/integrations/supabase/types';
+import { Tables, Database } from '@/integrations/supabase/types';
+
+type UserWithRoles = Tables<'profiles'> & {
+  user_roles: { role: Database['public']['Enums']['app_role'] }[]
+};
 
 interface UserManagementModalProps {
   isOpen: boolean;
@@ -23,10 +27,10 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
   const [userTypeFilter, setUserTypeFilter] = useState('all');
   const queryClient = useQueryClient();
 
-  const { data: users = [], isLoading, isError } = useQuery<Tables<'profiles'>[]>({
-    queryKey: ['users'],
+  const { data: users = [], isLoading, isError } = useQuery<UserWithRoles[]>({
+    queryKey: ['usersWithRoles'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('profiles').select('*');
+      const { data, error } = await supabase.from('profiles').select('*, user_roles(role)');
       if (error) {
         console.error('Error fetching users:', error);
         toast.error('Failed to fetch users.');
@@ -50,7 +54,7 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
     },
     onSuccess: () => {
       toast.success('User status updated successfully.');
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['usersWithRoles'] });
     },
     onError: (error) => {
       toast.error(`Failed to update user status: ${error.message}`);
@@ -80,10 +84,30 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
     },
     onSuccess: () => {
       toast.success('User deleted successfully.');
-      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['usersWithRoles'] });
     },
     onError: (error: Error) => {
       toast.error(`Error: ${error.message}`);
+    },
+  });
+
+  const updateUserRolesMutation = useMutation({
+    mutationFn: async ({ userId, roles }: { userId: string, roles: Database['public']['Enums']['app_role'][] }) => {
+      const { error: deleteError } = await supabase.from('user_roles').delete().eq('user_id', userId);
+      if (deleteError) throw deleteError;
+
+      if (roles.length > 0) {
+        const newRoles = roles.map(role => ({ user_id: userId, role }));
+        const { error: insertError } = await supabase.from('user_roles').insert(newRoles);
+        if (insertError) throw insertError;
+      }
+    },
+    onSuccess: () => {
+      toast.success("User roles updated successfully.");
+      queryClient.invalidateQueries({ queryKey: ['usersWithRoles'] });
+    },
+    onError: (error: Error) => {
+      toast.error(`Failed to update roles: ${error.message}`);
     },
   });
 
@@ -95,6 +119,7 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
         email: user.email || 'No email provided',
         userType: user.user_type || 'unknown',
         status: user.status,
+        roles: user.user_roles.map(r => r.role),
         joinDate: user.created_at,
         lastActive: user.updated_at,
       }))
@@ -118,6 +143,16 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
     }
   };
 
+  const handleRoleChange = (userId: string, currentRoles: Database['public']['Enums']['app_role'][], role: Database['public']['Enums']['app_role'], isChecked: boolean) => {
+    let newRoles: Database['public']['Enums']['app_role'][];
+    if (isChecked) {
+      newRoles = [...currentRoles, role];
+    } else {
+      newRoles = currentRoles.filter(r => r !== role);
+    }
+    updateUserRolesMutation.mutate({ userId, roles: newRoles });
+  };
+
   const getUserTypeBadge = (userType: string) => {
     const colors: { [key: string]: string } = {
       vendor: 'bg-green-100 text-green-800',
@@ -134,6 +169,16 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
       <Badge className="bg-green-100 text-green-800">Active</Badge> :
       <Badge variant="destructive">Suspended</Badge>;
   };
+
+  const getRoleBadge = (role: string) => {
+    const colors: { [key: string]: string } = {
+      admin: 'bg-red-200 text-red-800',
+      moderator: 'bg-yellow-200 text-yellow-800',
+      support: 'bg-indigo-200 text-indigo-800',
+    };
+    return <Badge key={role} variant="outline" className={colors[role]}>{role}</Badge>;
+  };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -212,31 +257,60 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
                     <TableCell>
                       <div className="font-medium">{user.name}</div>
                       <div className="text-sm text-gray-500">{user.email}</div>
+                      <div className="flex gap-1 mt-2">
+                        {user.roles.map(role => getRoleBadge(role))}
+                      </div>
                     </TableCell>
                     <TableCell>{getUserTypeBadge(user.userType)}</TableCell>
                     <TableCell>{getStatusBadge(user.status)}</TableCell>
                     <TableCell>{new Date(user.joinDate).toLocaleDateString()}</TableCell>
                     <TableCell>{new Date(user.lastActive).toLocaleDateString()}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Switch
-                          checked={user.status === 'active'}
-                          onCheckedChange={() => handleToggleStatus(user.id, user.status)}
-                          disabled={updateUserMutation.isPending}
-                        />
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDeleteUser(user.id, user.name)}
-                          disabled={deleteUserMutation.isPending && deleteUserMutation.variables === user.id}
-                        >
-                          {deleteUserMutation.isPending && deleteUserMutation.variables === user.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </div>
+                       <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => handleToggleStatus(user.id, user.status)}>
+                             {user.status === 'active' ? 'Suspend' : 'Activate'}
+                          </DropdownMenuItem>
+                           <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>Manage Roles</DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                              <DropdownMenuSubContent>
+                                <DropdownMenuCheckboxItem
+                                  checked={user.roles.includes('admin')}
+                                  onCheckedChange={(checked) => handleRoleChange(user.id, user.roles, 'admin', checked)}
+                                >
+                                  Admin
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                  checked={user.roles.includes('moderator')}
+                                  onCheckedChange={(checked) => handleRoleChange(user.id, user.roles, 'moderator', checked)}
+                                >
+                                  Moderator
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                  checked={user.roles.includes('support')}
+                                  onCheckedChange={(checked) => handleRoleChange(user.id, user.roles, 'support', checked)}
+                                >
+                                  Support
+                                </DropdownMenuCheckboxItem>
+                              </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                          </DropdownMenuSub>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteUser(user.id, user.name)}
+                            className="text-red-500"
+                          >
+                            Delete User
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))
