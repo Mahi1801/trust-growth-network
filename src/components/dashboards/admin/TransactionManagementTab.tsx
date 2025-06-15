@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -6,11 +5,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Database } from '@/integrations/supabase/types';
 import { format } from 'date-fns';
-import { Eye, Badge } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
-type Transaction = Database['public']['Tables']['transactions']['Row'] & {
+// Manually define the Transaction type as a workaround for stale Supabase types.
+type Transaction = {
+  id: string;
+  created_at: string;
+  user_id: string | null;
+  type: 'payment' | 'refund' | 'chargeback' | 'payout';
+  status: 'pending' | 'completed' | 'failed' | 'disputed' | 'cancelled';
+  amount: number;
+  currency: string;
+  gateway_transaction_id: string | null;
   profiles: {
     first_name: string | null;
     last_name: string | null;
@@ -19,7 +26,8 @@ type Transaction = Database['public']['Tables']['transactions']['Row'] & {
 };
 
 const fetchTransactions = async () => {
-  const { data, error } = await supabase
+  // The 'transactions' table is not yet in the auto-generated types, so we use `as any`
+  const { data, error } = await (supabase as any)
     .from('transactions')
     .select(`
       *,
