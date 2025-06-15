@@ -23,6 +23,7 @@ interface AuthContextType {
   login: (email: string, password: string, redirectTo?: string) => Promise<{ error: Error | null }>;
   signup: (userData: SignupData, redirectTo?: string) => Promise<{ error: Error | null }>;
   logout: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   isLoading: boolean;
   isAuthenticating: boolean;
   isProfileLoading: boolean;
@@ -255,6 +256,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    if (isAuthenticating) return;
+    setIsAuthenticating(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
+
+      if (error) {
+        console.error('Google Sign-in error:', error);
+        toast.error(error.message || 'Failed to sign in with Google.');
+        setIsAuthenticating(false);
+      }
+      // On success, Supabase handles redirection, so we don't need to set loading to false.
+    } catch (error) {
+      console.error('Google Sign-in exception:', error);
+      toast.error('An unexpected error occurred during Google Sign-in.');
+      setIsAuthenticating(false);
+    }
+  };
+
   const logout = async () => {
     try {
       console.log('Logging out...');
@@ -299,6 +324,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       login, 
       signup, 
       logout, 
+      signInWithGoogle,
       isLoading,
       isAuthenticating,
       isProfileLoading,

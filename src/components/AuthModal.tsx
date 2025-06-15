@@ -18,7 +18,7 @@ interface AuthModalProps {
 
 const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo }: AuthModalProps) => {
   const [activeTab, setActiveTab] = useState(initialTab);
-  const { login, signup, isAuthenticating, user } = useAuth();
+  const { login, signup, isAuthenticating, user, signInWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   
@@ -207,6 +207,11 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    if (isAuthenticating) return;
+    await signInWithGoogle();
+  };
+
   const handleTabChange = (value: string) => {
     if (value === "login" || value === "signup") {
       setActiveTab(value);
@@ -340,6 +345,22 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo
                 )}
               </Button>
               
+              <div className="relative flex py-2 items-center">
+                <div className="flex-grow border-t border-gray-300"></div>
+                <span className="flex-shrink mx-4 text-gray-500 text-sm">OR</span>
+                <div className="flex-grow border-t border-gray-300"></div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-11"
+                onClick={handleGoogleSignIn}
+                disabled={isAuthenticating}
+              >
+                Continue with Google
+              </Button>
+
               <p className="text-center text-sm text-gray-600">
                 Don't have an account?{" "}
                 <button
@@ -569,6 +590,22 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo
                 ) : (
                   "Create Account"
                 )}
+              </Button>
+              
+              <div className="relative flex py-2 items-center">
+                <div className="flex-grow border-t border-gray-300"></div>
+                <span className="flex-shrink mx-4 text-gray-500 text-sm">OR</span>
+                <div className="flex-grow border-t border-gray-300"></div>
+              </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full h-11"
+                onClick={handleGoogleSignIn}
+                disabled={isAuthenticating}
+              >
+                Continue with Google
               </Button>
               
               <p className="text-center text-sm text-gray-600">
