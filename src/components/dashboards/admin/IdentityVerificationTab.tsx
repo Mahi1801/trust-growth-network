@@ -34,7 +34,22 @@ const fetchVerificationRequests = async () => {
   if (error) {
     throw new Error(error.message);
   }
-  return data as VerificationRequest[];
+  
+  if (!data) {
+    return [];
+  }
+  
+  // The supabase client might return an error object for the joined 'profiles'
+  // if RLS prevents access. We clean the data to match our component's `VerificationRequest` type.
+  // Using `any` here to handle the potentially inconsistent shape of `request.profiles`.
+  const cleanedData = data.map((request: any) => ({
+    ...request,
+    profiles: (request.profiles && typeof request.profiles === 'object' && 'first_name' in request.profiles)
+      ? request.profiles
+      : null,
+  }));
+  
+  return cleanedData as VerificationRequest[];
 };
 
 const IdentityVerificationTab = () => {
@@ -117,4 +132,3 @@ const IdentityVerificationTab = () => {
 };
 
 export default IdentityVerificationTab;
-
