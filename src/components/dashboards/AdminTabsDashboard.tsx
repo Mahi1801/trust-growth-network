@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import { useState } from "react";
 import Footer from "../Footer";
 import UserManagementModal from "../modals/UserManagementModal";
 import AnalyticsModal from "../modals/AnalyticsModal";
+import SystemSettingsModal from "../modals/SystemSettingsModal";
 import { toast } from "sonner";
 
 const platformData = {
@@ -63,6 +65,7 @@ const AdminTabsDashboard = () => {
   const [activeTab, setActiveTab] = useState("vendor");
   const [showUserManagementModal, setShowUserManagementModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showSystemSettingsModal, setShowSystemSettingsModal] = useState(false);
 
   const handlePlatformSelect = (platformKey: string) => {
     if (Object.keys(platformData).includes(platformKey)) {
@@ -123,13 +126,14 @@ const AdminTabsDashboard = () => {
           <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Button variant="outline" onClick={() => setShowUserManagementModal(true)}><Users className="mr-2 h-4 w-4" /> User Management</Button>
               <Button variant="outline" onClick={() => setShowAnalyticsModal(true)}><BarChart3 className="mr-2 h-4 w-4" /> Platform Analytics</Button>
-              <Button variant="outline" onClick={() => toast.info("System settings are managed via the platform's backend.")}><Settings className="mr-2 h-4 w-4" /> System Settings</Button>
+              <Button variant="outline" onClick={() => setShowSystemSettingsModal(true)}><Settings className="mr-2 h-4 w-4" /> System Settings</Button>
           </CardContent>
         </Card>
       </main>
       <Footer onPlatformSelect={handlePlatformSelect} />
       <UserManagementModal isOpen={showUserManagementModal} onClose={() => setShowUserManagementModal(false)} />
       <AnalyticsModal isOpen={showAnalyticsModal} onClose={() => setShowAnalyticsModal(false)} userType="admin" />
+      <SystemSettingsModal isOpen={showSystemSettingsModal} onClose={() => setShowSystemSettingsModal(false)} />
     </div>
   );
 };

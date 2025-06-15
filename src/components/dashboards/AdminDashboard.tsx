@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import VendorManagementModal from '@/components/modals/VendorManagementModal';
 import UserManagementModal from '@/components/modals/UserManagementModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
+import SystemSettingsModal from '@/components/modals/SystemSettingsModal';
 
 const AdminDashboard = () => {
   const { user, profile, logout } = useAuth();
@@ -17,6 +18,7 @@ const AdminDashboard = () => {
   const [showVendorManagement, setShowVendorManagement] = useState(false);
   const [showUserManagement, setShowUserManagement] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showSystemSettingsModal, setShowSystemSettingsModal] = useState(false);
   const { toast } = useToast();
 
   // Mock data for analytics
@@ -88,10 +90,7 @@ const AdminDashboard = () => {
   };
 
   const handleSystemSettings = () => {
-    toast({
-      title: "System Settings",
-      description: "Opening system configuration panel with security settings and platform controls.",
-    });
+    setShowSystemSettingsModal(true);
   };
 
   const handleSecurityAudit = () => {
@@ -515,6 +514,10 @@ const AdminDashboard = () => {
         isOpen={showAnalyticsModal} 
         onClose={() => setShowAnalyticsModal(false)} 
         userType="admin"
+      />
+      <SystemSettingsModal
+        isOpen={showSystemSettingsModal}
+        onClose={() => setShowSystemSettingsModal(false)}
       />
     </div>
   );
