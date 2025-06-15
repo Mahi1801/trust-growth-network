@@ -166,6 +166,60 @@ export type Database = {
         }
         Relationships: []
       }
+      document_verifications: {
+        Row: {
+          created_at: string
+          document_back_url: string | null
+          document_front_url: string
+          document_type: Database["public"]["Enums"]["document_type"]
+          id: string
+          review_notes: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["verification_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          document_back_url?: string | null
+          document_front_url: string
+          document_type: Database["public"]["Enums"]["document_type"]
+          id?: string
+          review_notes?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          document_back_url?: string | null
+          document_front_url?: string
+          document_type?: Database["public"]["Enums"]["document_type"]
+          id?: string
+          review_notes?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_verifications_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_verifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_settings: {
         Row: {
           created_at: string | null
@@ -283,6 +337,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "support"
+      document_type: "passport" | "id_card" | "drivers_license" | "utility_bill"
+      verification_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "flagged_for_review"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -399,6 +459,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "support"],
+      document_type: ["passport", "id_card", "drivers_license", "utility_bill"],
+      verification_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "flagged_for_review",
+      ],
     },
   },
 } as const

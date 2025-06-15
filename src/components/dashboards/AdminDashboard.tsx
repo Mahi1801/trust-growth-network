@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -5,12 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts';
-import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye, UserCheck } from 'lucide-react';
+import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye, UserCheck, FileCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import VendorManagementModal from '@/components/modals/VendorManagementModal';
 import UserManagementModal from '@/components/modals/UserManagementModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 import SystemSettingsModal from '@/components/modals/SystemSettingsModal';
+import IdentityVerificationTab from './admin/IdentityVerificationTab';
 
 const AdminDashboard = () => {
   const { user, profile, logout } = useAuth();
@@ -445,17 +447,18 @@ const AdminDashboard = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex space-x-1 mb-6 bg-white p-1 rounded-lg shadow-sm">
+      <div className="flex space-x-1 mb-6 bg-white p-1 rounded-lg shadow-sm overflow-x-auto">
         {[
           { id: 'overview', label: 'Overview', icon: BarChart3 },
           { id: 'trust', label: 'Trust Scoring', icon: Shield },
+          { id: 'verification', label: 'Verification', icon: FileCheck },
           { id: 'analytics', label: 'Analytics', icon: TrendingUp },
           { id: 'settings', label: 'Settings', icon: Settings },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+            className={`flex items-center flex-shrink-0 space-x-2 px-4 py-2 rounded-md transition-colors ${
               activeTab === tab.id
                 ? 'bg-blue-600 text-white'
                 : 'text-gray-600 hover:bg-gray-100'
@@ -470,6 +473,7 @@ const AdminDashboard = () => {
       {/* Tab Content */}
       {activeTab === 'overview' && renderOverview()}
       {activeTab === 'trust' && renderTrustScoring()}
+      {activeTab === 'verification' && <IdentityVerificationTab />}
       {activeTab === 'analytics' && renderAnalytics()}
       {activeTab === 'settings' && (
         <Card className="card-hover">
