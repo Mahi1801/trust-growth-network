@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Users, Search, Ban, Loader2 } from 'lucide-react';
+import { Users, Search, Trash2, Ban, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Tables } from '@/integrations/supabase/types';
 
@@ -58,6 +57,36 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
     },
   });
 
+  const deleteUserMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+
+      const response = await fetch('https://adfitnytnodsmgxivkai.supabase.co/functions/v1/delete-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete user.');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      toast.success('User deleted successfully.');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+    onError: (error: Error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+  });
+
   const filteredUsers = useMemo(() => {
     return users
       .map(user => ({
@@ -83,10 +112,10 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
     updateUserMutation.mutate({ userId, newStatus });
   };
 
-  const handleDeleteUser = (userName: string) => {
-    toast.info(`User Deletion Placeholder`, {
-      description: `Secure user deletion for '${userName}' requires a server-side function and is not yet implemented.`,
-    });
+  const handleDeleteUser = (userId: string, userName: string) => {
+    if (window.confirm(`Are you sure you want to permanently delete ${userName}? This action cannot be undone.`)) {
+      deleteUserMutation.mutate(userId);
+    }
   };
 
   const getUserTypeBadge = (userType: string) => {
@@ -198,9 +227,14 @@ const UserManagementModal = ({ isOpen, onClose }: UserManagementModalProps) => {
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => handleDeleteUser(user.name)}
+                          onClick={() => handleDeleteUser(user.id, user.name)}
+                          disabled={deleteUserMutation.isPending && deleteUserMutation.variables === user.id}
                         >
-                          <Ban className="h-4 w-4" />
+                          {deleteUserMutation.isPending && deleteUserMutation.variables === user.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
                         </Button>
                       </div>
                     </TableCell>
