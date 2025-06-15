@@ -166,6 +166,56 @@ export type Database = {
         }
         Relationships: []
       }
+      crises: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          location: string | null
+          name: string
+          resolved_at: string | null
+          severity: Database["public"]["Enums"]["crisis_severity"]
+          started_at: string | null
+          status: Database["public"]["Enums"]["crisis_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["crisis_severity"]
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["crisis_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["crisis_severity"]
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["crisis_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crises_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_verifications: {
         Row: {
           created_at: string
@@ -337,6 +387,8 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "support"
+      crisis_severity: "low" | "medium" | "high" | "critical"
+      crisis_status: "active" | "monitoring" | "resolved" | "archived"
       document_type: "passport" | "id_card" | "drivers_license" | "utility_bill"
       verification_status:
         | "pending"
@@ -459,6 +511,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "support"],
+      crisis_severity: ["low", "medium", "high", "critical"],
+      crisis_status: ["active", "monitoring", "resolved", "archived"],
       document_type: ["passport", "id_card", "drivers_license", "utility_bill"],
       verification_status: [
         "pending",
