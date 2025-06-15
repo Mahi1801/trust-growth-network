@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,13 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts';
-import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye, UserCheck, FileCheck } from 'lucide-react';
+import { Users, Building2, Heart, Store, Settings, BarChart3, Shield, AlertTriangle, TrendingUp, MapPin, Eye, UserCheck, FileCheck, CreditCard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import VendorManagementModal from '@/components/modals/VendorManagementModal';
 import UserManagementModal from '@/components/modals/UserManagementModal';
 import AnalyticsModal from '@/components/modals/AnalyticsModal';
 import SystemSettingsModal from '@/components/modals/SystemSettingsModal';
 import IdentityVerificationTab from './admin/IdentityVerificationTab';
+import TransactionManagementTab from './admin/TransactionManagementTab';
 
 const AdminDashboard = () => {
   const { user, profile, logout } = useAuth();
@@ -452,6 +452,7 @@ const AdminDashboard = () => {
           { id: 'overview', label: 'Overview', icon: BarChart3 },
           { id: 'trust', label: 'Trust Scoring', icon: Shield },
           { id: 'verification', label: 'Verification', icon: FileCheck },
+          { id: 'transactions', label: 'Transactions', icon: CreditCard },
           { id: 'analytics', label: 'Analytics', icon: TrendingUp },
           { id: 'settings', label: 'Settings', icon: Settings },
         ].map((tab) => (
@@ -474,6 +475,7 @@ const AdminDashboard = () => {
       {activeTab === 'overview' && renderOverview()}
       {activeTab === 'trust' && renderTrustScoring()}
       {activeTab === 'verification' && <IdentityVerificationTab />}
+      {activeTab === 'transactions' && <TransactionManagementTab />}
       {activeTab === 'analytics' && renderAnalytics()}
       {activeTab === 'settings' && (
         <Card className="card-hover">
