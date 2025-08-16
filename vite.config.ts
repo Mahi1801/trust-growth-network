@@ -8,6 +8,11 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    watch: {
+      usePolling: false,
+      interval: 300,
+      ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**']
+    }
   },
   plugins: [
     react(),
