@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import VideoDemo from "./VideoDemo";
 
 interface HeroProps {
   onGetStarted: () => void;
@@ -11,6 +13,7 @@ interface HeroProps {
 
 const Hero = ({ onGetStarted }: HeroProps) => {
   const { toast } = useToast();
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   const scrollToFeatures = () => {
     const element = document.getElementById('features');
@@ -20,10 +23,7 @@ const Hero = ({ onGetStarted }: HeroProps) => {
   };
 
   const handleWatchDemo = () => {
-    toast({
-      title: "Demo Video",
-      description: "Opening comprehensive platform demo showcasing all features in action.",
-    });
+    setIsDemoOpen(true);
   };
 
   const handleLearnMore = () => {
@@ -274,6 +274,12 @@ const Hero = ({ onGetStarted }: HeroProps) => {
           </div>
         </div>
       </div>
+
+      {/* Video Demo Modal */}
+      <VideoDemo 
+        isOpen={isDemoOpen} 
+        onClose={() => setIsDemoOpen(false)} 
+      />
     </div>
   );
 };
