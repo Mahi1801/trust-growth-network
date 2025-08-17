@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { Mail, Lock, User, Phone, Building, MapPin, Loader2, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import { Chrome } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
@@ -358,6 +359,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo
                 onClick={handleGoogleSignIn}
                 disabled={isAuthenticating}
               >
+                <Chrome className="mr-2 h-4 w-4" />
                 Continue with Google
               </Button>
 
@@ -605,6 +607,7 @@ const AuthModal = ({ isOpen, onClose, initialTab = "login", userType, redirectTo
                 onClick={handleGoogleSignIn}
                 disabled={isAuthenticating}
               >
+                <Chrome className="mr-2 h-4 w-4" />
                 Continue with Google
               </Button>
               
