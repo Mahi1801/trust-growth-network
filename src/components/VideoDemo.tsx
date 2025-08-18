@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Play, X, Volume2, VolumeX, Maximize, Minimize, Sparkles, Zap } from "lucide-react";
+import { Play, X, Volume2, VolumeX, Maximize, Minimize, Sparkles, Zap, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import demoThumbnail from "@/assets/demo-video-hero.webp";
@@ -13,6 +13,19 @@ const VideoDemo = ({ isOpen, onClose }: VideoDemoProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const [currentTime, setCurrentTime] = useState(0);
+
+  const languages = [
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+    { code: "pt", name: "Português", flag: "🇵🇹" },
+    { code: "ja", name: "日本語", flag: "🇯🇵" },
+    { code: "ko", name: "한국어", flag: "🇰🇷" },
+    { code: "zh", name: "中文", flag: "🇨🇳" },
+  ];
 
   // Demo video sections with timestamps
   const demoSections = [
@@ -91,16 +104,18 @@ const VideoDemo = ({ isOpen, onClose }: VideoDemoProps) => {
                     </Button>
                     <div className="mt-4 text-white">
                       <div className="text-lg font-semibold mb-1 animate-fade-in">Watch Our Platform Demo</div>
-                      <div className="text-sm opacity-80 animate-fade-in">Discover revolutionary social impact features</div>
+                      <div className="text-sm opacity-80 animate-fade-in">
+                        Discover revolutionary social impact features in {selectedLanguage}
+                      </div>
                     </div>
                   </div>
                 ) : (
                   <div className="text-white text-center animate-fade-in">
                     <div className="bg-black/50 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                       <div className="text-3xl font-bold mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                        🎬 Demo Playing...
+                        🎬 Demo Playing
                       </div>
-                      <div className="text-lg opacity-90">Experience our revolutionary platform features</div>
+                      <div className="text-lg opacity-90">Experience our revolutionary platform features in {selectedLanguage}</div>
                       <div className="mt-4 flex items-center justify-center gap-2">
                         <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
                         <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
@@ -109,6 +124,26 @@ const VideoDemo = ({ isOpen, onClose }: VideoDemoProps) => {
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* Language Selector */}
+              <div className="absolute top-6 right-6 z-20">
+                <div className="bg-black/60 backdrop-blur-md rounded-xl px-4 py-2 border border-white/10 shadow-lg">
+                  <div className="flex items-center gap-2 text-white text-sm">
+                    <Globe className="h-4 w-4" />
+                    <select 
+                      value={selectedLanguage}
+                      onChange={(e) => setSelectedLanguage(e.target.value)}
+                      className="bg-transparent text-white border-none outline-none cursor-pointer"
+                    >
+                      {languages.map((lang) => (
+                        <option key={lang.code} value={lang.name} className="bg-slate-800 text-white">
+                          {lang.flag} {lang.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
 
               {/* Video Controls */}
@@ -120,7 +155,7 @@ const VideoDemo = ({ isOpen, onClose }: VideoDemoProps) => {
                     onClick={handlePlay}
                     className="text-white hover:bg-white/20 rounded-lg transition-all duration-200"
                   >
-                    <Play className="h-5 w-5" />
+                    {isPlaying ? <X className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                   </Button>
                   <Button
                     variant="ghost"
@@ -130,17 +165,24 @@ const VideoDemo = ({ isOpen, onClose }: VideoDemoProps) => {
                   >
                     {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                   </Button>
-                  <div className="text-white text-sm font-medium bg-white/10 px-3 py-1 rounded-full">2:30</div>
+                  <div className="text-white text-sm font-medium bg-white/10 px-3 py-1 rounded-full">
+                    {Math.floor(currentTime / 60)}:{(currentTime % 60).toString().padStart(2, '0')} / 2:30
+                  </div>
                 </div>
                 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleFullscreen}
-                  className="text-white hover:bg-white/20 rounded-lg transition-all duration-200"
-                >
-                  {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <div className="text-white text-xs opacity-75">
+                    {selectedLanguage}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleFullscreen}
+                    className="text-white hover:bg-white/20 rounded-lg transition-all duration-200"
+                  >
+                    {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
