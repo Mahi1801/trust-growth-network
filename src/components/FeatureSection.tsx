@@ -245,7 +245,7 @@ const FeatureSection = () => {
             <Button 
               size="lg"
               variant="outline"
-              className="border-2 border-white text-white hover:bg-white/10 hover:border-white/90 bg-white/5 px-8 py-4 text-lg backdrop-blur-sm font-semibold transform hover:scale-105 transition-all"
+              className="border-2 border-white/80 text-white hover:bg-white/20 hover:border-white bg-white/10 px-8 py-4 text-lg backdrop-blur-sm font-semibold transform hover:scale-105 transition-all shadow-lg"
             >
               Watch Success Stories
             </Button>
