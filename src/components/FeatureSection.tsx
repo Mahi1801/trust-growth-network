@@ -133,23 +133,21 @@ const FeatureSection = () => {
                     ))}
                   </div>
 
-                  {/* Benefits */}
-                  {hoveredFeature === index && (
-                    <div className="animate-fade-in">
-                      <h4 className="font-semibold mb-2 text-sm flex items-center gap-2">
-                        <Play className="h-3 w-3 text-purple-600" />
-                        Key Benefits:
-                      </h4>
-                      <div className="space-y-1">
-                        {feature.benefits.map((benefit, i) => (
-                          <div key={i} className="flex items-center gap-2 text-xs">
-                            <div className="w-1.5 h-1.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
-                            <span className="text-gray-700">{benefit}</span>
-                          </div>
-                        ))}
-                      </div>
+                  {/* Benefits - Always visible */}
+                  <div className="animate-fade-in">
+                    <h4 className="font-semibold mb-2 text-sm flex items-center gap-2">
+                      <Play className="h-3 w-3 text-purple-600" />
+                      Key Benefits:
+                    </h4>
+                    <div className="space-y-1">
+                      {feature.benefits.map((benefit, i) => (
+                        <div key={i} className="flex items-center gap-2 text-xs">
+                          <div className="w-1.5 h-1.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+                          <span className="text-gray-700">{benefit}</span>
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </div>
                 </CardContent>
 
                 {/* Hover overlay */}
@@ -247,7 +245,7 @@ const FeatureSection = () => {
             <Button 
               size="lg"
               variant="outline"
-              className="border-2 border-white/50 text-white hover:bg-white/10 hover:border-white px-8 py-4 text-lg backdrop-blur-sm font-semibold transform hover:scale-105 transition-all"
+              className="border-2 border-white text-white hover:bg-white/10 hover:border-white/90 bg-white/5 px-8 py-4 text-lg backdrop-blur-sm font-semibold transform hover:scale-105 transition-all"
             >
               Watch Success Stories
             </Button>
