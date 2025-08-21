@@ -3,10 +3,13 @@ import { Brain, Shield, Headset, Trophy, BookOpen, ArrowRight, Star, Zap, Play, 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+import AIImpactPredictor from "@/components/features/AIImpactPredictor";
 
 const FeatureSection = () => {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+  const [isAIPredictorOpen, setIsAIPredictorOpen] = useState(false);
 
   const uniqueFeatures = [
     {
@@ -96,65 +99,97 @@ const FeatureSection = () => {
 
         {/* Core Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {uniqueFeatures.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <Card 
-                key={index} 
-                className={`relative overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 cursor-pointer group card-hover animate-fade-in animate-delay-${index * 100}`}
-                onMouseEnter={() => setHoveredFeature(index)}
-                onMouseLeave={() => setHoveredFeature(null)}
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                      <Icon className="h-8 w-8 text-white" />
-                    </div>
-                    <Badge className="bg-green-100/90 text-green-700 backdrop-blur-sm">
-                      <Zap className="h-3 w-3 mr-1" />
-                      {feature.status}
-                    </Badge>
+        {uniqueFeatures.map((feature, index) => {
+          const Icon = feature.icon;
+          const isAIPredictor = feature.title === "AI Impact Predictor";
+          
+          const FeatureCard = (
+            <Card 
+              key={index} 
+              className={`relative overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 cursor-pointer group card-hover animate-fade-in animate-delay-${index * 100}`}
+              onMouseEnter={() => setHoveredFeature(index)}
+              onMouseLeave={() => setHoveredFeature(null)}
+              onClick={isAIPredictor ? () => setIsAIPredictorOpen(true) : undefined}
+            >
+              <CardHeader className="pb-4">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <Icon className="h-8 w-8 text-white" />
                   </div>
-                  
-                  <CardTitle className="text-xl mb-2 text-gray-900 font-bold group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-blue-600 group-hover:bg-clip-text transition-all duration-300">
-                    {feature.title}
-                  </CardTitle>
-                  <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-                </CardHeader>
+                  <Badge className="bg-green-100/90 text-green-700 backdrop-blur-sm">
+                    <Zap className="h-3 w-3 mr-1" />
+                    {feature.status}
+                  </Badge>
+                </div>
                 
-                <CardContent className="pt-0">
-                  {/* Metrics */}
-                  <div className="grid grid-cols-3 gap-2 mb-4">
-                    {Object.entries(feature.metrics).map(([key, value], i) => (
-                      <div key={i} className="text-center bg-gray-50/80 backdrop-blur-sm p-2 rounded-lg border border-gray-200/50">
-                        <div className="font-bold text-sm text-gray-900">{value}</div>
-                        <div className="text-xs text-gray-500 capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                <CardTitle className="text-xl mb-2 text-gray-900 font-bold group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-blue-600 group-hover:bg-clip-text transition-all duration-300">
+                  {feature.title}
+                </CardTitle>
+                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+              </CardHeader>
+              
+              <CardContent className="pt-0">
+                {/* Metrics */}
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {Object.entries(feature.metrics).map(([key, value], i) => (
+                    <div key={i} className="text-center bg-gray-50/80 backdrop-blur-sm p-2 rounded-lg border border-gray-200/50">
+                      <div className="font-bold text-sm text-gray-900">{value}</div>
+                      <div className="text-xs text-gray-500 capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Benefits - Always visible */}
+                <div className="animate-fade-in">
+                  <h4 className="font-semibold mb-2 text-sm flex items-center gap-2">
+                    <Play className="h-3 w-3 text-purple-600" />
+                    Key Benefits:
+                  </h4>
+                  <div className="space-y-1">
+                    {feature.benefits.map((benefit, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs">
+                        <div className="w-1.5 h-1.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+                        <span className="text-gray-700">{benefit}</span>
                       </div>
                     ))}
                   </div>
+                  
+                  {isAIPredictor && (
+                    <Button className="w-full mt-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white">
+                      <Brain className="h-4 w-4 mr-2" />
+                      Launch AI Predictor
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
 
-                  {/* Benefits - Always visible */}
-                  <div className="animate-fade-in">
-                    <h4 className="font-semibold mb-2 text-sm flex items-center gap-2">
-                      <Play className="h-3 w-3 text-purple-600" />
-                      Key Benefits:
-                    </h4>
-                    <div className="space-y-1">
-                      {feature.benefits.map((benefit, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs">
-                          <div className="w-1.5 h-1.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
-                          <span className="text-gray-700">{benefit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
+              {/* Hover overlay */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+            </Card>
+          );
 
-                {/* Hover overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-              </Card>
+          // Wrap AI Predictor in Dialog
+          if (isAIPredictor) {
+            return (
+              <Dialog key={index} open={isAIPredictorOpen} onOpenChange={setIsAIPredictorOpen}>
+                <DialogTrigger asChild>
+                  {FeatureCard}
+                </DialogTrigger>
+                <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <Brain className="h-6 w-6 text-purple-600" />
+                      AI Impact Prediction Engine
+                    </DialogTitle>
+                  </DialogHeader>
+                  <AIImpactPredictor />
+                </DialogContent>
+              </Dialog>
             );
-          })}
+          }
+
+          return FeatureCard;
+        })}
         </div>
 
         {/* Success Stories & Testimonials Section */}
