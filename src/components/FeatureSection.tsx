@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import AIImpactPredictor from "@/components/features/AIImpactPredictor";
+import BlockchainCertificatesMain from "@/components/blockchain/BlockchainCertificatesMain";
 
 const FeatureSection = () => {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const [isAIPredictorOpen, setIsAIPredictorOpen] = useState(false);
+  const [isBlockchainCertificatesOpen, setIsBlockchainCertificatesOpen] = useState(false);
 
   const uniqueFeatures = [
     {
@@ -102,6 +104,7 @@ const FeatureSection = () => {
         {uniqueFeatures.map((feature, index) => {
           const Icon = feature.icon;
           const isAIPredictor = feature.title === "AI Impact Predictor";
+          const isBlockchainCertificates = feature.title === "Blockchain Impact Certificates";
           
           const FeatureCard = (
             <Card 
@@ -109,7 +112,8 @@ const FeatureSection = () => {
               className={`relative overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 cursor-pointer group card-hover animate-fade-in animate-delay-${index * 100}`}
               onMouseEnter={() => setHoveredFeature(index)}
               onMouseLeave={() => setHoveredFeature(null)}
-              onClick={isAIPredictor ? () => setIsAIPredictorOpen(true) : undefined}
+              onClick={isAIPredictor ? () => setIsAIPredictorOpen(true) : 
+                      isBlockchainCertificates ? () => setIsBlockchainCertificatesOpen(true) : undefined}
             >
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between mb-4">
@@ -160,6 +164,13 @@ const FeatureSection = () => {
                       Launch AI Predictor
                     </Button>
                   )}
+                  
+                  {isBlockchainCertificates && (
+                    <Button className="w-full mt-3 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Launch Blockchain Certificates
+                    </Button>
+                  )}
                 </div>
               </CardContent>
 
@@ -183,6 +194,20 @@ const FeatureSection = () => {
                     </DialogTitle>
                   </DialogHeader>
                   <AIImpactPredictor />
+                </DialogContent>
+              </Dialog>
+            );
+          }
+
+          // Wrap Blockchain Certificates in Dialog
+          if (isBlockchainCertificates) {
+            return (
+              <Dialog key={index} open={isBlockchainCertificatesOpen} onOpenChange={setIsBlockchainCertificatesOpen}>
+                <DialogTrigger asChild>
+                  {FeatureCard}
+                </DialogTrigger>
+                <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto p-0">
+                  <BlockchainCertificatesMain />
                 </DialogContent>
               </Dialog>
             );
